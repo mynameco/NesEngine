@@ -10,13 +10,13 @@
 	.importzp	sp, sreg, regsave, regbank
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
-	.dbg		file, "lesson11.c", 12695, 1518911843
-	.dbg		file, "DEFINE.c", 5484, 1518911843
+	.dbg		file, "lesson11.c", 12807, 1519589862
+	.dbg		file, "DEFINE.c", 5484, 1519589845
 	.dbg		file, "BG/A1.csv", 545, 1518911843
 	.dbg		file, "BG/A2.csv", 545, 1518911843
 	.dbg		file, "BG/A3.csv", 541, 1518911843
 	.dbg		file, "BG/A4.csv", 550, 1518911843
-	.dbg		file, "BufferMT.c", 3365, 1518911843
+	.dbg		file, "BufferMT.c", 3422, 1519589564
 	.forceimport	__STARTUP__
 	.dbg		sym, "memcpy", "00", extern, "_memcpy"
 	.dbg		sym, "Wait_Vblank", "00", extern, "_Wait_Vblank"
@@ -96,29 +96,29 @@
 	.export		_MetaSprite_X
 	.export		_MetaSprite_Tile_Left
 	.export		_MetaSprite_Attrib_Left
-	.export		_All_Off
-	.export		_All_On
-	.export		_Reset_Scroll
-	.export		_Load_Palette
-	.export		_update_Sprites
-	.export		_Collision_Down
-	.export		_move_logic
-	.export		_Do_Buffer
-	.export		_Do_Buffer2
-	.export		_Do_Buffer3
-	.export		_Draw_Background
-	.export		_Set_Sprite_Zero
-	.export		_Load_HUD
-	.export		_Should_We_Buffer
-	.export		_New_Room
+	.export		_AllOff
+	.export		_AllOn
+	.export		_ResetScroll
+	.export		_LoadPalette
+	.export		_UpdateSprites
+	.export		_CollisionDown
+	.export		_MoveLogic
+	.export		_DoBuffer
+	.export		_DoBuffer2
+	.export		_DoBuffer3
+	.export		_DrawBackground
+	.export		_SetSpriteZero
+	.export		_LoadHud
+	.export		_ShouldWeBuffer
+	.export		_NewRoom
 	.import		_memcpy
 	.import		_Wait_Vblank
 	.import		_Get_Input
 	.import		_Sprite_Zero
 	.import		_Super_Fast_Write_PPU
 	.import		_Super_Fast_Write_PPU2
-	.export		_Buffer_Tiles
-	.export		_Buffer_Tiles2
+	.export		_BufferTiles
+	.export		_BufferTiles2
 	.export		_TestLabel
 	.export		_main
 
@@ -1382,103 +1382,61 @@ _BUFFER7:
 	.res	8,$00
 
 ; ---------------------------------------------------------------
-; void __near__ All_Off (void)
+; void __near__ AllOff (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_All_Off: near
+.proc	_AllOff: near
 
-	.dbg	func, "All_Off", "00", extern, "_All_Off"
+	.dbg	func, "AllOff", "00", extern, "_AllOff"
 
 .segment	"CODE"
 
 ;
 ; PPU_CTRL = 0;
 ;
-	.dbg	line, "lesson11.c", 124
+	.dbg	line, "lesson11.c", 130
 	lda     #$00
 	sta     $2000
 ;
 ; PPU_MASK = 0;
 ;
-	.dbg	line, "lesson11.c", 125
+	.dbg	line, "lesson11.c", 131
 	sta     $2001
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 126
+	.dbg	line, "lesson11.c", 132
 	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ All_On (void)
+; void __near__ AllOn (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_All_On: near
+.proc	_AllOn: near
 
-	.dbg	func, "All_On", "00", extern, "_All_On"
+	.dbg	func, "AllOn", "00", extern, "_AllOn"
 
 .segment	"CODE"
 
 ;
 ; PPU_CTRL = 0x94; // screen is on, NMI on
 ;
-	.dbg	line, "lesson11.c", 129
+	.dbg	line, "lesson11.c", 136
 	lda     #$94
 	sta     $2000
 ;
-; PPU_MASK = 0x1e; 
-;
-	.dbg	line, "lesson11.c", 130
-	lda     #$1E
-	sta     $2001
-;
-; }
-;
-	.dbg	line, "lesson11.c", 131
-	rts
-	.dbg	line
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ Reset_Scroll (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_Reset_Scroll: near
-
-	.dbg	func, "Reset_Scroll", "00", extern, "_Reset_Scroll"
-
-.segment	"CODE"
-
-;
-; PPU_ADDRESS = 0;
-;
-	.dbg	line, "lesson11.c", 134
-	lda     #$00
-	sta     $2006
-;
-; PPU_ADDRESS = 0;
-;
-	.dbg	line, "lesson11.c", 135
-	sta     $2006
-;
-; SCROLL = 0;
-;
-	.dbg	line, "lesson11.c", 136
-	sta     $2005
-;
-; SCROLL = 0;
+; PPU_MASK = 0x1e;
 ;
 	.dbg	line, "lesson11.c", 137
-	sta     $2005
+	lda     #$1E
+	sta     $2001
 ;
 ; }
 ;
@@ -1489,33 +1447,75 @@ _BUFFER7:
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Load_Palette (void)
+; void __near__ ResetScroll (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Load_Palette: near
+.proc	_ResetScroll: near
 
-	.dbg	func, "Load_Palette", "00", extern, "_Load_Palette"
+	.dbg	func, "ResetScroll", "00", extern, "_ResetScroll"
+
+.segment	"CODE"
+
+;
+; PPU_ADDRESS = 0;
+;
+	.dbg	line, "lesson11.c", 142
+	lda     #$00
+	sta     $2006
+;
+; PPU_ADDRESS = 0;
+;
+	.dbg	line, "lesson11.c", 143
+	sta     $2006
+;
+; SCROLL = 0;
+;
+	.dbg	line, "lesson11.c", 144
+	sta     $2005
+;
+; SCROLL = 0;
+;
+	.dbg	line, "lesson11.c", 145
+	sta     $2005
+;
+; }
+;
+	.dbg	line, "lesson11.c", 146
+	rts
+	.dbg	line
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ LoadPalette (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_LoadPalette: near
+
+	.dbg	func, "LoadPalette", "00", extern, "_LoadPalette"
 
 .segment	"CODE"
 
 ;
 ; PPU_ADDRESS = 0x3f;
 ;
-	.dbg	line, "lesson11.c", 141
+	.dbg	line, "lesson11.c", 150
 	lda     #$3F
 	sta     $2006
 ;
 ; PPU_ADDRESS = 0x00;
 ;
-	.dbg	line, "lesson11.c", 142
+	.dbg	line, "lesson11.c", 151
 	lda     #$00
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
-	.dbg	line, "lesson11.c", 143
+	.dbg	line, "lesson11.c", 152
 	sta     _index
 L0857:	lda     _index
 	cmp     #$20
@@ -1523,41 +1523,41 @@ L0857:	lda     _index
 ;
 ; PPU_DATA = PALETTE[index];
 ;
-	.dbg	line, "lesson11.c", 144
+	.dbg	line, "lesson11.c", 154
 	ldy     _index
 	lda     _PALETTE,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
-	.dbg	line, "lesson11.c", 143
+	.dbg	line, "lesson11.c", 152
 	inc     _index
 	jmp     L0857
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 146
+	.dbg	line, "lesson11.c", 156
 L0607:	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ update_Sprites (void)
+; void __near__ UpdateSprites (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_update_Sprites: near
+.proc	_UpdateSprites: near
 
-	.dbg	func, "update_Sprites", "00", extern, "_update_Sprites"
+	.dbg	func, "UpdateSprites", "00", extern, "_UpdateSprites"
 
 .segment	"CODE"
 
 ;
 ; state4 = state << 2; // shift left 2 = multiply 4
 ;
-	.dbg	line, "lesson11.c", 150
+	.dbg	line, "lesson11.c", 160
 	lda     _state
 	asl     a
 	asl     a
@@ -1565,19 +1565,19 @@ L0607:	rts
 ;
 ; index4 = 0;
 ;
-	.dbg	line, "lesson11.c", 151
+	.dbg	line, "lesson11.c", 161
 	lda     #$00
 	sta     _index4
 ;
-; if (direction == 0){ // right
+; if (direction == 0)
 ;
-	.dbg	line, "lesson11.c", 152
+	.dbg	line, "lesson11.c", 163
 	lda     _direction
 	jne     L085F
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
-	.dbg	line, "lesson11.c", 153
+	.dbg	line, "lesson11.c", 165
 	sta     _index
 L085E:	lda     _index
 	cmp     #$04
@@ -1585,12 +1585,12 @@ L085E:	lda     _index
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 176
+	.dbg	line, "lesson11.c", 192
 	rts
 ;
 ; SPRITES[index4] = MetaSprite_Y[index] + Y1; // relative y + master y
 ;
-	.dbg	line, "lesson11.c", 154
+	.dbg	line, "lesson11.c", 167
 L0861:	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1608,12 +1608,12 @@ L0625:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 155
+	.dbg	line, "lesson11.c", 168
 	inc     _index4
 ;
 ; SPRITES[index4] = MetaSprite_Tile_Right[index + state4]; // tile numbers
 ;
-	.dbg	line, "lesson11.c", 156
+	.dbg	line, "lesson11.c", 169
 	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1640,12 +1640,12 @@ L0859:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 157
+	.dbg	line, "lesson11.c", 170
 	inc     _index4
 ;
 ; SPRITES[index4] = MetaSprite_Attrib_Right[index]; // attributes, all zero here
 ;
-	.dbg	line, "lesson11.c", 158
+	.dbg	line, "lesson11.c", 171
 	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1661,12 +1661,12 @@ L0632:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 159
+	.dbg	line, "lesson11.c", 172
 	inc     _index4
 ;
 ; SPRITES[index4] = MetaSprite_X[index] + X1; // relative x + master x
 ;
-	.dbg	line, "lesson11.c", 160
+	.dbg	line, "lesson11.c", 173
 	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1684,18 +1684,18 @@ L0639:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 161
+	.dbg	line, "lesson11.c", 174
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
-	.dbg	line, "lesson11.c", 153
+	.dbg	line, "lesson11.c", 165
 	inc     _index
 	jmp     L085E
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
-	.dbg	line, "lesson11.c", 165
+	.dbg	line, "lesson11.c", 180
 L085F:	lda     #$00
 	sta     _index
 L0860:	lda     _index
@@ -1704,12 +1704,12 @@ L0860:	lda     _index
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 176
+	.dbg	line, "lesson11.c", 192
 	rts
 ;
 ; SPRITES[index4] = MetaSprite_Y[index] + Y1; // relative y + master y
 ;
-	.dbg	line, "lesson11.c", 166
+	.dbg	line, "lesson11.c", 182
 L0862:	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1727,12 +1727,12 @@ L0649:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 167
+	.dbg	line, "lesson11.c", 183
 	inc     _index4
 ;
 ; SPRITES[index4] = MetaSprite_Tile_Left[index + state4]; // tile numbers
 ;
-	.dbg	line, "lesson11.c", 168
+	.dbg	line, "lesson11.c", 184
 	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1759,12 +1759,12 @@ L085C:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 169
+	.dbg	line, "lesson11.c", 185
 	inc     _index4
 ;
 ; SPRITES[index4] = MetaSprite_Attrib_Left[index]; // attributes, all zero here
 ;
-	.dbg	line, "lesson11.c", 170
+	.dbg	line, "lesson11.c", 186
 	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1780,12 +1780,12 @@ L0656:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 171
+	.dbg	line, "lesson11.c", 187
 	inc     _index4
 ;
 ; SPRITES[index4] = MetaSprite_X[index] + X1; // relative x + master x
 ;
-	.dbg	line, "lesson11.c", 172
+	.dbg	line, "lesson11.c", 188
 	lda     #<(_SPRITES)
 	ldx     #>(_SPRITES)
 	clc
@@ -1803,12 +1803,12 @@ L065D:	sta     ptr1
 ;
 ; ++index4;
 ;
-	.dbg	line, "lesson11.c", 173
+	.dbg	line, "lesson11.c", 189
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
-	.dbg	line, "lesson11.c", 165
+	.dbg	line, "lesson11.c", 180
 	inc     _index
 	jmp     L0860
 	.dbg	line
@@ -1816,45 +1816,45 @@ L065D:	sta     ptr1
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Collision_Down (void)
+; void __near__ CollisionDown (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Collision_Down: near
+.proc	_CollisionDown: near
 
-	.dbg	func, "Collision_Down", "00", extern, "_Collision_Down"
+	.dbg	func, "CollisionDown", "00", extern, "_CollisionDown"
 
 .segment	"CODE"
 
 ;
-; if (NametableB == 0){ // first collision map
+; if (NametableB == 0)
 ;
-	.dbg	line, "lesson11.c", 180
+	.dbg	line, "lesson11.c", 197
 	lda     _NametableB
 	bne     L0663
 ;
 ; temp = C_MAP[collision_Index];
 ;
-	.dbg	line, "lesson11.c", 181
+	.dbg	line, "lesson11.c", 199
 	ldy     _collision_Index
 	lda     _C_MAP,y
 ;
-; else { // second collision map
+; else
 ;
-	.dbg	line, "lesson11.c", 184
+	.dbg	line, "lesson11.c", 203
 	jmp     L0868
 ;
 ; temp = C_MAP2[collision_Index];
 ;
-	.dbg	line, "lesson11.c", 185
+	.dbg	line, "lesson11.c", 205
 L0663:	ldy     _collision_Index
 	lda     _C_MAP2,y
 L0868:	sta     _temp
 ;
 ; collision += PLATFORM[temp];
 ;
-	.dbg	line, "lesson11.c", 186
+	.dbg	line, "lesson11.c", 206
 	ldy     _temp
 	lda     _PLATFORM,y
 	clc
@@ -1863,46 +1863,46 @@ L0868:	sta     _temp
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 188
+	.dbg	line, "lesson11.c", 208
 	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ move_logic (void)
+; void __near__ MoveLogic (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_move_logic: near
+.proc	_MoveLogic: near
 
-	.dbg	func, "move_logic", "00", extern, "_move_logic"
+	.dbg	func, "MoveLogic", "00", extern, "_MoveLogic"
 
 .segment	"CODE"
 
 ;
-; if ((joypad1 & (RIGHT|LEFT)) == 0){ // no L or R
+; if ((joypad1 & (RIGHT | LEFT)) == 0)
 ;
-	.dbg	line, "lesson11.c", 195
+	.dbg	line, "lesson11.c", 212
 	lda     _joypad1
 	and     #$03
 	bne     L0874
 ;
 ; walk_count = 0;
 ;
-	.dbg	line, "lesson11.c", 196
+	.dbg	line, "lesson11.c", 214
 	sta     _walk_count
 ;
-; if (X_speed >= 0){ // if positive, going right
+; if (X_speed >= 0)
 ;
-	.dbg	line, "lesson11.c", 198
+	.dbg	line, "lesson11.c", 216
 	ldx     _X_speed
 	bmi     L067E
 ;
-; if (X_speed >= 4){
+; if (X_speed >= 4)
 ;
-	.dbg	line, "lesson11.c", 199
+	.dbg	line, "lesson11.c", 218
 	lda     _X_speed
 	sec
 	sbc     #$04
@@ -1914,21 +1914,21 @@ L0684:	asl     a
 ;
 ; X_speed -= 4;
 ;
-	.dbg	line, "lesson11.c", 200
+	.dbg	line, "lesson11.c", 220
 	lda     _X_speed
 	sec
 	sbc     #$04
 	sta     _X_speed
 	bpl     L0874
 ;
-; else {
+; else
 ;
-	.dbg	line, "lesson11.c", 202
+	.dbg	line, "lesson11.c", 222
 	jmp     L0874
 ;
-; if (X_speed <= (-4)){ // -4
+; if (X_speed <= (-4))
 ;
-	.dbg	line, "lesson11.c", 207
+	.dbg	line, "lesson11.c", 229
 L067E:	lda     _X_speed
 	sec
 	sbc     #$FD
@@ -1938,66 +1938,66 @@ L0690:	asl     a
 	lda     #$00
 	bcc     L0873
 ;
-; X_speed +=4;
+; X_speed += 4;
 ;
-	.dbg	line, "lesson11.c", 208
+	.dbg	line, "lesson11.c", 231
 	lda     #$04
 	clc
 	adc     _X_speed
 	sta     _X_speed
 	bpl     L0874
 ;
-; else {
+; else
 ;
-	.dbg	line, "lesson11.c", 210
+	.dbg	line, "lesson11.c", 233
 	jmp     L0874
 ;
 ; X_speed = 0; // just stop
 ;
-	.dbg	line, "lesson11.c", 211
+	.dbg	line, "lesson11.c", 235
 L0873:	sta     _X_speed
 ;
-; if ((joypad1 & RIGHT) != 0){
+; if ((joypad1 & RIGHT) != 0)
 ;
-	.dbg	line, "lesson11.c", 216
+	.dbg	line, "lesson11.c", 240
 L0874:	lda     _joypad1
 	and     #$01
 	beq     L06A8
 ;
 ; ++walk_count;
 ;
-	.dbg	line, "lesson11.c", 217
+	.dbg	line, "lesson11.c", 242
 	inc     _walk_count
 ;
 ; direction = 0;
 ;
-	.dbg	line, "lesson11.c", 218
+	.dbg	line, "lesson11.c", 243
 	lda     #$00
 	sta     _direction
 ;
-; if (X_speed >= 0){ // going right
+; if (X_speed >= 0)
 ;
-	.dbg	line, "lesson11.c", 219
+	.dbg	line, "lesson11.c", 244
 	ldx     _X_speed
 	bmi     L069E
 ;
 ; X_speed += 2;
 ;
-	.dbg	line, "lesson11.c", 220
+	.dbg	line, "lesson11.c", 246
 	lda     #$02
 	clc
 	adc     _X_speed
 	sta     _X_speed
 	bpl     L06A8
 ;
-; else { // going left
+; else
 ;
-	.dbg	line, "lesson11.c", 222
+	.dbg	line, "lesson11.c", 248
 	jmp     L06A8
 ;
 ; X_speed += 8; // just stop
 ;
-	.dbg	line, "lesson11.c", 223
+	.dbg	line, "lesson11.c", 250
 L069E:	lda     #$08
 	clc
 	adc     _X_speed
@@ -2005,42 +2005,42 @@ L069E:	lda     #$08
 ;
 ; if (X_speed >= 0)
 ;
-	.dbg	line, "lesson11.c", 224
+	.dbg	line, "lesson11.c", 251
 	tax
 	bmi     L06A8
 ;
 ; X_speed = 0;
 ;
-	.dbg	line, "lesson11.c", 225
+	.dbg	line, "lesson11.c", 252
 	lda     #$00
 	sta     _X_speed
 ;
-; TestLabel(); 
+; TestLabel();
 ;
-	.dbg	line, "lesson11.c", 229
+	.dbg	line, "lesson11.c", 256
 L06A8:	jsr     _TestLabel
 ;
-; if ((joypad1 & LEFT) != 0){
+; if ((joypad1 & LEFT) != 0)
 ;
-	.dbg	line, "lesson11.c", 231
+	.dbg	line, "lesson11.c", 258
 	lda     _joypad1
 	and     #$02
 	beq     L0878
 ;
 ; ++walk_count;
 ;
-	.dbg	line, "lesson11.c", 232
+	.dbg	line, "lesson11.c", 260
 	inc     _walk_count
 ;
 ; direction = 1;
 ;
-	.dbg	line, "lesson11.c", 233
+	.dbg	line, "lesson11.c", 261
 	lda     #$01
 	sta     _direction
 ;
-; if (X_speed <= 0){ // was <, produced error, couldn't go left
+; if (X_speed <= 0)
 ;
-	.dbg	line, "lesson11.c", 234
+	.dbg	line, "lesson11.c", 262
 	lda     _X_speed
 	sec
 	sbc     #$01
@@ -2050,21 +2050,21 @@ L06B8:	bpl     L0876
 ;
 ; X_speed -= 2;
 ;
-	.dbg	line, "lesson11.c", 235
+	.dbg	line, "lesson11.c", 264
 	lda     _X_speed
 	sec
 	sbc     #$02
 	sta     _X_speed
 	bpl     L0878
 ;
-; else { // going right
+; else
 ;
-	.dbg	line, "lesson11.c", 237
+	.dbg	line, "lesson11.c", 266
 	jmp     L0878
 ;
 ; X_speed -= 8;//just stop
 ;
-	.dbg	line, "lesson11.c", 238
+	.dbg	line, "lesson11.c", 268
 L0876:	lda     _X_speed
 	sec
 	sbc     #$08
@@ -2072,25 +2072,25 @@ L0876:	lda     _X_speed
 ;
 ; if (X_speed < 0)
 ;
-	.dbg	line, "lesson11.c", 239
+	.dbg	line, "lesson11.c", 269
 	asl     a
 	bcc     L0878
 ;
 ; X_speed = 0;
 ;
-	.dbg	line, "lesson11.c", 240
+	.dbg	line, "lesson11.c", 270
 	lda     #$00
 	sta     _X_speed
 ;
 ; NametableB = Nametable;
 ;
-	.dbg	line, "lesson11.c", 249
+	.dbg	line, "lesson11.c", 279
 L0878:	lda     _Nametable
 	sta     _NametableB
 ;
 ; Scroll_Adjusted_X = (X1 + Horiz_scroll + 3); //left
 ;
-	.dbg	line, "lesson11.c", 250
+	.dbg	line, "lesson11.c", 280
 	ldx     #$00
 	lda     _X1
 	clc
@@ -2106,31 +2106,31 @@ L06CA:	sta     _Scroll_Adjusted_X
 ;
 ; high_byte = Scroll_Adjusted_X >> 8;
 ;
-	.dbg	line, "lesson11.c", 251
+	.dbg	line, "lesson11.c", 281
 	lda     _Scroll_Adjusted_X+1
 	sta     _high_byte
 ;
-; if (high_byte != 0){ // if H scroll + Sprite X > 255, then we should use
+; if (high_byte != 0)
 ;
-	.dbg	line, "lesson11.c", 252
+	.dbg	line, "lesson11.c", 282
 	lda     _high_byte
 	beq     L0879
 ;
 ; ++NametableB;    // the other nametable's collision map
 ;
-	.dbg	line, "lesson11.c", 253
+	.dbg	line, "lesson11.c", 284
 	inc     _NametableB
 ;
 ; NametableB &= 1; // keep it 0 or 1
 ;
-	.dbg	line, "lesson11.c", 254
+	.dbg	line, "lesson11.c", 285
 	lda     _NametableB
 	and     #$01
 	sta     _NametableB
 ;
-; collision_Index = (((char)Scroll_Adjusted_X>>4) + ((Y1+16) & 0xf0)); // bottom left
+; collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom left
 ;
-	.dbg	line, "lesson11.c", 257
+	.dbg	line, "lesson11.c", 288
 L0879:	lda     _Scroll_Adjusted_X
 	lsr     a
 	lsr     a
@@ -2147,24 +2147,24 @@ L0879:	lda     _Scroll_Adjusted_X
 ;
 ; collision = 0;
 ;
-	.dbg	line, "lesson11.c", 258
+	.dbg	line, "lesson11.c", 289
 	lda     #$00
 	sta     _collision
 ;
-; Collision_Down();
+; CollisionDown();
 ;
-	.dbg	line, "lesson11.c", 259
-	jsr     _Collision_Down
+	.dbg	line, "lesson11.c", 290
+	jsr     _CollisionDown
 ;
 ; NametableB = Nametable;
 ;
-	.dbg	line, "lesson11.c", 263
+	.dbg	line, "lesson11.c", 294
 	lda     _Nametable
 	sta     _NametableB
 ;
 ; Scroll_Adjusted_X = (X1 + Horiz_scroll + 12); // right
 ;
-	.dbg	line, "lesson11.c", 264
+	.dbg	line, "lesson11.c", 295
 	ldx     #$00
 	lda     _X1
 	clc
@@ -2180,31 +2180,31 @@ L06E1:	sta     _Scroll_Adjusted_X
 ;
 ; high_byte = Scroll_Adjusted_X >> 8;
 ;
-	.dbg	line, "lesson11.c", 265
+	.dbg	line, "lesson11.c", 296
 	lda     _Scroll_Adjusted_X+1
 	sta     _high_byte
 ;
-; if (high_byte != 0){ // if H scroll + Sprite X > 255, then we should use
+; if (high_byte != 0)
 ;
-	.dbg	line, "lesson11.c", 266
+	.dbg	line, "lesson11.c", 297
 	lda     _high_byte
 	beq     L087A
 ;
 ; ++NametableB;    // the other nametable's collision map
 ;
-	.dbg	line, "lesson11.c", 267
+	.dbg	line, "lesson11.c", 299
 	inc     _NametableB
 ;
 ; NametableB &= 1; // keep it 0 or 1
 ;
-	.dbg	line, "lesson11.c", 268
+	.dbg	line, "lesson11.c", 300
 	lda     _NametableB
 	and     #$01
 	sta     _NametableB
 ;
-; collision_Index = (((char)Scroll_Adjusted_X>>4) + ((Y1+16) & 0xf0)); // bottom right
+; collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom right
 ;
-	.dbg	line, "lesson11.c", 270
+	.dbg	line, "lesson11.c", 302
 L087A:	lda     _Scroll_Adjusted_X
 	lsr     a
 	lsr     a
@@ -2219,14 +2219,14 @@ L087A:	lda     _Scroll_Adjusted_X
 	adc     ptr1
 	sta     _collision_Index
 ;
-; Collision_Down();
+; CollisionDown();
 ;
-	.dbg	line, "lesson11.c", 271
-	jsr     _Collision_Down
+	.dbg	line, "lesson11.c", 303
+	jsr     _CollisionDown
 ;
 ; if ((Y1 & 0x0f) > 1) // only platform collide if nearly aligned to a metatile
 ;
-	.dbg	line, "lesson11.c", 273
+	.dbg	line, "lesson11.c", 305
 	lda     _Y1
 	and     #$0F
 	cmp     #$02
@@ -2234,52 +2234,52 @@ L087A:	lda     _Scroll_Adjusted_X
 ;
 ; collision = 0;
 ;
-	.dbg	line, "lesson11.c", 274
+	.dbg	line, "lesson11.c", 306
 	lda     #$00
 	sta     _collision
 ;
-; if (collision == 0){
+; if (collision == 0)
 ;
-	.dbg	line, "lesson11.c", 276
+	.dbg	line, "lesson11.c", 308
 L087B:	lda     _collision
 	bne     L087C
 ;
 ; Y_speed += 2; // gravity
 ;
-	.dbg	line, "lesson11.c", 277
+	.dbg	line, "lesson11.c", 310
 	lda     #$02
 	clc
 	adc     _Y_speed
 	sta     _Y_speed
 	bpl     L087D
 ;
-; else {
+; else
 ;
-	.dbg	line, "lesson11.c", 279
+	.dbg	line, "lesson11.c", 312
 	jmp     L087D
 ;
 ; Y_speed = 0; // collision = stop falling
 ;
-	.dbg	line, "lesson11.c", 280
+	.dbg	line, "lesson11.c", 314
 L087C:	lda     #$00
 	sta     _Y_speed
 ;
 ; Y1 &= 0xf0;  // align to the metatile
 ;
-	.dbg	line, "lesson11.c", 281
+	.dbg	line, "lesson11.c", 315
 	lda     _Y1
 	and     #$F0
 	sta     _Y1
 ;
-; if (collision > 0){
+; if (collision > 0)
 ;
-	.dbg	line, "lesson11.c", 285
+	.dbg	line, "lesson11.c", 319
 L087D:	lda     _collision
 	beq     L0881
 ;
-; if (((joypad1 & A_BUTTON) != 0) && ((joypad1old & A_BUTTON) == 0)){
+; if (((joypad1 & A_BUTTON) != 0) && ((joypad1old & A_BUTTON) == 0))
 ;
-	.dbg	line, "lesson11.c", 286
+	.dbg	line, "lesson11.c", 321
 	lda     _joypad1
 	and     #$80
 	beq     L0881
@@ -2289,19 +2289,19 @@ L087D:	lda     _collision
 ;
 ; Y_speed = -0x38; // -0x38
 ;
-	.dbg	line, "lesson11.c", 287
+	.dbg	line, "lesson11.c", 323
 	lda     #$C8
 	sta     _Y_speed
 ;
-; if (X_speed >= 0){ // going right
+; if (X_speed >= 0)
 ;
-	.dbg	line, "lesson11.c", 292
+	.dbg	line, "lesson11.c", 328
 L0881:	ldx     _X_speed
 	bmi     L070E
 ;
 ; if (X_speed > 0x20)
 ;
-	.dbg	line, "lesson11.c", 293
+	.dbg	line, "lesson11.c", 330
 	lda     _X_speed
 	sec
 	sbc     #$21
@@ -2311,17 +2311,17 @@ L0714:	bpl     L0882
 ;
 ; X_speed = 0x20;
 ;
-	.dbg	line, "lesson11.c", 294
+	.dbg	line, "lesson11.c", 331
 	lda     #$20
 ;
-; else {
+; else
 ;
-	.dbg	line, "lesson11.c", 296
+	.dbg	line, "lesson11.c", 333
 	jmp     L086B
 ;
 ; if (X_speed < -0x20)
 ;
-	.dbg	line, "lesson11.c", 297
+	.dbg	line, "lesson11.c", 335
 L070E:	lda     _X_speed
 	sec
 	sbc     #$E0
@@ -2331,19 +2331,19 @@ L071B:	bpl     L0882
 ;
 ; X_speed = -0x20; // -0x20
 ;
-	.dbg	line, "lesson11.c", 298
+	.dbg	line, "lesson11.c", 336
 	lda     #$E0
 L086B:	sta     _X_speed
 ;
-; if (Y_speed >= 0){
+; if (Y_speed >= 0)
 ;
-	.dbg	line, "lesson11.c", 301
+	.dbg	line, "lesson11.c", 339
 L0882:	ldx     _Y_speed
 	bmi     L0883
 ;
 ; if (Y_speed > 0x20)
 ;
-	.dbg	line, "lesson11.c", 302
+	.dbg	line, "lesson11.c", 341
 	lda     _Y_speed
 	sec
 	sbc     #$21
@@ -2353,25 +2353,25 @@ L0724:	bpl     L0883
 ;
 ; Y_speed = 0x20;
 ;
-	.dbg	line, "lesson11.c", 303
+	.dbg	line, "lesson11.c", 342
 	lda     #$20
 	sta     _Y_speed
 ;
 ; Horiz_scroll_Old = Horiz_scroll;
 ;
-	.dbg	line, "lesson11.c", 307
+	.dbg	line, "lesson11.c", 346
 L0883:	lda     _Horiz_scroll
 	sta     _Horiz_scroll_Old
 ;
-; if (X_speed >= 0){ // right
+; if (X_speed >= 0)
 ;
-	.dbg	line, "lesson11.c", 308
+	.dbg	line, "lesson11.c", 347
 	ldx     _X_speed
 	bmi     L0729
 ;
-; if (X1 < 0x80){
+; if (X1 < 0x80)
 ;
-	.dbg	line, "lesson11.c", 309
+	.dbg	line, "lesson11.c", 349
 	ldx     #$00
 	lda     _X1
 	cmp     #$80
@@ -2379,7 +2379,7 @@ L0883:	lda     _Horiz_scroll
 ;
 ; X1 += (X_speed >> 4); // use the high nibble
 ;
-	.dbg	line, "lesson11.c", 310
+	.dbg	line, "lesson11.c", 351
 	lda     _X_speed
 	bpl     L0731
 	dex
@@ -2390,23 +2390,23 @@ L0731:	jsr     asrax4
 ;
 ; if (X1 > 0x80)
 ;
-	.dbg	line, "lesson11.c", 311
+	.dbg	line, "lesson11.c", 352
 	cmp     #$81
 	bcc     L0885
 ;
 ; X1 = 0x80;
 ;
-	.dbg	line, "lesson11.c", 312
+	.dbg	line, "lesson11.c", 353
 	lda     #$80
 ;
-; else{
+; else
 ;
-	.dbg	line, "lesson11.c", 314
+	.dbg	line, "lesson11.c", 355
 	jmp     L086C
 ;
 ; Horiz_scroll += (X_speed >> 4); // use the high nibble
 ;
-	.dbg	line, "lesson11.c", 315
+	.dbg	line, "lesson11.c", 357
 L0884:	lda     _X_speed
 	bpl     L073A
 	dex
@@ -2415,9 +2415,9 @@ L073A:	jsr     asrax4
 	adc     _Horiz_scroll
 	sta     _Horiz_scroll
 ;
-; if (Horiz_scroll_Old > Horiz_scroll){ // if pass 0, switch nametables
+; if (Horiz_scroll_Old > Horiz_scroll)
 ;
-	.dbg	line, "lesson11.c", 316
+	.dbg	line, "lesson11.c", 358
 	lda     _Horiz_scroll_Old
 	sec
 	sbc     _Horiz_scroll
@@ -2426,22 +2426,22 @@ L073A:	jsr     asrax4
 ;
 ; ++Nametable;
 ;
-	.dbg	line, "lesson11.c", 317
+	.dbg	line, "lesson11.c", 360
 	inc     _Nametable
 ;
 ; ++Room;
 ;
-	.dbg	line, "lesson11.c", 318
+	.dbg	line, "lesson11.c", 361
 	inc     _Room
 ;
-; else { // going left
+; else
 ;
-	.dbg	line, "lesson11.c", 322
+	.dbg	line, "lesson11.c", 365
 	jmp     L0885
 ;
-; X1 += (X_speed >>4); // use the high nibble
+; X1 += (X_speed >> 4); // use the high nibble
 ;
-	.dbg	line, "lesson11.c", 323
+	.dbg	line, "lesson11.c", 367
 L0729:	ldx     #$00
 	lda     _X_speed
 	bpl     L0743
@@ -2453,33 +2453,33 @@ L0743:	jsr     asrax4
 ;
 ; if (X1 > 0xc0)
 ;
-	.dbg	line, "lesson11.c", 324
+	.dbg	line, "lesson11.c", 368
 	cmp     #$C1
 	bcc     L0885
 ;
 ; X1 = 0;
 ;
-	.dbg	line, "lesson11.c", 325
+	.dbg	line, "lesson11.c", 369
 	lda     #$00
 L086C:	sta     _X1
 ;
 ; Nametable &= 1; // keep it 1 or 0
 ;
-	.dbg	line, "lesson11.c", 328
+	.dbg	line, "lesson11.c", 372
 L0885:	lda     _Nametable
 	and     #$01
 	sta     _Nametable
 ;
 ; Room &= 3; // keep it 0-3
 ;
-	.dbg	line, "lesson11.c", 329
+	.dbg	line, "lesson11.c", 373
 	lda     _Room
 	and     #$03
 	sta     _Room
 ;
 ; Y1 += (Y_speed >> 4); // use the high nibble
 ;
-	.dbg	line, "lesson11.c", 335
+	.dbg	line, "lesson11.c", 381
 	ldx     #$00
 	lda     _Y_speed
 	bpl     L0757
@@ -2491,7 +2491,7 @@ L0757:	jsr     asrax4
 ;
 ; if (walk_count > 0x1f) // walk_count forced 0-1f
 ;
-	.dbg	line, "lesson11.c", 338
+	.dbg	line, "lesson11.c", 384
 	lda     _walk_count
 	cmp     #$20
 	ldx     #$00
@@ -2499,12 +2499,12 @@ L0757:	jsr     asrax4
 ;
 ; walk_count = 0;
 ;
-	.dbg	line, "lesson11.c", 339
+	.dbg	line, "lesson11.c", 385
 	stx     _walk_count
 ;
 ; state = Walk_Moves[(walk_count >> 3)]; // if not jumping
 ;
-	.dbg	line, "lesson11.c", 341
+	.dbg	line, "lesson11.c", 387
 L0886:	lda     _walk_count
 	lsr     a
 	lsr     a
@@ -2520,59 +2520,59 @@ L0886:	lda     _walk_count
 ;
 ; if (Y_speed < 0) // negative = jumping
 ;
-	.dbg	line, "lesson11.c", 343
+	.dbg	line, "lesson11.c", 389
 	lda     _Y_speed
 	asl     a
 	bcc     L0760
 ;
 ; state = 3;
 ;
-	.dbg	line, "lesson11.c", 344
+	.dbg	line, "lesson11.c", 390
 	lda     #$03
 	sta     _state
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 345
+	.dbg	line, "lesson11.c", 391
 L0760:	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Do_Buffer (void)
+; void __near__ DoBuffer (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Do_Buffer: near
+.proc	_DoBuffer: near
 
-	.dbg	func, "Do_Buffer", "00", extern, "_Do_Buffer"
+	.dbg	func, "DoBuffer", "00", extern, "_DoBuffer"
 
 .segment	"CODE"
 
 ;
-; Buffer_Tiles();
+; BufferTiles();
 ;
-	.dbg	line, "lesson11.c", 351
-	jsr     _Buffer_Tiles
+	.dbg	line, "lesson11.c", 398
+	jsr     _BufferTiles
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 353
+	.dbg	line, "lesson11.c", 400
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; Buffer_Tiles2();
+; BufferTiles2();
 ;
-	.dbg	line, "lesson11.c", 355
-	jsr     _Buffer_Tiles2
+	.dbg	line, "lesson11.c", 402
+	jsr     _BufferTiles2
 ;
 ; Horiz_scroll_Plus -= 0x10;
 ;
-	.dbg	line, "lesson11.c", 357
+	.dbg	line, "lesson11.c", 404
 	lda     _Horiz_scroll_Plus
 	sec
 	sbc     #$10
@@ -2580,50 +2580,50 @@ L0760:	rts
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 358
+	.dbg	line, "lesson11.c", 405
 	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Do_Buffer2 (void)
+; void __near__ DoBuffer2 (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Do_Buffer2: near
+.proc	_DoBuffer2: near
 
-	.dbg	func, "Do_Buffer2", "00", extern, "_Do_Buffer2"
+	.dbg	func, "DoBuffer2", "00", extern, "_DoBuffer2"
 
 .segment	"CODE"
 
 ;
-; if (Nametable_Plus == 0){ // write to right screen
+; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 362
+	.dbg	line, "lesson11.c", 410
 	lda     _Nametable_Plus
 	bne     L088F
 ;
 ; PPU_ADDRESS_High = 0x24;
 ;
-	.dbg	line, "lesson11.c", 363
+	.dbg	line, "lesson11.c", 412
 	lda     #$24
 ;
-; else { // write to the left screen
+; else
 ;
-	.dbg	line, "lesson11.c", 365
+	.dbg	line, "lesson11.c", 414
 	jmp     L088E
 ;
 ; PPU_ADDRESS_High = 0x20;
 ;
-	.dbg	line, "lesson11.c", 366
+	.dbg	line, "lesson11.c", 416
 L088F:	lda     #$20
 L088E:	sta     _PPU_ADDRESS_High
 ;
-; PPU_ADDRESS_Low = ((Horiz_scroll_Plus&0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
 ;
-	.dbg	line, "lesson11.c", 368
+	.dbg	line, "lesson11.c", 418
 	lda     _Horiz_scroll_Plus
 	and     #$F0
 	lsr     a
@@ -2635,62 +2635,62 @@ L088E:	sta     _PPU_ADDRESS_High
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_High;
 ;
-	.dbg	line, "lesson11.c", 369
+	.dbg	line, "lesson11.c", 419
 	lda     _PPU_ADDRESS_High
 	sta     $2006
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_Low;
 ;
-	.dbg	line, "lesson11.c", 370
+	.dbg	line, "lesson11.c", 420
 	lda     _PPU_ADDRESS_Low
 	sta     $2006
 ;
 ; Super_Fast_Write_PPU();
 ;
-	.dbg	line, "lesson11.c", 371
+	.dbg	line, "lesson11.c", 421
 	jmp     _Super_Fast_Write_PPU
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Do_Buffer3 (void)
+; void __near__ DoBuffer3 (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Do_Buffer3: near
+.proc	_DoBuffer3: near
 
-	.dbg	func, "Do_Buffer3", "00", extern, "_Do_Buffer3"
+	.dbg	func, "DoBuffer3", "00", extern, "_DoBuffer3"
 
 .segment	"CODE"
 
 ;
-; if (Nametable_Plus == 0){ // write to right screen
+; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 376
+	.dbg	line, "lesson11.c", 427
 	lda     _Nametable_Plus
 	bne     L0891
 ;
 ; PPU_ADDRESS_High = 0x24;
 ;
-	.dbg	line, "lesson11.c", 377
+	.dbg	line, "lesson11.c", 429
 	lda     #$24
 ;
-; else { // write to the left screen
+; else
 ;
-	.dbg	line, "lesson11.c", 379
+	.dbg	line, "lesson11.c", 431
 	jmp     L0890
 ;
 ; PPU_ADDRESS_High = 0x20;
 ;
-	.dbg	line, "lesson11.c", 380
+	.dbg	line, "lesson11.c", 433
 L0891:	lda     #$20
 L0890:	sta     _PPU_ADDRESS_High
 ;
-; PPU_ADDRESS_Low = ((Horiz_scroll_Plus&0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
 ;
-	.dbg	line, "lesson11.c", 382
+	.dbg	line, "lesson11.c", 435
 	lda     _Horiz_scroll_Plus
 	and     #$F0
 	lsr     a
@@ -2702,40 +2702,40 @@ L0890:	sta     _PPU_ADDRESS_High
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_High;
 ;
-	.dbg	line, "lesson11.c", 383
+	.dbg	line, "lesson11.c", 436
 	lda     _PPU_ADDRESS_High
 	sta     $2006
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_Low;
 ;
-	.dbg	line, "lesson11.c", 384
+	.dbg	line, "lesson11.c", 437
 	lda     _PPU_ADDRESS_Low
 	sta     $2006
 ;
-; Super_Fast_Write_PPU2(); 
+; Super_Fast_Write_PPU2();
 ;
-	.dbg	line, "lesson11.c", 385
+	.dbg	line, "lesson11.c", 438
 	jmp     _Super_Fast_Write_PPU2
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Draw_Background (void)
+; void __near__ DrawBackground (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Draw_Background: near
+.proc	_DrawBackground: near
 
-	.dbg	func, "Draw_Background", "00", extern, "_Draw_Background"
+	.dbg	func, "DrawBackground", "00", extern, "_DrawBackground"
 
 .segment	"CODE"
 
 ;
-; memcpy (C_MAP, A1, 240);
+; memcpy(C_MAP, A1, 240);
 ;
-	.dbg	line, "lesson11.c", 392
+	.dbg	line, "lesson11.c", 446
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
 	jsr     pushax
@@ -2746,9 +2746,9 @@ L0890:	sta     _PPU_ADDRESS_High
 	lda     #$F0
 	jsr     _memcpy
 ;
-; memcpy (C_MAP2, A2, 240);
+; memcpy(C_MAP2, A2, 240);
 ;
-	.dbg	line, "lesson11.c", 393
+	.dbg	line, "lesson11.c", 447
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
 	jsr     pushax
@@ -2761,194 +2761,194 @@ L0890:	sta     _PPU_ADDRESS_High
 ;
 ; Nametable_Plus = 1;
 ;
-	.dbg	line, "lesson11.c", 396
+	.dbg	line, "lesson11.c", 450
 	lda     #$01
 	sta     _Nametable_Plus
 ;
 ; PPU_CTRL = 4; // sets to downward increments when writing to PPU
 ;
-	.dbg	line, "lesson11.c", 397
+	.dbg	line, "lesson11.c", 451
 	lda     #$04
 	sta     $2000
 ;
-; for (A = 0; A < 8; ++A){
+; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 398
+	.dbg	line, "lesson11.c", 452
 	lda     #$00
 	sta     _A
 L0892:	lda     _A
 	cmp     #$08
 	bcs     L0893
 ;
-; Do_Buffer(); // fill buffer
+; DoBuffer(); // fill buffer
 ;
-	.dbg	line, "lesson11.c", 399
-	jsr     _Do_Buffer
+	.dbg	line, "lesson11.c", 454
+	jsr     _DoBuffer
 ;
-; Do_Buffer2(); // draw to ppu
+; DoBuffer2(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 400
-	jsr     _Do_Buffer2
+	.dbg	line, "lesson11.c", 455
+	jsr     _DoBuffer2
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 401
+	.dbg	line, "lesson11.c", 456
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; Do_Buffer3(); // draw to ppu
+; DoBuffer3(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 402
-	jsr     _Do_Buffer3
+	.dbg	line, "lesson11.c", 457
+	jsr     _DoBuffer3
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 403
+	.dbg	line, "lesson11.c", 458
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; for (A = 0; A < 8; ++A){
+; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 398
+	.dbg	line, "lesson11.c", 452
 	inc     _A
 	jmp     L0892
 ;
 ; --Nametable_Plus;
 ;
-	.dbg	line, "lesson11.c", 405
+	.dbg	line, "lesson11.c", 460
 L0893:	dec     _Nametable_Plus
 ;
-; for (A = 0; A < 8; ++A){
+; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 406
+	.dbg	line, "lesson11.c", 461
 	lda     #$00
 	sta     _A
 L0894:	lda     _A
 	cmp     #$08
 	bcs     L07B3
 ;
-; Do_Buffer(); // fill buffer
+; DoBuffer(); // fill buffer
 ;
-	.dbg	line, "lesson11.c", 407
-	jsr     _Do_Buffer
+	.dbg	line, "lesson11.c", 463
+	jsr     _DoBuffer
 ;
-; Do_Buffer2(); // draw to ppu
+; DoBuffer2(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 408
-	jsr     _Do_Buffer2
+	.dbg	line, "lesson11.c", 464
+	jsr     _DoBuffer2
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 409
+	.dbg	line, "lesson11.c", 465
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; Do_Buffer3(); // draw to ppu
+; DoBuffer3(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 410
-	jsr     _Do_Buffer3
+	.dbg	line, "lesson11.c", 466
+	jsr     _DoBuffer3
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 411
+	.dbg	line, "lesson11.c", 467
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; for (A = 0; A < 8; ++A){
+; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 406
+	.dbg	line, "lesson11.c", 461
 	inc     _A
 	jmp     L0894
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 413
+	.dbg	line, "lesson11.c", 469
 L07B3:	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Set_Sprite_Zero (void)
+; void __near__ SetSpriteZero (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Set_Sprite_Zero: near
+.proc	_SetSpriteZero: near
 
-	.dbg	func, "Set_Sprite_Zero", "00", extern, "_Set_Sprite_Zero"
+	.dbg	func, "SetSpriteZero", "00", extern, "_SetSpriteZero"
 
 .segment	"CODE"
 
 ;
 ; SPRITE_ZERO[0] = 0x16; // y
 ;
-	.dbg	line, "lesson11.c", 417
+	.dbg	line, "lesson11.c", 474
 	lda     #$16
 	sta     _SPRITE_ZERO
 ;
 ; SPRITE_ZERO[1] = 0x30; // tile
 ;
-	.dbg	line, "lesson11.c", 418
+	.dbg	line, "lesson11.c", 475
 	lda     #$30
 	sta     _SPRITE_ZERO+1
 ;
 ; SPRITE_ZERO[2] = 0;  // attributes
 ;
-	.dbg	line, "lesson11.c", 419
+	.dbg	line, "lesson11.c", 476
 	lda     #$00
 	sta     _SPRITE_ZERO+2
 ;
 ; SPRITE_ZERO[3] = 0xd0; // x
 ;
-	.dbg	line, "lesson11.c", 420
+	.dbg	line, "lesson11.c", 477
 	lda     #$D0
 	sta     _SPRITE_ZERO+3
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 421
+	.dbg	line, "lesson11.c", 478
 	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Load_HUD (void)
+; void __near__ LoadHud (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Load_HUD: near
+.proc	_LoadHud: near
 
-	.dbg	func, "Load_HUD", "00", extern, "_Load_HUD"
+	.dbg	func, "LoadHud", "00", extern, "_LoadHud"
 
 .segment	"CODE"
 
 ;
 ; PPU_ADDRESS = 0x20;
 ;
-	.dbg	line, "lesson11.c", 425
+	.dbg	line, "lesson11.c", 483
 	lda     #$20
 	sta     $2006
 ;
 ; PPU_ADDRESS = 0x42;
 ;
-	.dbg	line, "lesson11.c", 426
+	.dbg	line, "lesson11.c", 484
 	lda     #$42
 	sta     $2006
 ;
-; for (index = 0;index < sizeof(HUD);++index){
+; for (index = 0; index < sizeof(HUD); ++index)
 ;
-	.dbg	line, "lesson11.c", 427
+	.dbg	line, "lesson11.c", 485
 	lda     #$00
 	sta     _index
 L0895:	lda     _index
@@ -2957,38 +2957,38 @@ L0895:	lda     _index
 ;
 ; PPU_DATA = HUD[index];
 ;
-	.dbg	line, "lesson11.c", 428
+	.dbg	line, "lesson11.c", 487
 	ldy     _index
 	lda     _HUD,y
 	sta     $2007
 ;
-; for (index = 0;index < sizeof(HUD);++index){
+; for (index = 0; index < sizeof(HUD); ++index)
 ;
-	.dbg	line, "lesson11.c", 427
+	.dbg	line, "lesson11.c", 485
 	inc     _index
 	jmp     L0895
 ;
 ; PPU_DATA = 3;
 ;
-	.dbg	line, "lesson11.c", 430
+	.dbg	line, "lesson11.c", 489
 L0896:	lda     #$03
 	sta     $2007
 ;
 ; PPU_ADDRESS = 0x23;
 ;
-	.dbg	line, "lesson11.c", 431
+	.dbg	line, "lesson11.c", 490
 	lda     #$23
 	sta     $2006
 ;
 ; PPU_ADDRESS = 0xc0;
 ;
-	.dbg	line, "lesson11.c", 432
+	.dbg	line, "lesson11.c", 491
 	lda     #$C0
 	sta     $2006
 ;
-; for (index = 0;index < 8; ++index){
+; for (index = 0; index < 8; ++index)
 ;
-	.dbg	line, "lesson11.c", 433
+	.dbg	line, "lesson11.c", 492
 	lda     #$00
 	sta     _index
 L0897:	lda     _index
@@ -2997,103 +2997,103 @@ L0897:	lda     _index
 ;
 ; PPU_DATA = 0xaa;
 ;
-	.dbg	line, "lesson11.c", 434
+	.dbg	line, "lesson11.c", 494
 	lda     #$AA
 	sta     $2007
 ;
-; for (index = 0;index < 8; ++index){
+; for (index = 0; index < 8; ++index)
 ;
-	.dbg	line, "lesson11.c", 433
+	.dbg	line, "lesson11.c", 492
 	inc     _index
 	jmp     L0897
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 436
+	.dbg	line, "lesson11.c", 496
 L07ED:	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Should_We_Buffer (void)
+; void __near__ ShouldWeBuffer (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Should_We_Buffer: near
+.proc	_ShouldWeBuffer: near
 
-	.dbg	func, "Should_We_Buffer", "00", extern, "_Should_We_Buffer"
+	.dbg	func, "ShouldWeBuffer", "00", extern, "_ShouldWeBuffer"
 
 .segment	"CODE"
 
 ;
-; if (direction == 0){ // right
+; if (direction == 0)
 ;
-	.dbg	line, "lesson11.c", 446
+	.dbg	line, "lesson11.c", 507
 	lda     _direction
 	bne     L0800
 ;
-; if ((Horiz_scroll_Plus & 0x1e) == 0x02){ // it was == 0
+; if ((Horiz_scroll_Plus & 0x1e) == 0x02)
 ;
-	.dbg	line, "lesson11.c", 447
+	.dbg	line, "lesson11.c", 509
 	lda     _Horiz_scroll_Plus
 	and     #$1E
 	cmp     #$02
 	bne     L0898
 ;
-; Buffer_Tiles();
+; BufferTiles();
 ;
-	.dbg	line, "lesson11.c", 448
-	jsr     _Buffer_Tiles
+	.dbg	line, "lesson11.c", 511
+	jsr     _BufferTiles
 ;
 ; ++PPU_flag;
 ;
-	.dbg	line, "lesson11.c", 449
+	.dbg	line, "lesson11.c", 512
 	inc     _PPU_flag
 ;
-; if ((Horiz_scroll_Plus & 0x1e) == 0x10){
+; if ((Horiz_scroll_Plus & 0x1e) == 0x10)
 ;
-	.dbg	line, "lesson11.c", 451
+	.dbg	line, "lesson11.c", 514
 L0898:	lda     _Horiz_scroll_Plus
 	and     #$1E
 	cmp     #$10
 	bne     L0800
 ;
-; Buffer_Tiles2();
+; BufferTiles2();
 ;
-	.dbg	line, "lesson11.c", 452
-	jsr     _Buffer_Tiles2
+	.dbg	line, "lesson11.c", 516
+	jsr     _BufferTiles2
 ;
 ; ++PPU_flag2;
 ;
-	.dbg	line, "lesson11.c", 453
+	.dbg	line, "lesson11.c", 517
 	inc     _PPU_flag2
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 456
+	.dbg	line, "lesson11.c", 520
 L0800:	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ New_Room (void)
+; void __near__ NewRoom (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_New_Room: near
+.proc	_NewRoom: near
 
-	.dbg	func, "New_Room", "00", extern, "_New_Room"
+	.dbg	func, "NewRoom", "00", extern, "_NewRoom"
 
 .segment	"CODE"
 
 ;
 ; RoomB = RoomPlus + 1;
 ;
-	.dbg	line, "lesson11.c", 463
+	.dbg	line, "lesson11.c", 528
 	lda     _RoomPlus
 	clc
 	adc     #$01
@@ -3101,13 +3101,13 @@ L0800:	rts
 ;
 ; RoomB &= 3; // keep it 0-3, we only have 4 rooms
 ;
-	.dbg	line, "lesson11.c", 464
+	.dbg	line, "lesson11.c", 529
 	and     #$03
 	sta     _RoomB
 ;
 ; Room_Address = ROOMS[RoomB]; // get the address of the room data
 ;
-	.dbg	line, "lesson11.c", 465
+	.dbg	line, "lesson11.c", 530
 	ldx     #$00
 	lda     _RoomB
 	asl     a
@@ -3128,7 +3128,7 @@ L089E:	adc     #<(_ROOMS)
 ;
 ; A = Horiz_scroll_Plus >> 4;
 ;
-	.dbg	line, "lesson11.c", 466
+	.dbg	line, "lesson11.c", 531
 	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3136,15 +3136,15 @@ L089E:	adc     #<(_ROOMS)
 	lsr     a
 	sta     _A
 ;
-; if (Nametable_Plus == 0){ // load to right cmap
+; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 467
+	.dbg	line, "lesson11.c", 532
 	lda     _Nametable_Plus
 	bne     L08A0
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 468
+	.dbg	line, "lesson11.c", 534
 	sta     _index
 	tax
 L089F:	lda     _index
@@ -3153,7 +3153,7 @@ L089F:	lda     _index
 ;
 ; C_MAP2[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 469
+	.dbg	line, "lesson11.c", 536
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
 	clc
@@ -3172,22 +3172,22 @@ L081D:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 470
+	.dbg	line, "lesson11.c", 537
 	lda     #$10
 	clc
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 468
+	.dbg	line, "lesson11.c", 534
 	ldx     #$00
 	inc     _index
 	jmp     L089F
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 474
+	.dbg	line, "lesson11.c", 542
 L08A0:	tya
 	sta     _index
 	tax
@@ -3197,7 +3197,7 @@ L08A1:	lda     _index
 ;
 ; C_MAP[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 475
+	.dbg	line, "lesson11.c", 544
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
 	clc
@@ -3216,22 +3216,22 @@ L082D:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 476
+	.dbg	line, "lesson11.c", 545
 	lda     #$10
 	clc
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 474
+	.dbg	line, "lesson11.c", 542
 	ldx     #$00
 	inc     _index
 	jmp     L08A1
 ;
-; A = (Horiz_scroll_Plus+0x10)>> 4;
+; A = (Horiz_scroll_Plus + 0x10) >> 4;
 ;
-	.dbg	line, "lesson11.c", 482
+	.dbg	line, "lesson11.c", 551
 L08A2:	lda     _Horiz_scroll_Plus
 	clc
 	adc     #$10
@@ -3240,15 +3240,15 @@ L08A2:	lda     _Horiz_scroll_Plus
 L0835:	jsr     shrax4
 	sta     _A
 ;
-; if (Nametable_Plus == 0){ // load to right cmap
+; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 483
+	.dbg	line, "lesson11.c", 552
 	lda     _Nametable_Plus
 	bne     L08A4
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 484
+	.dbg	line, "lesson11.c", 554
 	sta     _index
 L08A3:	lda     _index
 	cmp     #$0F
@@ -3256,7 +3256,7 @@ L08A3:	lda     _index
 ;
 ; C_MAP2[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 485
+	.dbg	line, "lesson11.c", 556
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
 	clc
@@ -3275,21 +3275,21 @@ L0842:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 486
+	.dbg	line, "lesson11.c", 557
 	lda     #$10
 	clc
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 484
+	.dbg	line, "lesson11.c", 554
 	inc     _index
 	jmp     L08A3
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 490
+	.dbg	line, "lesson11.c", 562
 L08A4:	lda     #$00
 	sta     _index
 L08A5:	lda     _index
@@ -3298,7 +3298,7 @@ L08A5:	lda     _index
 ;
 ; C_MAP[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 491
+	.dbg	line, "lesson11.c", 564
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
 	clc
@@ -3317,71 +3317,71 @@ L0852:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 492
+	.dbg	line, "lesson11.c", 565
 	lda     #$10
 	clc
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 490
+	.dbg	line, "lesson11.c", 562
 	inc     _index
 	jmp     L08A5
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 495
+	.dbg	line, "lesson11.c", 568
 L0849:	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Buffer_Tiles (void)
+; void __near__ BufferTiles (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Buffer_Tiles: near
+.proc	_BufferTiles: near
 
-	.dbg	func, "Buffer_Tiles", "00", extern, "_Buffer_Tiles"
+	.dbg	func, "BufferTiles", "00", extern, "_BufferTiles"
 
 .segment	"CODE"
 
 ;
 ; index = 2;  // will be skipping the top 2 metatiles, it's the HUD
 ;
-	.dbg	line, "BufferMT.c", 5
+	.dbg	line, "BufferMT.c", 6
 	lda     #$02
 	sta     _index
 ;
 ; index2 = 0;
 ;
-	.dbg	line, "BufferMT.c", 6
+	.dbg	line, "BufferMT.c", 7
 	lda     #$00
 	sta     _index2
 ;
 ; index3 = 0;
 ;
-	.dbg	line, "BufferMT.c", 7
+	.dbg	line, "BufferMT.c", 8
 	tax
 	sta     _index3
 ;
-; while (index < 15){ 
-;
-	.dbg	line, "BufferMT.c", 8
-	jmp     L08AB
-;
-; if (Nametable_Plus == 0){ // drawing to the opposite screen that we're on
+; while (index < 15)
 ;
 	.dbg	line, "BufferMT.c", 9
+	jmp     L08AB
+;
+; if (Nametable_Plus == 0)
+;
+	.dbg	line, "BufferMT.c", 12
 L08A8:	lda     _Nametable_Plus
 	bne     L08A9
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
-	.dbg	line, "BufferMT.c", 10
+	.dbg	line, "BufferMT.c", 14
 	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3401,14 +3401,14 @@ L08A8:	lda     _Nametable_Plus
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
-	.dbg	line, "BufferMT.c", 12
+	.dbg	line, "BufferMT.c", 16
 	jmp     L08AC
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
-	.dbg	line, "BufferMT.c", 13
+	.dbg	line, "BufferMT.c", 18
 L08A9:	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3432,14 +3432,14 @@ L08AC:	lda     (ptr1),y
 ;
 ; temp3 = MT_color[temp]; // get color, store temp
 ;
-	.dbg	line, "BufferMT.c", 16
+	.dbg	line, "BufferMT.c", 21
 	ldy     _temp
 	lda     _MT_color,y
 	sta     _temp3
 ;
 ; temp <<= 2; // x 4
 ;
-	.dbg	line, "BufferMT.c", 18
+	.dbg	line, "BufferMT.c", 23
 	lda     _temp
 	asl     a
 	asl     a
@@ -3447,7 +3447,7 @@ L08AC:	lda     (ptr1),y
 ;
 ; BUFFER1[index2] = METATILES[temp]; // get the tl tile
 ;
-	.dbg	line, "BufferMT.c", 20
+	.dbg	line, "BufferMT.c", 25
 	lda     #<(_BUFFER1)
 	ldx     #>(_BUFFER1)
 	clc
@@ -3463,12 +3463,12 @@ L0491:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 21
+	.dbg	line, "BufferMT.c", 26
 	inc     _temp
 ;
 ; BUFFER2[index2] = METATILES[temp]; // get the tr tile
 ;
-	.dbg	line, "BufferMT.c", 22
+	.dbg	line, "BufferMT.c", 27
 	lda     #<(_BUFFER2)
 	ldx     #>(_BUFFER2)
 	clc
@@ -3484,17 +3484,17 @@ L0498:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 24
+	.dbg	line, "BufferMT.c", 29
 	inc     _temp
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 25
+	.dbg	line, "BufferMT.c", 30
 	inc     _index2
 ;
 ; BUFFER1[index2] = METATILES[temp]; // get the bl tile
 ;
-	.dbg	line, "BufferMT.c", 26
+	.dbg	line, "BufferMT.c", 31
 	lda     #<(_BUFFER1)
 	ldx     #>(_BUFFER1)
 	clc
@@ -3510,12 +3510,12 @@ L04A0:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 27
+	.dbg	line, "BufferMT.c", 32
 	inc     _temp
 ;
 ; BUFFER2[index2] = METATILES[temp]; // get the br tile
 ;
-	.dbg	line, "BufferMT.c", 28
+	.dbg	line, "BufferMT.c", 33
 	lda     #<(_BUFFER2)
 	ldx     #>(_BUFFER2)
 	clc
@@ -3531,29 +3531,29 @@ L04A7:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 30
+	.dbg	line, "BufferMT.c", 35
 	inc     _temp
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 31
+	.dbg	line, "BufferMT.c", 36
 	inc     _index2
 ;
 ; ++index; // next round, difference is attribute table stuff
 ;
-	.dbg	line, "BufferMT.c", 33
+	.dbg	line, "BufferMT.c", 38
 	inc     _index
 ;
-; if (Nametable_Plus == 0){ // read from 2nd map
+; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "BufferMT.c", 35
+	.dbg	line, "BufferMT.c", 41
 	ldx     #$00
 	lda     _Nametable_Plus
 	bne     L08AA
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
-	.dbg	line, "BufferMT.c", 36
+	.dbg	line, "BufferMT.c", 43
 	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3573,14 +3573,14 @@ L04A7:	sta     ptr1
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
-	.dbg	line, "BufferMT.c", 38
+	.dbg	line, "BufferMT.c", 45
 	jmp     L08AD
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
-	.dbg	line, "BufferMT.c", 39
+	.dbg	line, "BufferMT.c", 47
 L08AA:	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3604,7 +3604,7 @@ L08AD:	lda     (ptr1),y
 ;
 ; temp3 += (MT_color[temp] << 4); // get color, store temp
 ;
-	.dbg	line, "BufferMT.c", 42
+	.dbg	line, "BufferMT.c", 50
 	ldy     _temp
 	lda     _MT_color,y
 	asl     a
@@ -3617,14 +3617,14 @@ L08AD:	lda     (ptr1),y
 ;
 ; BUFFER5[index3] = temp3;
 ;
-	.dbg	line, "BufferMT.c", 43
+	.dbg	line, "BufferMT.c", 51
 	ldy     _index3
 	lda     _temp3
 	sta     _BUFFER5,y
 ;
 ; temp <<= 2; // x 4
 ;
-	.dbg	line, "BufferMT.c", 45
+	.dbg	line, "BufferMT.c", 53
 	lda     _temp
 	asl     a
 	asl     a
@@ -3632,7 +3632,7 @@ L08AD:	lda     (ptr1),y
 ;
 ; BUFFER1[index2] = METATILES[temp]; // get the tl tile
 ;
-	.dbg	line, "BufferMT.c", 47
+	.dbg	line, "BufferMT.c", 55
 	lda     #<(_BUFFER1)
 	ldx     #>(_BUFFER1)
 	clc
@@ -3648,12 +3648,12 @@ L04C8:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 48
+	.dbg	line, "BufferMT.c", 56
 	inc     _temp
 ;
 ; BUFFER2[index2] = METATILES[temp]; // get the tr tile
 ;
-	.dbg	line, "BufferMT.c", 49
+	.dbg	line, "BufferMT.c", 57
 	lda     #<(_BUFFER2)
 	ldx     #>(_BUFFER2)
 	clc
@@ -3669,17 +3669,17 @@ L04CF:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 51
+	.dbg	line, "BufferMT.c", 59
 	inc     _temp
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 52
+	.dbg	line, "BufferMT.c", 60
 	inc     _index2
 ;
 ; BUFFER1[index2] = METATILES[temp]; // get the bl tile
 ;
-	.dbg	line, "BufferMT.c", 53
+	.dbg	line, "BufferMT.c", 61
 	lda     #<(_BUFFER1)
 	ldx     #>(_BUFFER1)
 	clc
@@ -3695,12 +3695,12 @@ L04D7:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 54
+	.dbg	line, "BufferMT.c", 62
 	inc     _temp
 ;
 ; BUFFER2[index2] = METATILES[temp]; // get the br tile
 ;
-	.dbg	line, "BufferMT.c", 55
+	.dbg	line, "BufferMT.c", 63
 	lda     #<(_BUFFER2)
 	ldx     #>(_BUFFER2)
 	clc
@@ -3716,22 +3716,22 @@ L04DE:	sta     ptr1
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 57
+	.dbg	line, "BufferMT.c", 65
 	inc     _index2
 ;
 ; ++index3;
 ;
-	.dbg	line, "BufferMT.c", 58
+	.dbg	line, "BufferMT.c", 66
 	inc     _index3
 ;
 ; ++index;
 ;
-	.dbg	line, "BufferMT.c", 59
+	.dbg	line, "BufferMT.c", 67
 	inc     _index
 ;
-; while (index < 15){ 
+; while (index < 15)
 ;
-	.dbg	line, "BufferMT.c", 8
+	.dbg	line, "BufferMT.c", 9
 	ldx     #$00
 L08AB:	lda     _index
 	cmp     #$0F
@@ -3739,57 +3739,57 @@ L08AB:	lda     _index
 ;
 ; }
 ;
-	.dbg	line, "BufferMT.c", 61
+	.dbg	line, "BufferMT.c", 69
 	rts
 	.dbg	line
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Buffer_Tiles2 (void)
+; void __near__ BufferTiles2 (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Buffer_Tiles2: near
+.proc	_BufferTiles2: near
 
-	.dbg	func, "Buffer_Tiles2", "00", extern, "_Buffer_Tiles2"
+	.dbg	func, "BufferTiles2", "00", extern, "_BufferTiles2"
 
 .segment	"CODE"
 
 ;
 ; index = 2; // will be skipping the top 2 metatiles, later
 ;
-	.dbg	line, "BufferMT.c", 65
+	.dbg	line, "BufferMT.c", 74
 	lda     #$02
 	sta     _index
 ;
 ; index2 = 0;
 ;
-	.dbg	line, "BufferMT.c", 66
+	.dbg	line, "BufferMT.c", 75
 	lda     #$00
 	sta     _index2
 ;
 ; index3 = 0;
 ;
-	.dbg	line, "BufferMT.c", 67
+	.dbg	line, "BufferMT.c", 76
 	tax
 	sta     _index3
 ;
-; while (index < 15){
+; while (index < 15)
 ;
-	.dbg	line, "BufferMT.c", 68
+	.dbg	line, "BufferMT.c", 77
 	jmp     L08B4
 ;
-; if (Nametable_Plus == 0){ // drawing to the opposite screen that we're on
+; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "BufferMT.c", 69
+	.dbg	line, "BufferMT.c", 80
 L08B1:	lda     _Nametable_Plus
 	bne     L08B2
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
-	.dbg	line, "BufferMT.c", 70
+	.dbg	line, "BufferMT.c", 82
 	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3809,14 +3809,14 @@ L08B1:	lda     _Nametable_Plus
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
-	.dbg	line, "BufferMT.c", 72
+	.dbg	line, "BufferMT.c", 84
 	jmp     L08B6
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
-	.dbg	line, "BufferMT.c", 73
+	.dbg	line, "BufferMT.c", 86
 L08B2:	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3840,14 +3840,14 @@ L08B6:	lda     (ptr1),y
 ;
 ; temp3 = MT_color[temp]; // get palette #, store temp3
 ;
-	.dbg	line, "BufferMT.c", 76
+	.dbg	line, "BufferMT.c", 89
 	ldy     _temp
 	lda     _MT_color,y
 	sta     _temp3
 ;
 ; temp <<= 2; // x 4
 ;
-	.dbg	line, "BufferMT.c", 78
+	.dbg	line, "BufferMT.c", 91
 	lda     _temp
 	asl     a
 	asl     a
@@ -3855,7 +3855,7 @@ L08B6:	lda     (ptr1),y
 ;
 ; BUFFER3[index2] = METATILES[temp]; // get the tl tile
 ;
-	.dbg	line, "BufferMT.c", 80
+	.dbg	line, "BufferMT.c", 93
 	lda     #<(_BUFFER3)
 	ldx     #>(_BUFFER3)
 	clc
@@ -3871,12 +3871,12 @@ L0505:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 81
+	.dbg	line, "BufferMT.c", 94
 	inc     _temp
 ;
 ; BUFFER4[index2] = METATILES[temp]; // get the tr tile
 ;
-	.dbg	line, "BufferMT.c", 82
+	.dbg	line, "BufferMT.c", 95
 	lda     #<(_BUFFER4)
 	ldx     #>(_BUFFER4)
 	clc
@@ -3892,17 +3892,17 @@ L050C:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 84
+	.dbg	line, "BufferMT.c", 97
 	inc     _temp
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 85
+	.dbg	line, "BufferMT.c", 98
 	inc     _index2
 ;
 ; BUFFER3[index2] = METATILES[temp]; // get the bl tile
 ;
-	.dbg	line, "BufferMT.c", 86
+	.dbg	line, "BufferMT.c", 99
 	lda     #<(_BUFFER3)
 	ldx     #>(_BUFFER3)
 	clc
@@ -3918,12 +3918,12 @@ L0514:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 87
+	.dbg	line, "BufferMT.c", 100
 	inc     _temp
 ;
 ; BUFFER4[index2] = METATILES[temp]; // get the br tile
 ;
-	.dbg	line, "BufferMT.c", 88
+	.dbg	line, "BufferMT.c", 101
 	lda     #<(_BUFFER4)
 	ldx     #>(_BUFFER4)
 	clc
@@ -3939,29 +3939,29 @@ L051B:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 90
+	.dbg	line, "BufferMT.c", 103
 	inc     _temp
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 91
+	.dbg	line, "BufferMT.c", 104
 	inc     _index2
 ;
 ; ++index; // next round, difference is attribute table stuff
 ;
-	.dbg	line, "BufferMT.c", 93
+	.dbg	line, "BufferMT.c", 106
 	inc     _index
 ;
-; if (Nametable_Plus == 0){ // read from 2nd map
+; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "BufferMT.c", 95
+	.dbg	line, "BufferMT.c", 109
 	ldx     #$00
 	lda     _Nametable_Plus
 	bne     L08B3
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
-	.dbg	line, "BufferMT.c", 96
+	.dbg	line, "BufferMT.c", 111
 	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3981,14 +3981,14 @@ L051B:	sta     ptr1
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
-	.dbg	line, "BufferMT.c", 98
+	.dbg	line, "BufferMT.c", 113
 	jmp     L08B7
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
-	.dbg	line, "BufferMT.c", 99
+	.dbg	line, "BufferMT.c", 115
 L08B3:	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -4012,7 +4012,7 @@ L08B7:	lda     (ptr1),y
 ;
 ; temp3 += (MT_color[temp] << 4); // get palette #, store temp3
 ;
-	.dbg	line, "BufferMT.c", 102
+	.dbg	line, "BufferMT.c", 118
 	ldy     _temp
 	lda     _MT_color,y
 	asl     a
@@ -4025,7 +4025,7 @@ L08B7:	lda     (ptr1),y
 ;
 ; BUFFER6[index3] = temp3 << 2;
 ;
-	.dbg	line, "BufferMT.c", 103
+	.dbg	line, "BufferMT.c", 119
 	lda     #<(_BUFFER6)
 	ldx     #>(_BUFFER6)
 	clc
@@ -4042,7 +4042,7 @@ L0536:	sta     ptr1
 ;
 ; temp <<= 2; // x 4
 ;
-	.dbg	line, "BufferMT.c", 105
+	.dbg	line, "BufferMT.c", 121
 	lda     _temp
 	asl     a
 	asl     a
@@ -4050,7 +4050,7 @@ L0536:	sta     ptr1
 ;
 ; BUFFER3[index2] = METATILES[temp]; // get the tl tile
 ;
-	.dbg	line, "BufferMT.c", 107
+	.dbg	line, "BufferMT.c", 123
 	lda     #<(_BUFFER3)
 	ldx     #>(_BUFFER3)
 	clc
@@ -4066,12 +4066,12 @@ L053C:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 108
+	.dbg	line, "BufferMT.c", 124
 	inc     _temp
 ;
 ; BUFFER4[index2] = METATILES[temp]; // get the tr tile
 ;
-	.dbg	line, "BufferMT.c", 109
+	.dbg	line, "BufferMT.c", 125
 	lda     #<(_BUFFER4)
 	ldx     #>(_BUFFER4)
 	clc
@@ -4087,17 +4087,17 @@ L0543:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 111
+	.dbg	line, "BufferMT.c", 127
 	inc     _temp
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 112
+	.dbg	line, "BufferMT.c", 128
 	inc     _index2
 ;
 ; BUFFER3[index2] = METATILES[temp]; // get the bl tile
 ;
-	.dbg	line, "BufferMT.c", 113
+	.dbg	line, "BufferMT.c", 129
 	lda     #<(_BUFFER3)
 	ldx     #>(_BUFFER3)
 	clc
@@ -4113,12 +4113,12 @@ L054B:	sta     ptr1
 ;
 ; ++temp;
 ;
-	.dbg	line, "BufferMT.c", 114
+	.dbg	line, "BufferMT.c", 130
 	inc     _temp
 ;
 ; BUFFER4[index2] = METATILES[temp]; // get the br tile
 ;
-	.dbg	line, "BufferMT.c", 115
+	.dbg	line, "BufferMT.c", 131
 	lda     #<(_BUFFER4)
 	ldx     #>(_BUFFER4)
 	clc
@@ -4134,38 +4134,38 @@ L0552:	sta     ptr1
 ;
 ; ++index2;
 ;
-	.dbg	line, "BufferMT.c", 117
+	.dbg	line, "BufferMT.c", 133
 	inc     _index2
 ;
 ; ++index3;
 ;
-	.dbg	line, "BufferMT.c", 118
+	.dbg	line, "BufferMT.c", 134
 	inc     _index3
 ;
 ; ++index;
 ;
-	.dbg	line, "BufferMT.c", 119
+	.dbg	line, "BufferMT.c", 135
 	inc     _index
 ;
-; while (index < 15){
+; while (index < 15)
 ;
-	.dbg	line, "BufferMT.c", 68
+	.dbg	line, "BufferMT.c", 77
 	ldx     #$00
 L08B4:	lda     _index
 	cmp     #$0F
 	jcc     L08B1
 ;
-; for (index=0;index<8;++index){
+; for (index = 0; index < 8; ++index)
 ;
-	.dbg	line, "BufferMT.c", 123
+	.dbg	line, "BufferMT.c", 139
 	stx     _index
 L08B5:	lda     _index
 	cmp     #$08
 	bcs     L055A
 ;
-; BUFFER7[index] = BUFFER5[index] + BUFFER6[index]; 
+; BUFFER7[index] = BUFFER5[index] + BUFFER6[index];
 ;
-	.dbg	line, "BufferMT.c", 124
+	.dbg	line, "BufferMT.c", 141
 	lda     #<(_BUFFER7)
 	ldx     #>(_BUFFER7)
 	clc
@@ -4184,15 +4184,15 @@ L0563:	sta     sreg
 	ldy     #$00
 	sta     (sreg),y
 ;
-; for (index=0;index<8;++index){
+; for (index = 0; index < 8; ++index)
 ;
-	.dbg	line, "BufferMT.c", 123
+	.dbg	line, "BufferMT.c", 139
 	inc     _index
 	jmp     L08B5
 ;
 ; }
 ;
-	.dbg	line, "BufferMT.c", 126
+	.dbg	line, "BufferMT.c", 143
 L055A:	rts
 	.dbg	line
 
@@ -4213,12 +4213,12 @@ L055A:	rts
 ;
 ; ++dummy;
 ;
-	.dbg	line, "lesson11.c", 36
+	.dbg	line, "lesson11.c", 35
 	inc     _dummy
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 37
+	.dbg	line, "lesson11.c", 36
 	rts
 	.dbg	line
 
@@ -4237,15 +4237,15 @@ L055A:	rts
 .segment	"CODE"
 
 ;
-; All_Off(); // turn off screen
+; AllOff(); // turn off screen
 ;
 	.dbg	line, "lesson11.c", 40
-	jsr     _All_Off
+	jsr     _AllOff
 ;
-; Draw_Background();
+; DrawBackground();
 ;
 	.dbg	line, "lesson11.c", 41
-	jsr     _Draw_Background
+	jsr     _DrawBackground
 ;
 ; X1 = 0x80; // starting position
 ;
@@ -4259,10 +4259,10 @@ L055A:	rts
 	lda     #$70
 	sta     _Y1
 ;
-; Set_Sprite_Zero();
+; SetSpriteZero();
 ;
 	.dbg	line, "lesson11.c", 44
-	jsr     _Set_Sprite_Zero
+	jsr     _SetSpriteZero
 ;
 ; PPU_CTRL = 0x90; // rightward increments to PPU
 ;
@@ -4270,254 +4270,254 @@ L055A:	rts
 	lda     #$90
 	sta     $2000
 ;
-; Load_Palette();
+; LoadPalette();
 ;
 	.dbg	line, "lesson11.c", 46
-	jsr     _Load_Palette
+	jsr     _LoadPalette
 ;
-; Load_HUD();
+; LoadHud();
 ;
 	.dbg	line, "lesson11.c", 47
-	jsr     _Load_HUD
+	jsr     _LoadHud
 ;
-; Reset_Scroll();
+; ResetScroll();
 ;
 	.dbg	line, "lesson11.c", 48
-	jsr     _Reset_Scroll
+	jsr     _ResetScroll
 ;
 ; Wait_Vblank();
 ;
 	.dbg	line, "lesson11.c", 49
 	jsr     _Wait_Vblank
 ;
-; All_On(); // turn on screen
+; AllOn(); // turn on screen
 ;
 	.dbg	line, "lesson11.c", 50
-	jsr     _All_On
+	jsr     _AllOn
 ;
 ; while (NMI_flag == 0); // wait till NMI
 ;
-	.dbg	line, "lesson11.c", 52
+	.dbg	line, "lesson11.c", 55
 L08B8:	lda     _NMI_flag
 	beq     L08B8
 ;
 ; if (PPU_flag != 0)
 ;
-	.dbg	line, "lesson11.c", 54
+	.dbg	line, "lesson11.c", 57
 	lda     _PPU_flag
 	beq     L08B9
 ;
-; Do_Buffer2();
+; DoBuffer2();
 ;
-	.dbg	line, "lesson11.c", 55
-	jsr     _Do_Buffer2
+	.dbg	line, "lesson11.c", 58
+	jsr     _DoBuffer2
 ;
 ; PPU_CTRL = 0x94;
 ;
-	.dbg	line, "lesson11.c", 56
+	.dbg	line, "lesson11.c", 59
 L08B9:	lda     #$94
 	sta     $2000
 ;
 ; SCROLL = 0;
 ;
-	.dbg	line, "lesson11.c", 57
+	.dbg	line, "lesson11.c", 60
 	lda     #$00
 	sta     $2005
 ;
 ; SCROLL = 0;  // resetting scroll position, again
 ;
-	.dbg	line, "lesson11.c", 58
+	.dbg	line, "lesson11.c", 61
 	sta     $2005
 ;
 ; if (PPU_flag2 != 0)
 ;
-	.dbg	line, "lesson11.c", 60
+	.dbg	line, "lesson11.c", 63
 	lda     _PPU_flag2
 	beq     L08BA
 ;
-; Do_Buffer3();
+; DoBuffer3();
 ;
-	.dbg	line, "lesson11.c", 61
-	jsr     _Do_Buffer3
+	.dbg	line, "lesson11.c", 64
+	jsr     _DoBuffer3
 ;
 ; PPU_CTRL = 0x94;
 ;
-	.dbg	line, "lesson11.c", 62
+	.dbg	line, "lesson11.c", 65
 L08BA:	lda     #$94
 	sta     $2000
 ;
 ; SCROLL = 0;
 ;
-	.dbg	line, "lesson11.c", 63
+	.dbg	line, "lesson11.c", 66
 	lda     #$00
 	sta     $2005
 ;
 ; SCROLL = 0;  // resetting scroll position, again
 ;
-	.dbg	line, "lesson11.c", 64
+	.dbg	line, "lesson11.c", 67
 	sta     $2005
 ;
 ; Get_Input();
 ;
-	.dbg	line, "lesson11.c", 67
+	.dbg	line, "lesson11.c", 70
 	jsr     _Get_Input
 ;
 ; PPU_flag = 0;
 ;
-	.dbg	line, "lesson11.c", 68
+	.dbg	line, "lesson11.c", 71
 	lda     #$00
 	sta     _PPU_flag
 ;
 ; PPU_flag2 = 0;
 ;
-	.dbg	line, "lesson11.c", 69
+	.dbg	line, "lesson11.c", 72
 	sta     _PPU_flag2
 ;
-; if ((joypad1 & START) != 0){
+; if ((joypad1 & START) != 0)
 ;
-	.dbg	line, "lesson11.c", 71
+	.dbg	line, "lesson11.c", 74
 	lda     _joypad1
 	and     #$10
 	beq     L05A0
 ;
 ; SPRITE_ZERO[1] = 0xff; // switch tiles to a very small one
 ;
-	.dbg	line, "lesson11.c", 72
+	.dbg	line, "lesson11.c", 76
 	lda     #$FF
 	sta     _SPRITE_ZERO+1
 ;
 ; SPRITE_ZERO[2] = 0x20; // attributes = behind the bg
 ;
-	.dbg	line, "lesson11.c", 73
+	.dbg	line, "lesson11.c", 77
 	lda     #$20
 	sta     _SPRITE_ZERO+2
 ;
 ; Sprite_Zero();
 ;
-	.dbg	line, "lesson11.c", 77
+	.dbg	line, "lesson11.c", 81
 L05A0:	jsr     _Sprite_Zero
 ;
 ; SCROLL = Horiz_scroll;
 ;
-	.dbg	line, "lesson11.c", 79
+	.dbg	line, "lesson11.c", 83
 	lda     _Horiz_scroll
 	sta     $2005
 ;
 ; SCROLL = 0;  // setting the new scroll position
 ;
-	.dbg	line, "lesson11.c", 80
+	.dbg	line, "lesson11.c", 84
 	lda     #$00
 	sta     $2005
 ;
 ; PPU_CTRL = (0x94 + Nametable);
 ;
-	.dbg	line, "lesson11.c", 81
+	.dbg	line, "lesson11.c", 85
 	lda     _Nametable
 	clc
 	adc     #$94
 	sta     $2000
 ;
-; move_logic();
+; MoveLogic();
 ;
-	.dbg	line, "lesson11.c", 83
-	jsr     _move_logic
+	.dbg	line, "lesson11.c", 87
+	jsr     _MoveLogic
 ;
-; update_Sprites();
+; UpdateSprites();
 ;
-	.dbg	line, "lesson11.c", 84
-	jsr     _update_Sprites
+	.dbg	line, "lesson11.c", 88
+	jsr     _UpdateSprites
 ;
-; RoomPlus = Room;   // make a copy of variables, but 20 pixels right
+; RoomPlus = Room; // make a copy of variables, but 20 pixels right
 ;
-	.dbg	line, "lesson11.c", 89
+	.dbg	line, "lesson11.c", 93
 	lda     _Room
 	sta     _RoomPlus
 ;
 ; Nametable_Plus = Nametable;
 ;
-	.dbg	line, "lesson11.c", 90
+	.dbg	line, "lesson11.c", 94
 	lda     _Nametable
 	sta     _Nametable_Plus
 ;
 ; Horiz_scroll_Plus = Horiz_scroll + 0x20;
 ;
-	.dbg	line, "lesson11.c", 91
+	.dbg	line, "lesson11.c", 95
 	lda     _Horiz_scroll
 	clc
 	adc     #$20
 	sta     _Horiz_scroll_Plus
 ;
-; if (Horiz_scroll_Plus < 0x20){
+; if (Horiz_scroll_Plus < 0x20)
 ;
-	.dbg	line, "lesson11.c", 92
+	.dbg	line, "lesson11.c", 96
 	cmp     #$20
 	bcs     L08BB
 ;
 ; ++RoomPlus;
 ;
-	.dbg	line, "lesson11.c", 93
+	.dbg	line, "lesson11.c", 98
 	inc     _RoomPlus
 ;
 ; ++Nametable_Plus;
 ;
-	.dbg	line, "lesson11.c", 94
+	.dbg	line, "lesson11.c", 99
 	inc     _Nametable_Plus
 ;
 ; RoomPlus &= 3;
 ;
-	.dbg	line, "lesson11.c", 95
+	.dbg	line, "lesson11.c", 100
 	lda     _RoomPlus
 	and     #$03
 	sta     _RoomPlus
 ;
 ; Nametable_Plus &= 1;
 ;
-	.dbg	line, "lesson11.c", 96
+	.dbg	line, "lesson11.c", 101
 	lda     _Nametable_Plus
 	and     #$01
 	sta     _Nametable_Plus
 ;
 ; ++TEST; // for debugging
 ;
-	.dbg	line, "lesson11.c", 99
+	.dbg	line, "lesson11.c", 104
 L08BB:	inc     $00FF
 ;
-; if ((Horiz_scroll_Plus & 0x1e)==0)
+; if ((Horiz_scroll_Plus & 0x1e) == 0)
 ;
-	.dbg	line, "lesson11.c", 100
+	.dbg	line, "lesson11.c", 105
 	lda     _Horiz_scroll_Plus
 	and     #$1E
 	bne     L08BC
 ;
-; New_Room(); // 6245 cycles
+; NewRoom(); // 6245 cycles
 ;
-	.dbg	line, "lesson11.c", 101
-	jsr     _New_Room
+	.dbg	line, "lesson11.c", 106
+	jsr     _NewRoom
 ;
 ; ++TEST; // for debugging
 ;
-	.dbg	line, "lesson11.c", 103
+	.dbg	line, "lesson11.c", 108
 L08BC:	inc     $00FF
 ;
-; Should_We_Buffer(); // 4422 cycles
+; ShouldWeBuffer(); // 4422 cycles
 ;
-	.dbg	line, "lesson11.c", 104
-	jsr     _Should_We_Buffer
+	.dbg	line, "lesson11.c", 109
+	jsr     _ShouldWeBuffer
 ;
 ; ++TEST; // for debugging
 ;
-	.dbg	line, "lesson11.c", 105
+	.dbg	line, "lesson11.c", 110
 	inc     $00FF
 ;
 ; PPU_MASK = 0xff; // for debugging, turns screen grey to show how much of frame left
 ;
-	.dbg	line, "lesson11.c", 106
+	.dbg	line, "lesson11.c", 111
 	lda     #$FF
 	sta     $2001
 ;
-; for(temp = 0; temp < 8; temp++){ // just wait a bit, at least 1 scanline
+; for (temp = 0; temp < 8; temp++)
 ;
-	.dbg	line, "lesson11.c", 110
+	.dbg	line, "lesson11.c", 116
 	lda     #$00
 	sta     _temp
 L08BD:	lda     _temp
@@ -4526,30 +4526,30 @@ L08BD:	lda     _temp
 ;
 ; ++dummy;
 ;
-	.dbg	line, "lesson11.c", 111
+	.dbg	line, "lesson11.c", 118
 	inc     _dummy
 ;
-; for(temp = 0; temp < 8; temp++){ // just wait a bit, at least 1 scanline
+; for (temp = 0; temp < 8; temp++)
 ;
-	.dbg	line, "lesson11.c", 110
+	.dbg	line, "lesson11.c", 116
 	inc     _temp
 	jmp     L08BD
 ;
 ; PPU_MASK = 0x1e; // turn screen color back to regular
 ;
-	.dbg	line, "lesson11.c", 113
+	.dbg	line, "lesson11.c", 120
 L08BE:	lda     #$1E
 	sta     $2001
 ;
 ; NMI_flag = 0;
 ;
-	.dbg	line, "lesson11.c", 115
+	.dbg	line, "lesson11.c", 122
 	lda     #$00
 	sta     _NMI_flag
 ;
-; while (1){ // infinite loop
+; while (1)
 ;
-	.dbg	line, "lesson11.c", 51
+	.dbg	line, "lesson11.c", 53
 	jmp     L08B8
 	.dbg	line
 

@@ -83,29 +83,29 @@
 	.export		_MetaSprite_X
 	.export		_MetaSprite_Tile_Left
 	.export		_MetaSprite_Attrib_Left
-	.export		_All_Off
-	.export		_All_On
-	.export		_Reset_Scroll
-	.export		_Load_Palette
-	.export		_update_Sprites
-	.export		_Collision_Down
-	.export		_move_logic
-	.export		_Do_Buffer
-	.export		_Do_Buffer2
-	.export		_Do_Buffer3
-	.export		_Draw_Background
-	.export		_Set_Sprite_Zero
-	.export		_Load_HUD
-	.export		_Should_We_Buffer
-	.export		_New_Room
+	.export		_AllOff
+	.export		_AllOn
+	.export		_ResetScroll
+	.export		_LoadPalette
+	.export		_UpdateSprites
+	.export		_CollisionDown
+	.export		_MoveLogic
+	.export		_DoBuffer
+	.export		_DoBuffer2
+	.export		_DoBuffer3
+	.export		_DrawBackground
+	.export		_SetSpriteZero
+	.export		_LoadHud
+	.export		_ShouldWeBuffer
+	.export		_NewRoom
 	.import		_memcpy
 	.import		_Wait_Vblank
 	.import		_Get_Input
 	.import		_Sprite_Zero
 	.import		_Super_Fast_Write_PPU
 	.import		_Super_Fast_Write_PPU2
-	.export		_Buffer_Tiles
-	.export		_Buffer_Tiles2
+	.export		_BufferTiles
+	.export		_BufferTiles2
 	.export		_main
 
 .segment	"RODATA"
@@ -1368,12 +1368,12 @@ _BUFFER7:
 	.res	8,$00
 
 ; ---------------------------------------------------------------
-; void __near__ All_Off (void)
+; void __near__ AllOff (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_All_Off: near
+.proc	_AllOff: near
 
 .segment	"CODE"
 
@@ -1394,12 +1394,12 @@ _BUFFER7:
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ All_On (void)
+; void __near__ AllOn (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_All_On: near
+.proc	_AllOn: near
 
 .segment	"CODE"
 
@@ -1409,7 +1409,7 @@ _BUFFER7:
 	lda     #$94
 	sta     $2000
 ;
-; PPU_MASK = 0x1e; 
+; PPU_MASK = 0x1e;
 ;
 	lda     #$1E
 	sta     $2001
@@ -1421,12 +1421,12 @@ _BUFFER7:
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Reset_Scroll (void)
+; void __near__ ResetScroll (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Reset_Scroll: near
+.proc	_ResetScroll: near
 
 .segment	"CODE"
 
@@ -1455,12 +1455,12 @@ _BUFFER7:
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Load_Palette (void)
+; void __near__ LoadPalette (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Load_Palette: near
+.proc	_LoadPalette: near
 
 .segment	"CODE"
 
@@ -1475,7 +1475,7 @@ _BUFFER7:
 	lda     #$00
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	sta     _index
 L083F:	lda     _index
@@ -1488,7 +1488,7 @@ L083F:	lda     _index
 	lda     _PALETTE,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	inc     _index
 	jmp     L083F
@@ -1500,12 +1500,12 @@ L05F0:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ update_Sprites (void)
+; void __near__ UpdateSprites (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_update_Sprites: near
+.proc	_UpdateSprites: near
 
 .segment	"CODE"
 
@@ -1522,12 +1522,12 @@ L05F0:	rts
 	lda     #$00
 	sta     _index4
 ;
-; if (direction == 0){ // right
+; if (direction == 0)
 ;
 	lda     _direction
 	jne     L0847
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	sta     _index
 L0846:	lda     _index
@@ -1629,12 +1629,12 @@ L0622:	sta     ptr1
 ;
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	inc     _index
 	jmp     L0846
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 L0847:	lda     #$00
 	sta     _index
@@ -1737,7 +1737,7 @@ L0646:	sta     ptr1
 ;
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	inc     _index
 	jmp     L0848
@@ -1745,17 +1745,17 @@ L0646:	sta     ptr1
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Collision_Down (void)
+; void __near__ CollisionDown (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Collision_Down: near
+.proc	_CollisionDown: near
 
 .segment	"CODE"
 
 ;
-; if (NametableB == 0){ // first collision map
+; if (NametableB == 0)
 ;
 	lda     _NametableB
 	bne     L064C
@@ -1765,7 +1765,7 @@ L0646:	sta     ptr1
 	ldy     _collision_Index
 	lda     _C_MAP,y
 ;
-; else { // second collision map
+; else
 ;
 	jmp     L0850
 ;
@@ -1790,17 +1790,17 @@ L0850:	sta     _temp
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ move_logic (void)
+; void __near__ MoveLogic (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_move_logic: near
+.proc	_MoveLogic: near
 
 .segment	"CODE"
 
 ;
-; if ((joypad1 & (RIGHT|LEFT)) == 0){ // no L or R
+; if ((joypad1 & (RIGHT | LEFT)) == 0)
 ;
 	lda     _joypad1
 	and     #$03
@@ -1810,12 +1810,12 @@ L0850:	sta     _temp
 ;
 	sta     _walk_count
 ;
-; if (X_speed >= 0){ // if positive, going right
+; if (X_speed >= 0)
 ;
 	ldx     _X_speed
 	bmi     L0667
 ;
-; if (X_speed >= 4){
+; if (X_speed >= 4)
 ;
 	lda     _X_speed
 	sec
@@ -1834,11 +1834,11 @@ L066D:	asl     a
 	sta     _X_speed
 	bpl     L085C
 ;
-; else {
+; else
 ;
 	jmp     L085C
 ;
-; if (X_speed <= (-4)){ // -4
+; if (X_speed <= (-4))
 ;
 L0667:	lda     _X_speed
 	sec
@@ -1849,7 +1849,7 @@ L0679:	asl     a
 	lda     #$00
 	bcc     L085B
 ;
-; X_speed +=4;
+; X_speed += 4;
 ;
 	lda     #$04
 	clc
@@ -1857,7 +1857,7 @@ L0679:	asl     a
 	sta     _X_speed
 	bpl     L085C
 ;
-; else {
+; else
 ;
 	jmp     L085C
 ;
@@ -1865,7 +1865,7 @@ L0679:	asl     a
 ;
 L085B:	sta     _X_speed
 ;
-; if ((joypad1 & RIGHT) != 0){
+; if ((joypad1 & RIGHT) != 0)
 ;
 L085C:	lda     _joypad1
 	and     #$01
@@ -1880,7 +1880,7 @@ L085C:	lda     _joypad1
 	lda     #$00
 	sta     _direction
 ;
-; if (X_speed >= 0){ // going right
+; if (X_speed >= 0)
 ;
 	ldx     _X_speed
 	bmi     L0687
@@ -1893,7 +1893,7 @@ L085C:	lda     _joypad1
 	sta     _X_speed
 	bpl     L085E
 ;
-; else { // going left
+; else
 ;
 	jmp     L085E
 ;
@@ -1914,7 +1914,7 @@ L0687:	lda     #$08
 	lda     #$00
 	sta     _X_speed
 ;
-; if ((joypad1 & LEFT) != 0){
+; if ((joypad1 & LEFT) != 0)
 ;
 L085E:	lda     _joypad1
 	and     #$02
@@ -1929,7 +1929,7 @@ L085E:	lda     _joypad1
 	lda     #$01
 	sta     _direction
 ;
-; if (X_speed <= 0){ // was <, produced error, couldn't go left
+; if (X_speed <= 0)
 ;
 	lda     _X_speed
 	sec
@@ -1946,7 +1946,7 @@ L06A0:	bpl     L085F
 	sta     _X_speed
 	bpl     L0861
 ;
-; else { // going right
+; else
 ;
 	jmp     L0861
 ;
@@ -1992,7 +1992,7 @@ L06B2:	sta     _Scroll_Adjusted_X
 	lda     _Scroll_Adjusted_X+1
 	sta     _high_byte
 ;
-; if (high_byte != 0){ // if H scroll + Sprite X > 255, then we should use
+; if (high_byte != 0)
 ;
 	lda     _high_byte
 	beq     L0862
@@ -2007,7 +2007,7 @@ L06B2:	sta     _Scroll_Adjusted_X
 	and     #$01
 	sta     _NametableB
 ;
-; collision_Index = (((char)Scroll_Adjusted_X>>4) + ((Y1+16) & 0xf0)); // bottom left
+; collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom left
 ;
 L0862:	lda     _Scroll_Adjusted_X
 	lsr     a
@@ -2028,9 +2028,9 @@ L0862:	lda     _Scroll_Adjusted_X
 	lda     #$00
 	sta     _collision
 ;
-; Collision_Down();
+; CollisionDown();
 ;
-	jsr     _Collision_Down
+	jsr     _CollisionDown
 ;
 ; NametableB = Nametable;
 ;
@@ -2057,7 +2057,7 @@ L06C9:	sta     _Scroll_Adjusted_X
 	lda     _Scroll_Adjusted_X+1
 	sta     _high_byte
 ;
-; if (high_byte != 0){ // if H scroll + Sprite X > 255, then we should use
+; if (high_byte != 0)
 ;
 	lda     _high_byte
 	beq     L0863
@@ -2072,7 +2072,7 @@ L06C9:	sta     _Scroll_Adjusted_X
 	and     #$01
 	sta     _NametableB
 ;
-; collision_Index = (((char)Scroll_Adjusted_X>>4) + ((Y1+16) & 0xf0)); // bottom right
+; collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom right
 ;
 L0863:	lda     _Scroll_Adjusted_X
 	lsr     a
@@ -2088,9 +2088,9 @@ L0863:	lda     _Scroll_Adjusted_X
 	adc     ptr1
 	sta     _collision_Index
 ;
-; Collision_Down();
+; CollisionDown();
 ;
-	jsr     _Collision_Down
+	jsr     _CollisionDown
 ;
 ; if ((Y1 & 0x0f) > 1) // only platform collide if nearly aligned to a metatile
 ;
@@ -2104,7 +2104,7 @@ L0863:	lda     _Scroll_Adjusted_X
 	lda     #$00
 	sta     _collision
 ;
-; if (collision == 0){
+; if (collision == 0)
 ;
 L0864:	lda     _collision
 	bne     L0865
@@ -2117,7 +2117,7 @@ L0864:	lda     _collision
 	sta     _Y_speed
 	bpl     L0866
 ;
-; else {
+; else
 ;
 	jmp     L0866
 ;
@@ -2132,12 +2132,12 @@ L0865:	lda     #$00
 	and     #$F0
 	sta     _Y1
 ;
-; if (collision > 0){
+; if (collision > 0)
 ;
 L0866:	lda     _collision
 	beq     L086A
 ;
-; if (((joypad1 & A_BUTTON) != 0) && ((joypad1old & A_BUTTON) == 0)){
+; if (((joypad1 & A_BUTTON) != 0) && ((joypad1old & A_BUTTON) == 0))
 ;
 	lda     _joypad1
 	and     #$80
@@ -2151,7 +2151,7 @@ L0866:	lda     _collision
 	lda     #$C8
 	sta     _Y_speed
 ;
-; if (X_speed >= 0){ // going right
+; if (X_speed >= 0)
 ;
 L086A:	ldx     _X_speed
 	bmi     L06F6
@@ -2169,7 +2169,7 @@ L06FC:	bpl     L086B
 ;
 	lda     #$20
 ;
-; else {
+; else
 ;
 	jmp     L0853
 ;
@@ -2187,7 +2187,7 @@ L0703:	bpl     L086B
 	lda     #$E0
 L0853:	sta     _X_speed
 ;
-; if (Y_speed >= 0){
+; if (Y_speed >= 0)
 ;
 L086B:	ldx     _Y_speed
 	bmi     L086C
@@ -2211,12 +2211,12 @@ L070C:	bpl     L086C
 L086C:	lda     _Horiz_scroll
 	sta     _Horiz_scroll_Old
 ;
-; if (X_speed >= 0){ // right
+; if (X_speed >= 0)
 ;
 	ldx     _X_speed
 	bmi     L0711
 ;
-; if (X1 < 0x80){
+; if (X1 < 0x80)
 ;
 	ldx     #$00
 	lda     _X1
@@ -2242,7 +2242,7 @@ L0719:	jsr     asrax4
 ;
 	lda     #$80
 ;
-; else{
+; else
 ;
 	jmp     L0854
 ;
@@ -2256,7 +2256,7 @@ L0722:	jsr     asrax4
 	adc     _Horiz_scroll
 	sta     _Horiz_scroll
 ;
-; if (Horiz_scroll_Old > Horiz_scroll){ // if pass 0, switch nametables
+; if (Horiz_scroll_Old > Horiz_scroll)
 ;
 	lda     _Horiz_scroll_Old
 	sec
@@ -2272,11 +2272,11 @@ L0722:	jsr     asrax4
 ;
 	inc     _Room
 ;
-; else { // going left
+; else
 ;
 	jmp     L086E
 ;
-; X1 += (X_speed >>4); // use the high nibble
+; X1 += (X_speed >> 4); // use the high nibble
 ;
 L0711:	ldx     #$00
 	lda     _X_speed
@@ -2364,19 +2364,19 @@ L0748:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Do_Buffer (void)
+; void __near__ DoBuffer (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Do_Buffer: near
+.proc	_DoBuffer: near
 
 .segment	"CODE"
 
 ;
-; Buffer_Tiles();
+; BufferTiles();
 ;
-	jsr     _Buffer_Tiles
+	jsr     _BufferTiles
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
@@ -2385,9 +2385,9 @@ L0748:	rts
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; Buffer_Tiles2();
+; BufferTiles2();
 ;
-	jsr     _Buffer_Tiles2
+	jsr     _BufferTiles2
 ;
 ; Horiz_scroll_Plus -= 0x10;
 ;
@@ -2403,17 +2403,17 @@ L0748:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Do_Buffer2 (void)
+; void __near__ DoBuffer2 (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Do_Buffer2: near
+.proc	_DoBuffer2: near
 
 .segment	"CODE"
 
 ;
-; if (Nametable_Plus == 0){ // write to right screen
+; if (Nametable_Plus == 0)
 ;
 	lda     _Nametable_Plus
 	bne     L0878
@@ -2422,7 +2422,7 @@ L0748:	rts
 ;
 	lda     #$24
 ;
-; else { // write to the left screen
+; else
 ;
 	jmp     L0877
 ;
@@ -2431,7 +2431,7 @@ L0748:	rts
 L0878:	lda     #$20
 L0877:	sta     _PPU_ADDRESS_High
 ;
-; PPU_ADDRESS_Low = ((Horiz_scroll_Plus&0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
 ;
 	lda     _Horiz_scroll_Plus
 	and     #$F0
@@ -2459,17 +2459,17 @@ L0877:	sta     _PPU_ADDRESS_High
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Do_Buffer3 (void)
+; void __near__ DoBuffer3 (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Do_Buffer3: near
+.proc	_DoBuffer3: near
 
 .segment	"CODE"
 
 ;
-; if (Nametable_Plus == 0){ // write to right screen
+; if (Nametable_Plus == 0)
 ;
 	lda     _Nametable_Plus
 	bne     L087A
@@ -2478,7 +2478,7 @@ L0877:	sta     _PPU_ADDRESS_High
 ;
 	lda     #$24
 ;
-; else { // write to the left screen
+; else
 ;
 	jmp     L0879
 ;
@@ -2487,7 +2487,7 @@ L0877:	sta     _PPU_ADDRESS_High
 L087A:	lda     #$20
 L0879:	sta     _PPU_ADDRESS_High
 ;
-; PPU_ADDRESS_Low = ((Horiz_scroll_Plus&0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
 ;
 	lda     _Horiz_scroll_Plus
 	and     #$F0
@@ -2508,24 +2508,24 @@ L0879:	sta     _PPU_ADDRESS_High
 	lda     _PPU_ADDRESS_Low
 	sta     $2006
 ;
-; Super_Fast_Write_PPU2(); 
+; Super_Fast_Write_PPU2();
 ;
 	jmp     _Super_Fast_Write_PPU2
 
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Draw_Background (void)
+; void __near__ DrawBackground (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Draw_Background: near
+.proc	_DrawBackground: near
 
 .segment	"CODE"
 
 ;
-; memcpy (C_MAP, A1, 240);
+; memcpy(C_MAP, A1, 240);
 ;
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
@@ -2537,7 +2537,7 @@ L0879:	sta     _PPU_ADDRESS_High
 	lda     #$F0
 	jsr     _memcpy
 ;
-; memcpy (C_MAP2, A2, 240);
+; memcpy(C_MAP2, A2, 240);
 ;
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
@@ -2559,7 +2559,7 @@ L0879:	sta     _PPU_ADDRESS_High
 	lda     #$04
 	sta     $2000
 ;
-; for (A = 0; A < 8; ++A){
+; for (A = 0; A < 8; ++A)
 ;
 	lda     #$00
 	sta     _A
@@ -2567,24 +2567,13 @@ L087B:	lda     _A
 	cmp     #$08
 	bcs     L087C
 ;
-; Do_Buffer(); // fill buffer
+; DoBuffer(); // fill buffer
 ;
-	jsr     _Do_Buffer
+	jsr     _DoBuffer
 ;
-; Do_Buffer2(); // draw to ppu
+; DoBuffer2(); // draw to ppu
 ;
-	jsr     _Do_Buffer2
-;
-; Horiz_scroll_Plus += 0x10;
-;
-	lda     #$10
-	clc
-	adc     _Horiz_scroll_Plus
-	sta     _Horiz_scroll_Plus
-;
-; Do_Buffer3(); // draw to ppu
-;
-	jsr     _Do_Buffer3
+	jsr     _DoBuffer2
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
@@ -2593,7 +2582,18 @@ L087B:	lda     _A
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; for (A = 0; A < 8; ++A){
+; DoBuffer3(); // draw to ppu
+;
+	jsr     _DoBuffer3
+;
+; Horiz_scroll_Plus += 0x10;
+;
+	lda     #$10
+	clc
+	adc     _Horiz_scroll_Plus
+	sta     _Horiz_scroll_Plus
+;
+; for (A = 0; A < 8; ++A)
 ;
 	inc     _A
 	jmp     L087B
@@ -2602,7 +2602,7 @@ L087B:	lda     _A
 ;
 L087C:	dec     _Nametable_Plus
 ;
-; for (A = 0; A < 8; ++A){
+; for (A = 0; A < 8; ++A)
 ;
 	lda     #$00
 	sta     _A
@@ -2610,24 +2610,13 @@ L087D:	lda     _A
 	cmp     #$08
 	bcs     L079B
 ;
-; Do_Buffer(); // fill buffer
+; DoBuffer(); // fill buffer
 ;
-	jsr     _Do_Buffer
+	jsr     _DoBuffer
 ;
-; Do_Buffer2(); // draw to ppu
+; DoBuffer2(); // draw to ppu
 ;
-	jsr     _Do_Buffer2
-;
-; Horiz_scroll_Plus += 0x10;
-;
-	lda     #$10
-	clc
-	adc     _Horiz_scroll_Plus
-	sta     _Horiz_scroll_Plus
-;
-; Do_Buffer3(); // draw to ppu
-;
-	jsr     _Do_Buffer3
+	jsr     _DoBuffer2
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
@@ -2636,7 +2625,18 @@ L087D:	lda     _A
 	adc     _Horiz_scroll_Plus
 	sta     _Horiz_scroll_Plus
 ;
-; for (A = 0; A < 8; ++A){
+; DoBuffer3(); // draw to ppu
+;
+	jsr     _DoBuffer3
+;
+; Horiz_scroll_Plus += 0x10;
+;
+	lda     #$10
+	clc
+	adc     _Horiz_scroll_Plus
+	sta     _Horiz_scroll_Plus
+;
+; for (A = 0; A < 8; ++A)
 ;
 	inc     _A
 	jmp     L087D
@@ -2648,12 +2648,12 @@ L079B:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Set_Sprite_Zero (void)
+; void __near__ SetSpriteZero (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Set_Sprite_Zero: near
+.proc	_SetSpriteZero: near
 
 .segment	"CODE"
 
@@ -2685,12 +2685,12 @@ L079B:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Load_HUD (void)
+; void __near__ LoadHud (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Load_HUD: near
+.proc	_LoadHud: near
 
 .segment	"CODE"
 
@@ -2705,7 +2705,7 @@ L079B:	rts
 	lda     #$42
 	sta     $2006
 ;
-; for (index = 0;index < sizeof(HUD);++index){
+; for (index = 0; index < sizeof(HUD); ++index)
 ;
 	lda     #$00
 	sta     _index
@@ -2719,7 +2719,7 @@ L087E:	lda     _index
 	lda     _HUD,y
 	sta     $2007
 ;
-; for (index = 0;index < sizeof(HUD);++index){
+; for (index = 0; index < sizeof(HUD); ++index)
 ;
 	inc     _index
 	jmp     L087E
@@ -2739,7 +2739,7 @@ L087F:	lda     #$03
 	lda     #$C0
 	sta     $2006
 ;
-; for (index = 0;index < 8; ++index){
+; for (index = 0; index < 8; ++index)
 ;
 	lda     #$00
 	sta     _index
@@ -2752,7 +2752,7 @@ L0880:	lda     _index
 	lda     #$AA
 	sta     $2007
 ;
-; for (index = 0;index < 8; ++index){
+; for (index = 0; index < 8; ++index)
 ;
 	inc     _index
 	jmp     L0880
@@ -2764,46 +2764,46 @@ L07D5:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Should_We_Buffer (void)
+; void __near__ ShouldWeBuffer (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Should_We_Buffer: near
+.proc	_ShouldWeBuffer: near
 
 .segment	"CODE"
 
 ;
-; if (direction == 0){ // right
+; if (direction == 0)
 ;
 	lda     _direction
 	bne     L07E8
 ;
-; if ((Horiz_scroll_Plus & 0x1e) == 0x02){ // it was == 0
+; if ((Horiz_scroll_Plus & 0x1e) == 0x02)
 ;
 	lda     _Horiz_scroll_Plus
 	and     #$1E
 	cmp     #$02
 	bne     L0881
 ;
-; Buffer_Tiles();
+; BufferTiles();
 ;
-	jsr     _Buffer_Tiles
+	jsr     _BufferTiles
 ;
 ; ++PPU_flag;
 ;
 	inc     _PPU_flag
 ;
-; if ((Horiz_scroll_Plus & 0x1e) == 0x10){
+; if ((Horiz_scroll_Plus & 0x1e) == 0x10)
 ;
 L0881:	lda     _Horiz_scroll_Plus
 	and     #$1E
 	cmp     #$10
 	bne     L07E8
 ;
-; Buffer_Tiles2();
+; BufferTiles2();
 ;
-	jsr     _Buffer_Tiles2
+	jsr     _BufferTiles2
 ;
 ; ++PPU_flag2;
 ;
@@ -2816,12 +2816,12 @@ L07E8:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ New_Room (void)
+; void __near__ NewRoom (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_New_Room: near
+.proc	_NewRoom: near
 
 .segment	"CODE"
 
@@ -2867,12 +2867,12 @@ L0887:	adc     #<(_ROOMS)
 	lsr     a
 	sta     _A
 ;
-; if (Nametable_Plus == 0){ // load to right cmap
+; if (Nametable_Plus == 0)
 ;
 	lda     _Nametable_Plus
 	bne     L0889
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 	sta     _index
 	tax
@@ -2905,13 +2905,13 @@ L0805:	jsr     pushax
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 	ldx     #$00
 	inc     _index
 	jmp     L0888
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 L0889:	tya
 	sta     _index
@@ -2945,13 +2945,13 @@ L0815:	jsr     pushax
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 	ldx     #$00
 	inc     _index
 	jmp     L088A
 ;
-; A = (Horiz_scroll_Plus+0x10)>> 4;
+; A = (Horiz_scroll_Plus + 0x10) >> 4;
 ;
 L088B:	lda     _Horiz_scroll_Plus
 	clc
@@ -2961,12 +2961,12 @@ L088B:	lda     _Horiz_scroll_Plus
 L081D:	jsr     shrax4
 	sta     _A
 ;
-; if (Nametable_Plus == 0){ // load to right cmap
+; if (Nametable_Plus == 0)
 ;
 	lda     _Nametable_Plus
 	bne     L088D
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 	sta     _index
 L088C:	lda     _index
@@ -2998,12 +2998,12 @@ L082A:	jsr     pushax
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 	inc     _index
 	jmp     L088C
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 L088D:	lda     #$00
 	sta     _index
@@ -3036,7 +3036,7 @@ L083A:	jsr     pushax
 	adc     _A
 	sta     _A
 ;
-; for (index=0;index<15;++index){
+; for (index = 0; index < 15; ++index)
 ;
 	inc     _index
 	jmp     L088E
@@ -3048,12 +3048,12 @@ L0831:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Buffer_Tiles (void)
+; void __near__ BufferTiles (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Buffer_Tiles: near
+.proc	_BufferTiles: near
 
 .segment	"CODE"
 
@@ -3412,12 +3412,12 @@ L0894:	lda     _index
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Buffer_Tiles2 (void)
+; void __near__ BufferTiles2 (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Buffer_Tiles2: near
+.proc	_BufferTiles2: near
 
 .segment	"CODE"
 
@@ -3828,13 +3828,13 @@ L055A:	rts
 .segment	"CODE"
 
 ;
-; All_Off(); // turn off screen
+; AllOff(); // turn off screen
 ;
-	jsr     _All_Off
+	jsr     _AllOff
 ;
-; Draw_Background();
+; DrawBackground();
 ;
-	jsr     _Draw_Background
+	jsr     _DrawBackground
 ;
 ; X1 = 0x80; // starting position
 ;
@@ -3846,34 +3846,34 @@ L055A:	rts
 	lda     #$70
 	sta     _Y1
 ;
-; Set_Sprite_Zero();
+; SetSpriteZero();
 ;
-	jsr     _Set_Sprite_Zero
+	jsr     _SetSpriteZero
 ;
 ; PPU_CTRL = 0x90; // rightward increments to PPU
 ;
 	lda     #$90
 	sta     $2000
 ;
-; Load_Palette();
+; LoadPalette();
 ;
-	jsr     _Load_Palette
+	jsr     _LoadPalette
 ;
-; Load_HUD();
+; LoadHud();
 ;
-	jsr     _Load_HUD
+	jsr     _LoadHud
 ;
-; Reset_Scroll();
+; ResetScroll();
 ;
-	jsr     _Reset_Scroll
+	jsr     _ResetScroll
 ;
 ; Wait_Vblank();
 ;
 	jsr     _Wait_Vblank
 ;
-; All_On(); // turn on screen
+; AllOn(); // turn on screen
 ;
-	jsr     _All_On
+	jsr     _AllOn
 ;
 ; while (NMI_flag == 0); // wait till NMI
 ;
@@ -3885,9 +3885,9 @@ L08A1:	lda     _NMI_flag
 	lda     _PPU_flag
 	beq     L08A2
 ;
-; Do_Buffer2();
+; DoBuffer2();
 ;
-	jsr     _Do_Buffer2
+	jsr     _DoBuffer2
 ;
 ; PPU_CTRL = 0x94;
 ;
@@ -3908,9 +3908,9 @@ L08A2:	lda     #$94
 	lda     _PPU_flag2
 	beq     L08A3
 ;
-; Do_Buffer3();
+; DoBuffer3();
 ;
-	jsr     _Do_Buffer3
+	jsr     _DoBuffer3
 ;
 ; PPU_CTRL = 0x94;
 ;
@@ -3939,7 +3939,7 @@ L08A3:	lda     #$94
 ;
 	sta     _PPU_flag2
 ;
-; if ((joypad1 & START) != 0){
+; if ((joypad1 & START) != 0)
 ;
 	lda     _joypad1
 	and     #$10
@@ -3976,13 +3976,13 @@ L059E:	jsr     _Sprite_Zero
 	adc     #$94
 	sta     $2000
 ;
-; move_logic();
+; MoveLogic();
 ;
-	jsr     _move_logic
+	jsr     _MoveLogic
 ;
-; update_Sprites();
+; UpdateSprites();
 ;
-	jsr     _update_Sprites
+	jsr     _UpdateSprites
 ;
 ; RoomPlus = Room;   // make a copy of variables, but 20 pixels right
 ;
@@ -4001,7 +4001,7 @@ L059E:	jsr     _Sprite_Zero
 	adc     #$20
 	sta     _Horiz_scroll_Plus
 ;
-; if (Horiz_scroll_Plus < 0x20){
+; if (Horiz_scroll_Plus < 0x20)
 ;
 	cmp     #$20
 	bcs     L08A4
@@ -4026,26 +4026,26 @@ L059E:	jsr     _Sprite_Zero
 	and     #$01
 	sta     _Nametable_Plus
 ;
-; if ((Horiz_scroll_Plus & 0x1e)==0)
+; if ((Horiz_scroll_Plus & 0x1e) == 0)
 ;
 L08A4:	lda     _Horiz_scroll_Plus
 	and     #$1E
 	bne     L05C5
 ;
-; New_Room(); // 6245 cycles
+; NewRoom(); // 6245 cycles
 ;
-	jsr     _New_Room
+	jsr     _NewRoom
 ;
-; Should_We_Buffer(); // 4422 cycles
+; ShouldWeBuffer(); // 4422 cycles
 ;
-L05C5:	jsr     _Should_We_Buffer
+L05C5:	jsr     _ShouldWeBuffer
 ;
 ; NMI_flag = 0;
 ;
 	lda     #$00
 	sta     _NMI_flag
 ;
-; while (1){ // infinite loop
+; while (1)
 ;
 	jmp     L08A1
 

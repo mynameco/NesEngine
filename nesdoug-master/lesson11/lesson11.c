@@ -37,17 +37,17 @@ void TestLabel(void)
 
 void main(void)
 {
-	All_Off(); // turn off screen
-	Draw_Background();
+	AllOff(); // turn off screen
+	DrawBackground();
 	X1 = 0x80; // starting position
 	Y1 = 0x70; // middle of screen
-	Set_Sprite_Zero();
+	SetSpriteZero();
 	PPU_CTRL = 0x90; // rightward increments to PPU
-	Load_Palette();
-	Load_HUD();
-	Reset_Scroll();
+	LoadPalette();
+	LoadHud();
+	ResetScroll();
 	Wait_Vblank();
-	All_On(); // turn on screen
+	AllOn(); // turn on screen
 
 	// infinite loop
 	while (1)
@@ -55,13 +55,13 @@ void main(void)
 		while (NMI_flag == 0); // wait till NMI
 
 		if (PPU_flag != 0)
-			Do_Buffer2();
+			DoBuffer2();
 		PPU_CTRL = 0x94;
 		SCROLL = 0;
 		SCROLL = 0;		// resetting scroll position, again
 
 		if (PPU_flag2 != 0)
-			Do_Buffer3();
+			DoBuffer3();
 		PPU_CTRL = 0x94;
 		SCROLL = 0;
 		SCROLL = 0;		// resetting scroll position, again
@@ -84,8 +84,8 @@ void main(void)
 		SCROLL = 0;		// setting the new scroll position
 		PPU_CTRL = (0x94 + Nametable);
 
-		move_logic();
-		update_Sprites();
+		MoveLogic();
+		UpdateSprites();
 
 		// originally, I was drawing to opposite nametable, at the same
 		// position as Horiz_scroll, but I could see the changes a little, so I
@@ -103,10 +103,10 @@ void main(void)
 
 		++TEST; // for debugging
 		if ((Horiz_scroll_Plus & 0x1e) == 0)
-			New_Room(); // 6245 cycles
+			NewRoom(); // 6245 cycles
 
 		++TEST; // for debugging
-		Should_We_Buffer(); // 4422 cycles
+		ShouldWeBuffer(); // 4422 cycles
 		++TEST; // for debugging
 		PPU_MASK = 0xff; // for debugging, turns screen grey to show how much of frame left
 		// also sets all 'color emphasis' bits, which should darken the screen
@@ -125,19 +125,19 @@ void main(void)
 
 // inside the startup code, the NMI routine will ++NMI_flag and ++Frame_Count at each V-blank
 
-void All_Off(void)
+void AllOff(void)
 {
 	PPU_CTRL = 0;
 	PPU_MASK = 0;
 }
 
-void All_On(void)
+void AllOn(void)
 {
 	PPU_CTRL = 0x94; // screen is on, NMI on
 	PPU_MASK = 0x1e;
 }
 
-void Reset_Scroll(void)
+void ResetScroll(void)
 {
 	PPU_ADDRESS = 0;
 	PPU_ADDRESS = 0;
@@ -145,7 +145,7 @@ void Reset_Scroll(void)
 	SCROLL = 0;
 }
 
-void Load_Palette(void)
+void LoadPalette(void)
 {
 	PPU_ADDRESS = 0x3f;
 	PPU_ADDRESS = 0x00;
@@ -155,7 +155,7 @@ void Load_Palette(void)
 	}
 }
 
-void update_Sprites(void)
+void UpdateSprites(void)
 {
 	state4 = state << 2; // shift left 2 = multiply 4
 	index4 = 0;
@@ -191,7 +191,7 @@ void update_Sprites(void)
 	}
 }
 
-void Collision_Down(void)
+void CollisionDown(void)
 {
 	// first collision map
 	if (NametableB == 0)
@@ -207,7 +207,7 @@ void Collision_Down(void)
 	}
 }
 
-void move_logic(void)
+void MoveLogic(void)
 {
 	if ((joypad1 & (RIGHT | LEFT)) == 0)
 	{ // no L or R
@@ -287,7 +287,7 @@ void move_logic(void)
 	// we want to find which metatile in the collision map this point is in...is it solid?
 	collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom left
 	collision = 0;
-	Collision_Down();
+	CollisionDown();
 
 	// now check the bottom right corner of character
 	// which nametable am I in?
@@ -300,7 +300,7 @@ void move_logic(void)
 		NametableB &= 1;	// keep it 0 or 1
 	}
 	collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom right
-	Collision_Down();
+	CollisionDown();
 
 	if ((Y1 & 0x0f) > 1) // only platform collide if nearly aligned to a metatile
 		collision = 0;
@@ -392,20 +392,20 @@ void move_logic(void)
 
 
 // do 4 columns, 1 at every 0x20 pixel moves. do half, then half.
-void Do_Buffer(void)
+void DoBuffer(void)
 { // puts from cmap to buffer
 
-	Buffer_Tiles();
+	BufferTiles();
 
 	Horiz_scroll_Plus += 0x10;
 
-	Buffer_Tiles2();
+	BufferTiles2();
 
 	Horiz_scroll_Plus -= 0x10;
 }
 
 
-void Do_Buffer2(void)
+void DoBuffer2(void)
 { // first pass
 	if (Nametable_Plus == 0)
 	{ // write to right screen
@@ -422,7 +422,7 @@ void Do_Buffer2(void)
 }
 
 
-void Do_Buffer3(void)
+void DoBuffer3(void)
 { // second pass
 	if (Nametable_Plus == 0)
 	{ // write to right screen
@@ -440,7 +440,7 @@ void Do_Buffer3(void)
 
 
 // note, screen is off, this only runs at startup
-void Draw_Background(void)
+void DrawBackground(void)
 {
 	// load the collisions map into the RAM
 	memcpy(C_MAP, A1, 240);
@@ -451,25 +451,25 @@ void Draw_Background(void)
 	PPU_CTRL = 4; // sets to downward increments when writing to PPU
 	for (A = 0; A < 8; ++A)
 	{
-		Do_Buffer();	// fill buffer
-		Do_Buffer2();	// draw to ppu
+		DoBuffer();	// fill buffer
+		DoBuffer2();	// draw to ppu
 		Horiz_scroll_Plus += 0x10;
-		Do_Buffer3();	// draw to ppu
+		DoBuffer3();	// draw to ppu
 		Horiz_scroll_Plus += 0x10;
 	}
 	--Nametable_Plus;
 	for (A = 0; A < 8; ++A)
 	{
-		Do_Buffer();	// fill buffer
-		Do_Buffer2();	// draw to ppu
+		DoBuffer();	// fill buffer
+		DoBuffer2();	// draw to ppu
 		Horiz_scroll_Plus += 0x10;
-		Do_Buffer3();	// draw to ppu
+		DoBuffer3();	// draw to ppu
 		Horiz_scroll_Plus += 0x10;
 	}
 }
 
 
-void Set_Sprite_Zero(void)
+void SetSpriteZero(void)
 {
 	SPRITE_ZERO[0] = 0x16;	// y
 	SPRITE_ZERO[1] = 0x30;	// tile
@@ -478,7 +478,7 @@ void Set_Sprite_Zero(void)
 }
 
 
-void Load_HUD(void)
+void LoadHud(void)
 {
 	PPU_ADDRESS = 0x20;
 	PPU_ADDRESS = 0x42;
@@ -502,18 +502,18 @@ void Load_HUD(void)
  *	glitch our screen, since our sprite zero scroll would
  *	still be in effect when the PPU goes to render the HUD
  */
-void Should_We_Buffer(void)
+void ShouldWeBuffer(void)
 {
 	if (direction == 0)
 	{ // right
 		if ((Horiz_scroll_Plus & 0x1e) == 0x02)
 		{ // it was == 0
-			Buffer_Tiles();
+			BufferTiles();
 			++PPU_flag;
 		}
 		if ((Horiz_scroll_Plus & 0x1e) == 0x10)
 		{
-			Buffer_Tiles2();
+			BufferTiles2();
 			++PPU_flag2;
 		}
 	}
@@ -523,7 +523,7 @@ void Should_We_Buffer(void)
 // this function gets new data to put in the collision map
 // as we go right it fetches 2 columns of data at a time
 // each byte of data is a 16x16 square on the screen
-void New_Room(void)
+void NewRoom(void)
 { // left column
 	RoomB = RoomPlus + 1;
 	RoomB &= 3; // keep it 0-3, we only have 4 rooms

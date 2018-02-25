@@ -176,21 +176,21 @@ const unsigned char MetaSprite_Tile_Left[] =
 const unsigned char MetaSprite_Attrib_Left[] = { 0x40, 0x40, 0x40, 0x40 }; // attributes = H flipped
 
 // Prototypes
-void All_Off(void);
-void All_On(void);
-void Reset_Scroll(void);
-void Load_Palette(void);
-void update_Sprites(void);
-void Collision_Down(void);
-void move_logic(void);
-void Do_Buffer(void);
-void Do_Buffer2(void);
-void Do_Buffer3(void);
-void Draw_Background(void);
-void Set_Sprite_Zero(void);
-void Load_HUD(void);
-void Should_We_Buffer(void);
-void New_Room(void);
+void AllOff(void);
+void AllOn(void);
+void ResetScroll(void);
+void LoadPalette(void);
+void UpdateSprites(void);
+void CollisionDown(void);
+void MoveLogic(void);
+void DoBuffer(void);
+void DoBuffer2(void);
+void DoBuffer3(void);
+void DrawBackground(void);
+void SetSpriteZero(void);
+void LoadHud(void);
+void ShouldWeBuffer(void);
+void NewRoom(void);
 
 void __fastcall__ memcpy(void* dest, const void* src, int count);
 void Wait_Vblank(void);

@@ -1,7 +1,7 @@
 // fills buffer from metatile/collision map of room
 // first pass = the 2 columns to the left, 1/2 attribute table
 
-void Buffer_Tiles(void)
+void BufferTiles(void)
 {
 	index = 2; 	// will be skipping the top 2 metatiles, it's the HUD
 	index2 = 0;
@@ -69,7 +69,7 @@ void Buffer_Tiles(void)
 }
 
 // second pass = the 2 columns to the right, finish attribute table
-void Buffer_Tiles2(void)
+void BufferTiles2(void)
 {
 	index = 2; // will be skipping the top 2 metatiles, later
 	index2 = 0;
