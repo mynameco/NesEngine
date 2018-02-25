@@ -61,7 +61,7 @@ _index:
 	lda     #$00
 	sta     $2006
 ;
-; for(index = 0; index < sizeof(PALETTE); ++index){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	sta     _index
 L004C:	lda     _index
@@ -74,7 +74,7 @@ L004C:	lda     _index
 	lda     _PALETTE,y
 	sta     $2007
 ;
-; for(index = 0; index < sizeof(PALETTE); ++index){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	inc     _index
 	jmp     L004C
@@ -89,7 +89,7 @@ L004D:	lda     #$21
 	lda     #$CA
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(TEXT); ++index ){
+; for (index = 0; index < sizeof(TEXT); ++index)
 ;
 	lda     #$00
 	sta     _index
@@ -103,7 +103,7 @@ L004E:	lda     _index
 	lda     _TEXT,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(TEXT); ++index ){
+; for (index = 0; index < sizeof(TEXT); ++index)
 ;
 	inc     _index
 	jmp     L004E
