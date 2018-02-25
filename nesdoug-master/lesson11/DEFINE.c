@@ -37,17 +37,17 @@ unsigned char state;
 unsigned char state4;
 unsigned char joypad1;
 unsigned char joypad1old;
-unsigned char joypad1test; 
-unsigned char joypad2; 
+unsigned char joypad1test;
+unsigned char joypad2;
 unsigned char joypad2old;
 unsigned char joypad2test;
 unsigned char Room;
 unsigned char RoomB;
 unsigned char RoomPlus;
 const unsigned char *Room_Address; // is an int pointer, points to chars
-unsigned char Horiz_scroll; 
-unsigned char Horiz_scroll_Old; 
-unsigned char Horiz_scroll_Plus; 
+unsigned char Horiz_scroll;
+unsigned char Horiz_scroll_Old;
+unsigned char Horiz_scroll_Plus;
 unsigned int Scroll_Adjusted_X;
 // got rid of Vscroll, now always 0
 unsigned char Nametable;
@@ -98,17 +98,21 @@ unsigned char BUFFER7[8];	// final attribute table buffer
 #include "BG/A3.csv"
 #include "BG/A4.csv"
 
-const unsigned char * const ROOMS[]={A1, A2, A3, A4};
+const unsigned char * const ROOMS[] = { A1, A2, A3, A4 };
 
 // collision maps called A1-A4
 // now their value is 0-11, which will index to this array...
 
-const unsigned char PLATFORM[]={ // which metatiles act like platforms
-	0, 1, 1, 1, 1, 1, 
-	0, 0, 0, 0, 0, 0};
+// which metatiles act like platforms
+const unsigned char PLATFORM[] =
+{
+	0, 1, 1, 1, 1, 1,
+	0, 0, 0, 0, 0, 0
+};
 
 // tl, tr, bl, br = tiles for each metatile
-const unsigned char METATILES[]={
+const unsigned char METATILES[] =
+{
 	0, 0, 0, 0, // 0 sky
 	2, 2, 2, 2, // 1 ground
 	0x14, 0x14, 0x14, 0x14, // 2 brick
@@ -124,60 +128,71 @@ const unsigned char METATILES[]={
 };
 
 // color palette for each metatile
-const unsigned char MT_color[]={
+const unsigned char MT_color[] =
+{
 	0, 3, 0, 1, 1, 1,
-	1, 1, 1, 1, 1, 1};
-	
-const unsigned char HUD[]={"TEST SPRITE ZERO HERE  "}; // add tile 3 after this
+	1, 1, 1, 1, 1, 1
+};
+
+const unsigned char HUD[] = { "TEST SPRITE ZERO HERE  " }; // add tile 3 after this
 // note, use palette 2 = 0xaa for first 8
 
-const unsigned char PALETTE[]={
-0x22, 0x16, 0x36, 0x0f,  0, 8, 0x18, 0x39,  0, 0, 0x10, 0x20,  0, 0x0a, 0x1a, 0x2a,
-0x22, 0x37, 0x16, 0x0f,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 5, 0x15};
+const unsigned char PALETTE[] =
+{
+	0x22, 0x16, 0x36, 0x0f,  0, 8, 0x18, 0x39,  0, 0, 0x10, 0x20,  0, 0x0a, 0x1a, 0x2a,
+	0x22, 0x37, 0x16, 0x0f,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 5, 0x15
+};
 
-const unsigned char Walk_Moves[] = {
-	0, 1, 0, 2}; // just a way to reuse the #0 state tiles
-	
-const unsigned char MetaSprite_Y[] = {0, 0, 8, 8}; // relative y coordinates
+const unsigned char Walk_Moves[] =
+{
+	0, 1, 0, 2
+}; // just a way to reuse the #0 state tiles
 
-const unsigned char MetaSprite_Tile_Right[] = { // tile numbers, right
+const unsigned char MetaSprite_Y[] = { 0, 0, 8, 8 }; // relative y coordinates
+
+// tile numbers, right
+const unsigned char MetaSprite_Tile_Right[] =
+{
 	0, 1, 0x10, 0x11, 	// walk 0, 2
 	2, 3, 0x12, 0x13, 	// walk 1
 	4, 5, 0x14, 0x15, 	// walk 3
-	6, 7, 0x16, 0x17};	// jump
+	6, 7, 0x16, 0x17 	// jump
+};
 
-const unsigned char MetaSprite_Attrib_Right[] = {0, 0, 0, 0}; // attributes = not flipped
+const unsigned char MetaSprite_Attrib_Right[] = { 0, 0, 0, 0 }; // attributes = not flipped
 
-const unsigned char MetaSprite_X[] = {0, 8, 0, 8}; // relative x coordinates
+const unsigned char MetaSprite_X[] = { 0, 8, 0, 8 }; // relative x coordinates
 // we are using 4 sprites, each one has a relative position from the top left sprite
 
-const unsigned char MetaSprite_Tile_Left[] = { // tile numbers, left
+// tile numbers, left
+const unsigned char MetaSprite_Tile_Left[] =
+{
 	1, 0, 0x11, 0x10, 	// walk 0, 2
 	3, 2, 0x13, 0x12, 	// walk 1
 	5, 4, 0x15, 0x14, 	// walk 3
-	7, 6, 0x17, 0x16}; 	// jump
+	7, 6, 0x17, 0x16 	// jump
+};
 
-const unsigned char MetaSprite_Attrib_Left[] = {0x40, 0x40, 0x40, 0x40}; // attributes = H flipped
-
+const unsigned char MetaSprite_Attrib_Left[] = { 0x40, 0x40, 0x40, 0x40 }; // attributes = H flipped
 
 // Prototypes
-void All_Off (void);
-void All_On (void);
-void Reset_Scroll (void);
-void Load_Palette (void);
-void update_Sprites (void);
-void Collision_Down (void);
-void move_logic (void);
-void Do_Buffer (void);
-void Do_Buffer2 (void);
-void Do_Buffer3 (void);
-void Draw_Background (void);
-void Set_Sprite_Zero (void);
-void Load_HUD (void);
-void Should_We_Buffer (void);
-void New_Room (void);
+void All_Off(void);
+void All_On(void);
+void Reset_Scroll(void);
+void Load_Palette(void);
+void update_Sprites(void);
+void Collision_Down(void);
+void move_logic(void);
+void Do_Buffer(void);
+void Do_Buffer2(void);
+void Do_Buffer3(void);
+void Draw_Background(void);
+void Set_Sprite_Zero(void);
+void Load_HUD(void);
+void Should_We_Buffer(void);
+void New_Room(void);
 
-void __fastcall__ memcpy (void* dest, const void* src, int count);
+void __fastcall__ memcpy(void* dest, const void* src, int count);
 void Wait_Vblank(void);
 void Get_Input(void);
 void Sprite_Zero(void);

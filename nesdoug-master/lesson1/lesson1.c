@@ -18,10 +18,11 @@ const unsigned char TEXT[] =
 	"Hello World!"
 };
 
+//	black, gray, lt gray, white
 const unsigned char PALETTE[] =
 {
 	0x1f, 0x00, 0x10, 0x20
-}; //	black, gray, lt gray, white
+};
 
 void main(void)
 {

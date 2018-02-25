@@ -3073,16 +3073,16 @@ L0831:	rts
 	tax
 	sta     _index3
 ;
-; while (index < 15){ 
+; while (index < 15)
 ;
 	jmp     L0894
 ;
-; if (Nametable_Plus == 0){ // drawing to the opposite screen that we're on
+; if (Nametable_Plus == 0)
 ;
 L0891:	lda     _Nametable_Plus
 	bne     L0892
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
 	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3103,11 +3103,11 @@ L0891:	lda     _Nametable_Plus
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
 	jmp     L0895
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
 L0892:	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3231,13 +3231,13 @@ L04A7:	sta     ptr1
 ;
 	inc     _index
 ;
-; if (Nametable_Plus == 0){ // read from 2nd map
+; if (Nametable_Plus == 0)
 ;
 	ldx     #$00
 	lda     _Nametable_Plus
 	bne     L0893
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
 	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3258,11 +3258,11 @@ L04A7:	sta     ptr1
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
 	jmp     L0896
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the metatile
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the metatile
 ;
 L0893:	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3398,7 +3398,7 @@ L04DE:	sta     ptr1
 ;
 	inc     _index
 ;
-; while (index < 15){ 
+; while (index < 15)
 ;
 	ldx     #$00
 L0894:	lda     _index
@@ -3437,16 +3437,16 @@ L0894:	lda     _index
 	tax
 	sta     _index3
 ;
-; while (index < 15){
+; while (index < 15)
 ;
 	jmp     L089D
 ;
-; if (Nametable_Plus == 0){ // drawing to the opposite screen that we're on
+; if (Nametable_Plus == 0)
 ;
 L089A:	lda     _Nametable_Plus
 	bne     L089B
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
 	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3467,11 +3467,11 @@ L089A:	lda     _Nametable_Plus
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
 	jmp     L089F
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
 L089B:	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3595,13 +3595,13 @@ L051B:	sta     ptr1
 ;
 	inc     _index
 ;
-; if (Nametable_Plus == 0){ // read from 2nd map
+; if (Nametable_Plus == 0)
 ;
 	ldx     #$00
 	lda     _Nametable_Plus
 	bne     L089C
 ;
-; temp = C_MAP2[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP2[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
 	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3622,11 +3622,11 @@ L051B:	sta     ptr1
 	sta     ptr1+1
 	ldy     #<(_C_MAP2)
 ;
-; else{
+; else
 ;
 	jmp     L08A0
 ;
-; temp = C_MAP[(Horiz_scroll_Plus>>4) + (index<<4)]; // get the mt
+; temp = C_MAP[(Horiz_scroll_Plus >> 4) + (index << 4)]; // get the mt
 ;
 L089C:	lda     _Horiz_scroll_Plus
 	lsr     a
@@ -3772,21 +3772,21 @@ L0552:	sta     ptr1
 ;
 	inc     _index
 ;
-; while (index < 15){
+; while (index < 15)
 ;
 	ldx     #$00
 L089D:	lda     _index
 	cmp     #$0F
 	jcc     L089A
 ;
-; for (index=0;index<8;++index){
+; for (index = 0; index < 8; ++index)
 ;
 	stx     _index
 L089E:	lda     _index
 	cmp     #$08
 	bcs     L055A
 ;
-; BUFFER7[index] = BUFFER5[index] + BUFFER6[index]; 
+; BUFFER7[index] = BUFFER5[index] + BUFFER6[index];
 ;
 	lda     #<(_BUFFER7)
 	ldx     #>(_BUFFER7)
@@ -3806,7 +3806,7 @@ L0563:	sta     sreg
 	ldy     #$00
 	sta     (sreg),y
 ;
-; for (index=0;index<8;++index){
+; for (index = 0; index < 8; ++index)
 ;
 	inc     _index
 	jmp     L089E
