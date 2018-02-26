@@ -1,4 +1,4 @@
-/*	simple Hello World, for cc65, for NES
+﻿/*	simple Hello World, for cc65, for NES
  *	doug fraker 2015
  *	feel free to reuse any code here
  */
@@ -48,8 +48,8 @@ void main(void)
 	}
 
 	//	reset the scroll position	
-	PPU_ADDRESS = 0;
-	PPU_ADDRESS = 0;
+	PPU_ADDRESS = 0; // Без этого работает
+	PPU_ADDRESS = 0; // Без этого работает
 	SCROLL = 0;
 	SCROLL = 0;
 

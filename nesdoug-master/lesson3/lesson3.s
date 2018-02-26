@@ -29,7 +29,7 @@
 .segment	"RODATA"
 
 _TEXT:
-	.byte	$48,$65,$6C,$6C,$6F,$26,$57,$6F,$72,$6C,$64,$21,$00
+	.byte	$48,$65,$6C,$6C,$6F,$20,$57,$6F,$72,$6C,$64,$21,$00
 _PALETTE:
 	.byte	$11
 	.byte	$00
@@ -84,7 +84,7 @@ _test:
 	lda     #$00
 	sta     $2000
 ;
-; PPU_MASK = 0; 
+; PPU_MASK = 0;
 ;
 	sta     $2001
 ;
@@ -110,7 +110,7 @@ _test:
 	lda     #$90
 	sta     $2000
 ;
-; PPU_MASK = 0x1e; 
+; PPU_MASK = 0x1e;
 ;
 	lda     #$1E
 	sta     $2001
@@ -142,12 +142,12 @@ _test:
 	lda     #$00
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	sta     _index
-L00B6:	lda     _index
+L0098:	lda     _index
 	cmp     #$10
-	bcs     L00B7
+	bcs     L0099
 ;
 ; PPU_DATA = PALETTE[index];
 ;
@@ -155,14 +155,14 @@ L00B6:	lda     _index
 	lda     _PALETTE,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	inc     _index
-	jmp     L00B6
+	jmp     L0098
 ;
 ; PPU_ADDRESS = 0x23;
 ;
-L00B7:	lda     #$23
+L0099:	lda     #$23
 	sta     $2006
 ;
 ; PPU_ADDRESS = 0xda;
@@ -170,11 +170,11 @@ L00B7:	lda     #$23
 	lda     #$DA
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(Attrib_Table); ++index ){
+; for (index = 0; index < sizeof(Attrib_Table); ++index)
 ;
 	lda     #$00
 	sta     _index
-L00B8:	lda     _index
+L009A:	lda     _index
 	cmp     #$04
 	bcs     L0042
 ;
@@ -184,10 +184,10 @@ L00B8:	lda     _index
 	lda     _Attrib_Table,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(Attrib_Table); ++index ){
+; for (index = 0; index < sizeof(Attrib_Table); ++index)
 ;
 	inc     _index
-	jmp     L00B8
+	jmp     L009A
 ;
 ; }
 ;
@@ -240,11 +240,11 @@ L0042:	rts
 .segment	"CODE"
 
 ;
-; if (Text_Position < sizeof(TEXT)){
+; if (Text_Position < sizeof(TEXT))
 ;
 	lda     _Text_Position
 	cmp     #$0D
-	bcs     L00B9
+	bcs     L009B
 ;
 ; PPU_ADDRESS = 0x21;
 ;
@@ -264,35 +264,17 @@ L0042:	rts
 	lda     _TEXT,y
 	sta     $2007
 ;
-; PPU_ADDRESS = 0x21;
-;
-	lda     #$21
-	sta     $2006
-;
-; PPU_ADDRESS = 0xea + Text_Position; // one line down = add 0x20 to the low bit
-;
-	lda     _Text_Position
-	clc
-	adc     #$EA
-	sta     $2006
-;
-; PPU_DATA = TEXT[Text_Position];
-;
-	ldy     _Text_Position
-	lda     _TEXT,y
-	sta     $2007
-;
-; ++Text_Position; 
+; ++Text_Position;
 ;
 	inc     _Text_Position
 ;
-; else {
+; else
 ;
 	rts
 ;
 ; Text_Position = 0;
 ;
-L00B9:	lda     #$00
+L009B:	lda     #$00
 	sta     _Text_Position
 ;
 ; PPU_ADDRESS = 0x21;
@@ -305,55 +287,27 @@ L00B9:	lda     #$00
 	lda     #$CA
 	sta     $2006
 ;
-; for ( index = 0; index < sizeof(TEXT); ++index ){
+; for (index = 0; index < sizeof(TEXT); ++index)
 ;
 	lda     #$00
 	sta     _index
-L00BA:	lda     _index
+L009C:	lda     _index
 	cmp     #$0D
-	bcs     L00BB
+	bcs     L008D
 ;
-; PPU_DATA = 0; // clear the text by putting tile #0 in its place
+; PPU_DATA = 0;
 ;
 	lda     #$00
 	sta     $2007
 ;
-; for ( index = 0; index < sizeof(TEXT); ++index ){
+; for (index = 0; index < sizeof(TEXT); ++index)
 ;
 	inc     _index
-	jmp     L00BA
-;
-; PPU_ADDRESS = 0x21;
-;
-L00BB:	lda     #$21
-	sta     $2006
-;
-; PPU_ADDRESS = 0xea;
-;
-	lda     #$EA
-	sta     $2006
-;
-; for ( index = 0; index < sizeof(TEXT); ++index ){
-;
-	lda     #$00
-	sta     _index
-L00BC:	lda     _index
-	cmp     #$0D
-	bcs     L00AB
-;
-; PPU_DATA = 0; // clear the text by putting tile #0 in its place
-;
-	lda     #$00
-	sta     $2007
-;
-; for ( index = 0; index < sizeof(TEXT); ++index ){
-;
-	inc     _index
-	jmp     L00BC
+	jmp     L009C
 ;
 ; }
 ;
-L00AB:	rts
+L008D:	rts
 
 .endproc
 
@@ -368,7 +322,7 @@ L00AB:	rts
 .segment	"CODE"
 
 ;
-; All_Off();   // turn off screen
+; All_Off(); // turn off screen
 ;
 	jsr     _All_Off
 ;
@@ -380,25 +334,25 @@ L00AB:	rts
 ;
 	jsr     _Reset_Scroll
 ;
-; All_On();   // turn on screen
+; All_On(); // turn on screen
 ;
 	jsr     _All_On
 ;
-; while (NMI_flag == 0); // wait till NMI
+; while (NMI_flag == 0);
 ;
-L00BD:	lda     _NMI_flag
-	beq     L00BD
+L009D:	lda     _NMI_flag
+	beq     L009D
 ;
 ; NMI_flag = 0;
 ;
 	lda     #$00
 	sta     _NMI_flag
 ;
-; if (Frame_Count == 30){ // wait 30 frames = 0.5 seconds
+; if (Frame_Count == 30)
 ;
 	lda     _Frame_Count
 	cmp     #$1E
-	bne     L00BD
+	bne     L009D
 ;
 ; Load_Text();
 ;
@@ -417,9 +371,9 @@ L00BD:	lda     _NMI_flag
 ;
 	inc     _test
 ;
-; while (1){   // infinite loop
+; while (1)
 ;
-	jmp     L00BD
+	jmp     L009D
 
 .endproc
 

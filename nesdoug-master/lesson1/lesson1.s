@@ -64,9 +64,9 @@ _index:
 ; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	sta     _index
-L004C:	lda     _index
+L0046:	lda     _index
 	cmp     #$04
-	bcs     L004D
+	bcs     L0047
 ;
 ; PPU_DATA = PALETTE[index];
 ;
@@ -77,11 +77,11 @@ L004C:	lda     _index
 ; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	inc     _index
-	jmp     L004C
+	jmp     L0046
 ;
 ; PPU_ADDRESS = 0x21;   // set an address in the PPU of 0x21ca
 ;
-L004D:	lda     #$21
+L0047:	lda     #$21
 	sta     $2006
 ;
 ; PPU_ADDRESS = 0xca;   // about the middle of the screen
@@ -93,9 +93,9 @@ L004D:	lda     #$21
 ;
 	lda     #$00
 	sta     _index
-L004E:	lda     _index
+L0048:	lda     _index
 	cmp     #$0D
-	bcs     L004F
+	bcs     L0049
 ;
 ; PPU_DATA = TEXT[index];
 ;
@@ -106,19 +106,11 @@ L004E:	lda     _index
 ; for (index = 0; index < sizeof(TEXT); ++index)
 ;
 	inc     _index
-	jmp     L004E
-;
-; PPU_ADDRESS = 0;
-;
-L004F:	lda     #$00
-	sta     $2006
-;
-; PPU_ADDRESS = 0;
-;
-	sta     $2006
+	jmp     L0048
 ;
 ; SCROLL = 0;
 ;
+L0049:	lda     #$00
 	sta     $2005
 ;
 ; SCROLL = 0;
@@ -137,7 +129,7 @@ L004F:	lda     #$00
 ;
 ; while (1);
 ;
-L004B:	jmp     L004B
+L0045:	jmp     L0045
 
 .endproc
 
