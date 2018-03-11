@@ -50,10 +50,10 @@
 	.export		_Palette
 	.export		_Walk_Moves
 	.export		_MetaSprite_Y
-	.export		_MetaSprite_Tile_R
-	.export		_MetaSprite_Attrib_R
 	.export		_MetaSprite_X
+	.export		_MetaSprite_Tile_R
 	.export		_MetaSprite_Tile_L
+	.export		_MetaSprite_Attrib_R
 	.export		_MetaSprite_Attrib_L
 	.export		_AllOff
 	.export		_AllOn
@@ -844,6 +844,11 @@ _MetaSprite_Y:
 	.byte	$00
 	.byte	$08
 	.byte	$08
+_MetaSprite_X:
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$08
 _MetaSprite_Tile_R:
 	.byte	$00
 	.byte	$01
@@ -861,16 +866,6 @@ _MetaSprite_Tile_R:
 	.byte	$07
 	.byte	$16
 	.byte	$17
-_MetaSprite_Attrib_R:
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-_MetaSprite_X:
-	.byte	$00
-	.byte	$08
-	.byte	$00
-	.byte	$08
 _MetaSprite_Tile_L:
 	.byte	$01
 	.byte	$00
@@ -888,6 +883,11 @@ _MetaSprite_Tile_L:
 	.byte	$06
 	.byte	$17
 	.byte	$16
+_MetaSprite_Attrib_R:
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 _MetaSprite_Attrib_L:
 	.byte	$40
 	.byte	$40

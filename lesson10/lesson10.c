@@ -4,7 +4,7 @@
  *	feel free to reuse any code here
  */
 
-#include "Define.c"
+#include "Define.h"
 
 void main(void)
 {

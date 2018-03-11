@@ -1,4 +1,10 @@
 // let's define some stuff
+#ifndef __DEFINE_H__
+#define __DEFINE_H__
+
+#ifndef __fastcall__
+#define __fastcall__
+#endif
 
 #define PPU_CTRL *((unsigned char*)0x2000)
 #define PPU_MASK *((unsigned char*)0x2001)
@@ -87,6 +93,8 @@ const unsigned char Walk_Moves[] = { 0, 1, 0, 2 };
 
 // relative y coordinates
 const unsigned char MetaSprite_Y[] = { 0, 0, 8, 8 };
+// relative x coordinates
+const unsigned char MetaSprite_X[] = { 0, 8, 0, 8 };
 
 // tile numbers, right
 const unsigned char MetaSprite_Tile_R[] =
@@ -97,13 +105,6 @@ const unsigned char MetaSprite_Tile_R[] =
 	6, 7, 0x16, 0x17 // jump
 };
 
-// attributes = not flipped
-const unsigned char MetaSprite_Attrib_R[] = { 0, 0, 0, 0 };
-
-// relative x coordinates
-const unsigned char MetaSprite_X[] = { 0, 8, 0, 8 };
-// we are using 4 sprites, each one has a relative position from the top left sprite
-
 // tile numbers, left
 const unsigned char MetaSprite_Tile_L[] =
 {
@@ -113,6 +114,8 @@ const unsigned char MetaSprite_Tile_L[] =
 	7, 6, 0x17, 0x16 // jump
 };
 
+// attributes = not flipped
+const unsigned char MetaSprite_Attrib_R[] = { 0, 0, 0, 0 };
 //attributes = H flipped
 const unsigned char MetaSprite_Attrib_L[] = { 0x40, 0x40, 0x40, 0x40 };
 
@@ -131,3 +134,5 @@ void __fastcall__ memcpy(void* dest, const void* src, int count);
 void Wait_Vblank(void);
 void __fastcall__ UnRLE(const unsigned char *data);
 void Get_Input(void);
+
+#endif
