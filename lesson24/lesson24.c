@@ -29,6 +29,8 @@ const unsigned char PaletteSprites[] =
 };
 
 const unsigned char* metasprite = 0;
+const unsigned char* const* metasprite_list = 0;
+unsigned char metasprite_list_index = 0;
 #define ANIMATION_SHIFT 2
 
 void main(void)
@@ -77,6 +79,9 @@ void main(void)
 		// wait till beginning of the frame
 		ppu_wait_nmi();
 
+		pad_poll(0); // read controller 1
+		pad_poll(1); // read controller 2
+
 		// clear all sprites from buffer
 		oam_clear();
 
@@ -87,6 +92,8 @@ void main(void)
 		// oam_spr(unsigned char x,unsigned char y,unsigned char chrnum,unsigned char attr,unsigned char sprid);
 		// use tile #0, palette #0
 		sprid = oam_spr(X_position, Y_position, 0, 0, sprid);
+
+		metasprite_list = metasprite_list_list[metasprite_list_index];
 
 		sprite_index++;
 		metasprite = metasprite_list[sprite_index >> ANIMATION_SHIFT];
@@ -103,6 +110,16 @@ void main(void)
 		// and another
 		//sprid = oam_meta_spr(X_position3, Y_position, sprid, metasprite_1_data);
 
+		if ((PAD_STATET & PAD_UP) != 0)
+		{
+			metasprite_list_index = 1;
+			sprite_index = 0;
+		}
+		else if ((PAD_STATET & PAD_DOWN) != 0)
+		{
+			metasprite_list_index = 0;
+			sprite_index = 0;
+		}
 		//Y_position++;
 	}
 };

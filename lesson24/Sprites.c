@@ -142,16 +142,8 @@ const unsigned char metasprite_15_data[] =
 	128
 };
 
-const unsigned char* const metasprite_list[] =
+const unsigned char* const metasprite_list1[] =
 {
-	//metasprite_0_data,
-	//metasprite_1_data,
-	//metasprite_2_data,
-	//metasprite_3_data,
-	//metasprite_4_data,
-	//metasprite_5_data,
-	//metasprite_6_data,
-	//metasprite_7_data,
 	metasprite_8_data,
 	metasprite_9_data,
 	metasprite_10_data,
@@ -161,5 +153,24 @@ const unsigned char* const metasprite_list[] =
 	metasprite_14_data,
 	metasprite_15_data,
 	0
+};
+
+const unsigned char* const metasprite_list2[] =
+{
+	metasprite_0_data,
+	metasprite_1_data,
+	metasprite_2_data,
+	metasprite_3_data,
+	metasprite_4_data,
+	metasprite_5_data,
+	metasprite_6_data,
+	metasprite_7_data,
+	0
+};
+
+const unsigned char* const *metasprite_list_list[] =
+{
+	metasprite_list1,
+	metasprite_list2,
 };
 
