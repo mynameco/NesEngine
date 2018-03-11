@@ -10,10 +10,10 @@
 	.importzp	sp, sreg, regsave, regbank
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
-	.dbg		file, "lesson24.c", 2530, 1520801495
+	.dbg		file, "lesson24.c", 2514, 1520802638
 	.dbg		file, "neslib.h", 8578, 1492006296
 	.dbg		file, "lesson24.h", 1562, 1520800394
-	.dbg		file, "Sprites.c", 397, 1520800965
+	.dbg		file, "Sprites.c", 2212, 1520802659
 	.forceimport	__STARTUP__
 	.dbg		sym, "pal_bg", "00", extern, "_pal_bg"
 	.dbg		sym, "pal_spr", "00", extern, "_pal_spr"
@@ -47,6 +47,20 @@
 	.export		_sprite_index
 	.export		_metasprite_0_data
 	.export		_metasprite_1_data
+	.export		_metasprite_2_data
+	.export		_metasprite_3_data
+	.export		_metasprite_4_data
+	.export		_metasprite_5_data
+	.export		_metasprite_6_data
+	.export		_metasprite_7_data
+	.export		_metasprite_8_data
+	.export		_metasprite_9_data
+	.export		_metasprite_10_data
+	.export		_metasprite_11_data
+	.export		_metasprite_12_data
+	.export		_metasprite_13_data
+	.export		_metasprite_14_data
+	.export		_metasprite_15_data
 	.export		_metasprite_list
 	.export		_Test
 	.export		_PaletteBackgroud
@@ -56,25 +70,34 @@
 
 .segment	"DATA"
 
+_metasprite:
+	.word	$0000
+
+.segment	"RODATA"
+
 _metasprite_0_data:
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
-	.byte	$00
-	.byte	$08
-	.byte	$11
 	.byte	$00
 	.byte	$08
 	.byte	$00
 	.byte	$01
-	.byte	$40
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$10
+	.byte	$00
 	.byte	$08
 	.byte	$08
 	.byte	$11
-	.byte	$40
+	.byte	$00
 	.byte	$80
 _metasprite_1_data:
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$00
 	.byte	$08
 	.byte	$00
 	.byte	$03
@@ -87,32 +110,269 @@ _metasprite_1_data:
 	.byte	$08
 	.byte	$13
 	.byte	$00
-	.byte	$10
-	.byte	$08
-	.byte	$12
-	.byte	$40
+	.byte	$80
+_metasprite_2_data:
 	.byte	$00
-	.byte	$10
+	.byte	$00
+	.byte	$04
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$05
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$14
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$15
+	.byte	$00
+	.byte	$80
+_metasprite_3_data:
+	.byte	$00
+	.byte	$00
+	.byte	$06
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$07
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$16
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$17
+	.byte	$00
+	.byte	$80
+_metasprite_4_data:
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$09
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$18
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$19
+	.byte	$00
+	.byte	$80
+_metasprite_5_data:
+	.byte	$00
+	.byte	$08
+	.byte	$1A
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$0A
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$0B
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$1B
+	.byte	$00
+	.byte	$80
+_metasprite_6_data:
+	.byte	$00
+	.byte	$00
+	.byte	$0C
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$0D
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$1C
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$1D
+	.byte	$00
+	.byte	$80
+_metasprite_7_data:
+	.byte	$00
+	.byte	$00
+	.byte	$0E
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$0F
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$1E
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$1F
+	.byte	$00
+	.byte	$80
+_metasprite_8_data:
+	.byte	$00
+	.byte	$00
+	.byte	$20
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$21
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$30
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$31
+	.byte	$00
+	.byte	$80
+_metasprite_9_data:
+	.byte	$00
+	.byte	$00
 	.byte	$22
 	.byte	$00
 	.byte	$08
-	.byte	$10
+	.byte	$00
 	.byte	$23
 	.byte	$00
-	.byte	$10
-	.byte	$10
-	.byte	$22
-	.byte	$40
+	.byte	$00
+	.byte	$08
+	.byte	$32
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$33
+	.byte	$00
+	.byte	$80
+_metasprite_10_data:
+	.byte	$00
+	.byte	$00
+	.byte	$24
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$25
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$34
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$35
+	.byte	$00
+	.byte	$80
+_metasprite_11_data:
+	.byte	$00
+	.byte	$00
+	.byte	$26
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$27
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$36
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$37
+	.byte	$00
+	.byte	$80
+_metasprite_12_data:
+	.byte	$00
+	.byte	$00
+	.byte	$28
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$29
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$38
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$39
+	.byte	$00
+	.byte	$80
+_metasprite_13_data:
+	.byte	$00
+	.byte	$00
+	.byte	$2A
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$2B
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$3A
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$3B
+	.byte	$00
+	.byte	$80
+_metasprite_14_data:
+	.byte	$00
+	.byte	$00
+	.byte	$2C
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$2D
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$3C
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$3D
+	.byte	$00
+	.byte	$80
+_metasprite_15_data:
+	.byte	$00
+	.byte	$00
+	.byte	$2E
+	.byte	$00
+	.byte	$08
+	.byte	$00
+	.byte	$2F
+	.byte	$00
+	.byte	$00
+	.byte	$08
+	.byte	$3E
+	.byte	$00
+	.byte	$08
+	.byte	$08
+	.byte	$3F
+	.byte	$00
 	.byte	$80
 _metasprite_list:
-	.addr	_metasprite_0_data
-	.addr	_metasprite_1_data
+	.addr	_metasprite_8_data
+	.addr	_metasprite_9_data
+	.addr	_metasprite_10_data
+	.addr	_metasprite_11_data
+	.addr	_metasprite_12_data
+	.addr	_metasprite_13_data
+	.addr	_metasprite_14_data
+	.addr	_metasprite_15_data
 	.word	$0000
-_metasprite:
-	.word	$0000
-
-.segment	"RODATA"
-
 _Test:
 	.byte	$53,$70,$72,$69,$74,$65,$73,$00
 _PaletteBackgroud:
@@ -134,9 +394,9 @@ _PaletteBackgroud:
 	.byte	$00
 _PaletteSprites:
 	.byte	$0F
-	.byte	$0F
-	.byte	$0F
-	.byte	$28
+	.byte	$00
+	.byte	$10
+	.byte	$30
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -263,7 +523,7 @@ _sprite_index:
 ; ppu_wait_nmi();
 ;
 	.dbg	line, "lesson24.c", 78
-L0073:	jsr     _ppu_wait_nmi
+L015B:	jsr     _ppu_wait_nmi
 ;
 ; oam_clear();
 ;
@@ -307,7 +567,6 @@ L0073:	jsr     _ppu_wait_nmi
 	lda     _sprite_index
 	lsr     a
 	lsr     a
-	lsr     a
 	stx     tmp1
 	asl     a
 	rol     tmp1
@@ -329,9 +588,9 @@ L0073:	jsr     _ppu_wait_nmi
 ;
 	.dbg	line, "lesson24.c", 93
 	cpx     #$00
-	bne     L0086
+	bne     L016E
 	cmp     #$00
-	bne     L0086
+	bne     L016E
 ;
 ; sprite_index = 0;
 ;
@@ -349,7 +608,7 @@ L0073:	jsr     _ppu_wait_nmi
 ; sprid = oam_meta_spr(X_position2, Y_position, sprid, metasprite);
 ;
 	.dbg	line, "lesson24.c", 101
-L0086:	jsr     decsp3
+L016E:	jsr     decsp3
 	lda     _X_position2
 	ldy     #$02
 	sta     (sp),y
@@ -364,15 +623,10 @@ L0086:	jsr     decsp3
 	jsr     _oam_meta_spr
 	sta     _sprid
 ;
-; Y_position++;
-;
-	.dbg	line, "lesson24.c", 106
-	inc     _Y_position
-;
 ; while (1)
 ;
 	.dbg	line, "lesson24.c", 75
-	jmp     L0073
+	jmp     L015B
 	.dbg	line
 
 .endproc

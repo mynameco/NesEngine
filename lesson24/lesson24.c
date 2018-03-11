@@ -22,14 +22,14 @@ const unsigned char PaletteBackgroud[] =
 };
 const unsigned char PaletteSprites[] =
 {
-	0x0f, 0x0f, 0x0f, 0x28, //	black, black, yellow
+	0x0f, 0x00, 0x10, 0x30,
 	0,0,0,0,
 	0,0,0,0,
 	0,0,0,0
 };
 
-unsigned char* metasprite = 0;
-#define ANIMATION_SHIFT 3
+const unsigned char* metasprite = 0;
+#define ANIMATION_SHIFT 2
 
 void main(void)
 {
@@ -103,7 +103,7 @@ void main(void)
 		// and another
 		//sprid = oam_meta_spr(X_position3, Y_position, sprid, metasprite_1_data);
 
-		Y_position++;
+		//Y_position++;
 	}
 };
 
