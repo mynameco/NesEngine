@@ -6,7 +6,7 @@
     <None Include="reset.s" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Define.c" />
     <ClCompile Include="lesson10.c" />
+    <ClCompile Include="Define.h" />
   </ItemGroup>
 </Project>

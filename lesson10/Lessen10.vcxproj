@@ -116,7 +116,7 @@
     <None Include="reset.s" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Define.c" />
+    <ClCompile Include="Define.h" />
     <ClCompile Include="lesson10.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
