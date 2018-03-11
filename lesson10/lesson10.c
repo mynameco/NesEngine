@@ -4,45 +4,45 @@
  *	feel free to reuse any code here
  */
 
-#include "DEFINE.c"
+#include "Define.c"
 
 void main(void)
 {
-	All_Off(); // turn off screen
-	Draw_Background();
+	AllOff(); // turn off screen
+	DrawBackground();
 	X1 = 0x80;
 	Y1 = 0x70; // middle of screen
-	Load_Palette();
-	Reset_Scroll();
+	LoadPalette();
+	ResetScroll();
 	Wait_Vblank();
-	All_On(); // turn on screen
+	AllOn(); // turn on screen
 	while (1)
 	{ // infinite loop
 		while (NMI_flag == 0); // wait till NMI
 
 		//every_frame();	// moved this to the nmi code in reset.s for greater stability
 		Get_Input();
-		move_logic();
-		update_Sprites();
+		MoveLogic();
+		UpdateSprites();
 
 		NMI_flag = 0;
 	}
 }
 
 // inside the startup code, the NMI routine will ++NMI_flag and ++Frame_Count at each V-blank
-void All_Off(void)
+void AllOff(void)
 {
 	PPU_CTRL = 0;
 	PPU_MASK = 0;
 }
 
-void All_On(void)
+void AllOn(void)
 {
 	PPU_CTRL = 0x90; // screen is on, NMI on
 	PPU_MASK = 0x1e;
 }
 
-void Reset_Scroll(void)
+void ResetScroll(void)
 {
 	PPU_ADDRESS = 0;
 	PPU_ADDRESS = 0;
@@ -50,7 +50,7 @@ void Reset_Scroll(void)
 	SCROLL = 0;
 }
 
-void Load_Palette(void)
+void LoadPalette(void)
 {
 	PPU_ADDRESS = 0x3f;
 	PPU_ADDRESS = 0x00;
@@ -60,7 +60,7 @@ void Load_Palette(void)
 	}
 }
 
-void update_Sprites(void)
+void UpdateSprites(void)
 {
 	state4 = state << 2; // shift left 2 = multiply 4
 	index4 = 0;
@@ -94,7 +94,7 @@ void update_Sprites(void)
 	}
 }
 
-void Collision_Down(void)
+void CollisionDown(void)
 {
 	if (NametableB == 0)
 	{ // first collision map
@@ -108,7 +108,7 @@ void Collision_Down(void)
 	}
 }
 
-void move_logic(void)
+void MoveLogic(void)
 {
 	if ((joypad1 & (RIGHT | LEFT)) == 0)
 	{ // no L or R
@@ -181,7 +181,7 @@ void move_logic(void)
 	// we want to find which metatile in the collision map this point is in...is it solid?
 	collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0));
 	collision = 0;
-	Collision_Down(); // if on platform, ++collision
+	CollisionDown(); // if on platform, ++collision
 
 	// now check the bottom right corner of character
 	// which nametable am I in?
@@ -194,7 +194,7 @@ void move_logic(void)
 		NametableB &= 1; // keep it 0 or 1
 	}
 	collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom right
-	Collision_Down(); // if on platform, ++collision
+	CollisionDown(); // if on platform, ++collision
 
 	if ((Y1 & 0x0f) > 1) // only platform collide if nearly aligned to a metatile
 		collision = 0;
@@ -262,7 +262,7 @@ void move_logic(void)
 		state = 3;
 }
 
-void Draw_Background(void)
+void DrawBackground(void)
 {
 	PPU_ADDRESS = 0x20; // address of nametable #0 = 0x2000
 	PPU_ADDRESS = 0x00;

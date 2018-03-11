@@ -60,7 +60,6 @@ unsigned char C_MAP[256];
 unsigned char C_MAP2[256];
 // MAP equals ram addresses 300-4ff, collision map, metatiles
 
-
 #include "BG/N1.h"
 #include "BG/N2.h"
 #include "BG/N1.csv"
@@ -69,8 +68,9 @@ unsigned char C_MAP2[256];
 // collision maps called C1 and C2
 // now their value is 0-11, which will index to this array...
 
+// which metatiles act like platforms
 const unsigned char PLATFORM[] =
-{ // which metatiles act like platforms
+{
 	0, 1, 1, 1, 1, 1,
 	0, 0, 0, 0, 0, 0, 0
 };
@@ -81,45 +81,49 @@ const unsigned char PALETTE[] =
 	0x22, 0x37, 0x16, 0x0f,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 5, 0x15
 };
 
-const unsigned char Walk_Moves[] =
-{
-	0, 1, 0, 2
-}; // just a way to reuse the #0 state tiles
+// just a way to reuse the #0 state tiles
+const unsigned char Walk_Moves[] = { 0, 1, 0, 2 };
 
-const unsigned char MetaSprite_Y[] = { 0, 0, 8, 8 }; // relative y coordinates
+// relative y coordinates
+const unsigned char MetaSprite_Y[] = { 0, 0, 8, 8 };
 
+// tile numbers, right
 const unsigned char MetaSprite_Tile_R[] =
-{ // tile numbers, right
-	0, 1, 0x10, 0x11, 	// walk 0, 2
-	2, 3, 0x12, 0x13,	// walk 1
-	4, 5, 0x14, 0x15, 	// walk 3
-	6, 7, 0x16, 0x17
-};	// jump
+{
+	0, 1, 0x10, 0x11, // walk 0, 2
+	2, 3, 0x12, 0x13, // walk 1
+	4, 5, 0x14, 0x15, // walk 3
+	6, 7, 0x16, 0x17 // jump
+};
 
-const unsigned char MetaSprite_Attrib_R[] = { 0, 0, 0, 0 }; // attributes = not flipped
+// attributes = not flipped
+const unsigned char MetaSprite_Attrib_R[] = { 0, 0, 0, 0 };
 
-const unsigned char MetaSprite_X[] = { 0, 8, 0, 8 }; // relative x coordinates
+// relative x coordinates
+const unsigned char MetaSprite_X[] = { 0, 8, 0, 8 };
 // we are using 4 sprites, each one has a relative position from the top left sprite
 
+// tile numbers, left
 const unsigned char MetaSprite_Tile_L[] =
-{ // tile numbers, left
-	1, 0, 0x11, 0x10, 	// walk 0, 2
-	3, 2, 0x13, 0x12,	// walk 1
-	5, 4, 0x15, 0x14,	// walk 3
-	7, 6, 0x17, 0x16
-};	// jump
+{
+	1, 0, 0x11, 0x10, // walk 0, 2
+	3, 2, 0x13, 0x12, // walk 1
+	5, 4, 0x15, 0x14, // walk 3
+	7, 6, 0x17, 0x16 // jump
+};
 
-const unsigned char MetaSprite_Attrib_L[] = { 0x40, 0x40, 0x40, 0x40 }; //attributes = H flipped
+//attributes = H flipped
+const unsigned char MetaSprite_Attrib_L[] = { 0x40, 0x40, 0x40, 0x40 };
 
 // Prototypes
-void All_Off(void);
-void All_On(void);
-void Reset_Scroll(void);
-void Load_Palette(void);
-void update_Sprites(void);
-void Collision_Down(void);
-void move_logic(void);
-void Draw_Background(void);
+void AllOff(void);
+void AllOn(void);
+void ResetScroll(void);
+void LoadPalette(void);
+void UpdateSprites(void);
+void CollisionDown(void);
+void MoveLogic(void);
+void DrawBackground(void);
 
 void __fastcall__ memcpy(void* dest, const void* src, int count);
 void Wait_Vblank(void);

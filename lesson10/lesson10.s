@@ -54,14 +54,14 @@
 	.export		_MetaSprite_X
 	.export		_MetaSprite_Tile_L
 	.export		_MetaSprite_Attrib_L
-	.export		_All_Off
-	.export		_All_On
-	.export		_Reset_Scroll
-	.export		_Load_Palette
-	.export		_update_Sprites
-	.export		_Collision_Down
-	.export		_move_logic
-	.export		_Draw_Background
+	.export		_AllOff
+	.export		_AllOn
+	.export		_ResetScroll
+	.export		_LoadPalette
+	.export		_UpdateSprites
+	.export		_CollisionDown
+	.export		_MoveLogic
+	.export		_DrawBackground
 	.import		_memcpy
 	.import		_Wait_Vblank
 	.import		_UnRLE
@@ -957,12 +957,12 @@ _C_MAP2:
 	.res	256,$00
 
 ; ---------------------------------------------------------------
-; void __near__ All_Off (void)
+; void __near__ AllOff (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_All_Off: near
+.proc	_AllOff: near
 
 .segment	"CODE"
 
@@ -972,7 +972,7 @@ _C_MAP2:
 	lda     #$00
 	sta     $2000
 ;
-; PPU_MASK = 0; 
+; PPU_MASK = 0;
 ;
 	sta     $2001
 ;
@@ -983,12 +983,12 @@ _C_MAP2:
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ All_On (void)
+; void __near__ AllOn (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_All_On: near
+.proc	_AllOn: near
 
 .segment	"CODE"
 
@@ -998,7 +998,7 @@ _C_MAP2:
 	lda     #$90
 	sta     $2000
 ;
-; PPU_MASK = 0x1e; 
+; PPU_MASK = 0x1e;
 ;
 	lda     #$1E
 	sta     $2001
@@ -1010,12 +1010,12 @@ _C_MAP2:
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Reset_Scroll (void)
+; void __near__ ResetScroll (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Reset_Scroll: near
+.proc	_ResetScroll: near
 
 .segment	"CODE"
 
@@ -1044,12 +1044,12 @@ _C_MAP2:
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Load_Palette (void)
+; void __near__ LoadPalette (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Load_Palette: near
+.proc	_LoadPalette: near
 
 .segment	"CODE"
 
@@ -1064,7 +1064,7 @@ _C_MAP2:
 	lda     #$00
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	sta     _index
 L04BD:	lda     _index
@@ -1077,7 +1077,7 @@ L04BD:	lda     _index
 	lda     _PALETTE,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	inc     _index
 	jmp     L04BD
@@ -1089,12 +1089,12 @@ L036A:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ update_Sprites (void)
+; void __near__ UpdateSprites (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_update_Sprites: near
+.proc	_UpdateSprites: near
 
 .segment	"CODE"
 
@@ -1111,12 +1111,12 @@ L036A:	rts
 	lda     #$00
 	sta     _index4
 ;
-; if (direction == 0){ // right
+; if (direction == 0)
 ;
 	lda     _direction
 	jne     L04C5
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	sta     _index
 L04C4:	lda     _index
@@ -1218,12 +1218,12 @@ L039C:	sta     ptr1
 ;
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	inc     _index
 	jmp     L04C4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 L04C5:	lda     #$00
 	sta     _index
@@ -1326,7 +1326,7 @@ L03C0:	sta     ptr1
 ;
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	inc     _index
 	jmp     L04C6
@@ -1334,17 +1334,17 @@ L03C0:	sta     ptr1
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Collision_Down (void)
+; void __near__ CollisionDown (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Collision_Down: near
+.proc	_CollisionDown: near
 
 .segment	"CODE"
 
 ;
-; if (NametableB == 0){ // first collision map
+; if (NametableB == 0)
 ;
 	lda     _NametableB
 	bne     L03C6
@@ -1354,7 +1354,7 @@ L03C0:	sta     ptr1
 	ldy     _collision_Index
 	lda     _C_MAP,y
 ;
-; else { // second collision map
+; else
 ;
 	jmp     L04CE
 ;
@@ -1379,17 +1379,17 @@ L04CE:	sta     _temp
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ move_logic (void)
+; void __near__ MoveLogic (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_move_logic: near
+.proc	_MoveLogic: near
 
 .segment	"CODE"
 
 ;
-; if ((joypad1 & (RIGHT|LEFT)) == 0){ // no L or R
+; if ((joypad1 & (RIGHT | LEFT)) == 0)
 ;
 	lda     _joypad1
 	and     #$03
@@ -1399,12 +1399,12 @@ L04CE:	sta     _temp
 ;
 	sta     _walk_count
 ;
-; if (X_speed >= 0){ // if positive, going right
+; if (X_speed >= 0)
 ;
 	ldx     _X_speed
 	bmi     L03E1
 ;
-; if (X_speed >= 4){
+; if (X_speed >= 4)
 ;
 	lda     _X_speed
 	sec
@@ -1423,11 +1423,11 @@ L03E7:	asl     a
 	sta     _X_speed
 	bpl     L04DB
 ;
-; else {
+; else
 ;
 	jmp     L04DB
 ;
-; if (X_speed <= (-4)){
+; if (X_speed <= (-4))
 ;
 L03E1:	lda     _X_speed
 	sec
@@ -1438,7 +1438,7 @@ L03F3:	asl     a
 	lda     #$00
 	bcc     L04DA
 ;
-; X_speed +=4;
+; X_speed += 4;
 ;
 	lda     #$04
 	clc
@@ -1446,7 +1446,7 @@ L03F3:	asl     a
 	sta     _X_speed
 	bpl     L04DB
 ;
-; else {
+; else
 ;
 	jmp     L04DB
 ;
@@ -1454,7 +1454,7 @@ L03F3:	asl     a
 ;
 L04DA:	sta     _X_speed
 ;
-; if ((joypad1 & RIGHT) != 0){
+; if ((joypad1 & RIGHT) != 0)
 ;
 L04DB:	lda     _joypad1
 	and     #$01
@@ -1469,7 +1469,7 @@ L04DB:	lda     _joypad1
 	lda     #$00
 	sta     _direction
 ;
-; if (X_speed >= 0){ // going right
+; if (X_speed >= 0)
 ;
 	ldx     _X_speed
 	bmi     L0401
@@ -1482,7 +1482,7 @@ L04DB:	lda     _joypad1
 	sta     _X_speed
 	bpl     L04DC
 ;
-; else { // going left
+; else
 ;
 	jmp     L04DC
 ;
@@ -1493,7 +1493,7 @@ L0401:	lda     #$08
 	adc     _X_speed
 	sta     _X_speed
 ;
-; if ((joypad1 & LEFT) != 0){
+; if ((joypad1 & LEFT) != 0)
 ;
 L04DC:	lda     _joypad1
 	and     #$02
@@ -1508,7 +1508,7 @@ L04DC:	lda     _joypad1
 	lda     #$01
 	sta     _direction
 ;
-; if (X_speed <= 0){ // going left
+; if (X_speed <= 0)
 ;
 	lda     _X_speed
 	sec
@@ -1525,7 +1525,7 @@ L0415:	bpl     L04DD
 	sta     _X_speed
 	bpl     L04DE
 ;
-; else { // going right
+; else
 ;
 	jmp     L04DE
 ;
@@ -1561,7 +1561,7 @@ L0422:	sta     _Scroll_Adjusted_X
 	lda     _Scroll_Adjusted_X+1
 	sta     _high_byte
 ;
-; if (high_byte != 0){ // if H scroll + Sprite X > 255, then we should use
+; if (high_byte != 0)
 ;
 	lda     _high_byte
 	beq     L04DF
@@ -1576,7 +1576,7 @@ L0422:	sta     _Scroll_Adjusted_X
 	and     #$01
 	sta     _NametableB
 ;
-; collision_Index = (((char)Scroll_Adjusted_X>>4) + ((Y1+16) & 0xf0));
+; collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0));
 ;
 L04DF:	lda     _Scroll_Adjusted_X
 	lsr     a
@@ -1597,9 +1597,9 @@ L04DF:	lda     _Scroll_Adjusted_X
 	lda     #$00
 	sta     _collision
 ;
-; Collision_Down(); // if on platform, ++collision
+; CollisionDown(); // if on platform, ++collision
 ;
-	jsr     _Collision_Down
+	jsr     _CollisionDown
 ;
 ; NametableB = Nametable;
 ;
@@ -1626,7 +1626,7 @@ L0439:	sta     _Scroll_Adjusted_X
 	lda     _Scroll_Adjusted_X+1
 	sta     _high_byte
 ;
-; if (high_byte != 0){ // if H scroll + Sprite X > 255, then we should use
+; if (high_byte != 0)
 ;
 	lda     _high_byte
 	beq     L04E0
@@ -1641,7 +1641,7 @@ L0439:	sta     _Scroll_Adjusted_X
 	and     #$01
 	sta     _NametableB
 ;
-; collision_Index = (((char)Scroll_Adjusted_X>>4) + ((Y1+16) & 0xf0)); // bottom right
+; collision_Index = (((char)Scroll_Adjusted_X >> 4) + ((Y1 + 16) & 0xf0)); // bottom right
 ;
 L04E0:	lda     _Scroll_Adjusted_X
 	lsr     a
@@ -1657,9 +1657,9 @@ L04E0:	lda     _Scroll_Adjusted_X
 	adc     ptr1
 	sta     _collision_Index
 ;
-; Collision_Down(); // if on platform, ++collision
+; CollisionDown(); // if on platform, ++collision
 ;
-	jsr     _Collision_Down
+	jsr     _CollisionDown
 ;
 ; if ((Y1 & 0x0f) > 1) // only platform collide if nearly aligned to a metatile
 ;
@@ -1673,7 +1673,7 @@ L04E0:	lda     _Scroll_Adjusted_X
 	lda     #$00
 	sta     _collision
 ;
-; if (collision == 0){
+; if (collision == 0)
 ;
 L04E1:	lda     _collision
 	bne     L04E2
@@ -1686,7 +1686,7 @@ L04E1:	lda     _collision
 	sta     _Y_speed
 	bpl     L04E3
 ;
-; else {
+; else
 ;
 	jmp     L04E3
 ;
@@ -1701,12 +1701,12 @@ L04E2:	lda     #$00
 	and     #$F0
 	sta     _Y1
 ;
-; if (collision > 0){
+; if (collision > 0)
 ;
 L04E3:	lda     _collision
 	beq     L04E7
 ;
-; if (((joypad1 & A_BUTTON) != 0) && ((joypad1old & A_BUTTON) == 0)){
+; if (((joypad1 & A_BUTTON) != 0) && ((joypad1old & A_BUTTON) == 0))
 ;
 	lda     _joypad1
 	and     #$80
@@ -1720,7 +1720,7 @@ L04E3:	lda     _collision
 	lda     #$C8
 	sta     _Y_speed
 ;
-; if (X_speed >= 0){ // going right
+; if (X_speed >= 0)
 ;
 L04E7:	ldx     _X_speed
 	bmi     L0466
@@ -1738,7 +1738,7 @@ L046C:	bpl     L04E8
 ;
 	lda     #$20
 ;
-; else {
+; else
 ;
 	jmp     L04D3
 ;
@@ -1756,7 +1756,7 @@ L0474:	bpl     L04E8
 	lda     #$E0
 L04D3:	sta     _X_speed
 ;
-; if (Y_speed >= 0){
+; if (Y_speed >= 0)
 ;
 L04E8:	ldx     _Y_speed
 	bmi     L04E9
@@ -1791,7 +1791,7 @@ L0486:	jsr     asrax4
 	adc     _Horiz_scroll
 	sta     _Horiz_scroll
 ;
-; if (X_speed >= 0){ // going right
+; if (X_speed >= 0)
 ;
 	ldx     _X_speed
 	bmi     L0487
@@ -1805,7 +1805,7 @@ L0486:	jsr     asrax4
 	bcc     L04EA
 	beq     L04EA
 ;
-; else { // going left
+; else
 ;
 	jmp     L04EE
 ;
@@ -1880,12 +1880,12 @@ L049F:	rts
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ Draw_Background (void)
+; void __near__ DrawBackground (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_Draw_Background: near
+.proc	_DrawBackground: near
 
 .segment	"CODE"
 
@@ -1922,7 +1922,7 @@ L049F:	rts
 	ldx     #>(_N2)
 	jsr     _UnRLE
 ;
-; memcpy (C_MAP, C1, 240);
+; memcpy(C_MAP, C1, 240);
 ;
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
@@ -1934,7 +1934,7 @@ L049F:	rts
 	lda     #$F0
 	jsr     _memcpy
 ;
-; memcpy (C_MAP2, C2, 240);
+; memcpy(C_MAP2, C2, 240);
 ;
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
@@ -1959,13 +1959,13 @@ L049F:	rts
 .segment	"CODE"
 
 ;
-; All_Off(); // turn off screen
+; AllOff(); // turn off screen
 ;
-	jsr     _All_Off
+	jsr     _AllOff
 ;
-; Draw_Background();
+; DrawBackground();
 ;
-	jsr     _Draw_Background
+	jsr     _DrawBackground
 ;
 ; X1 = 0x80;
 ;
@@ -1977,21 +1977,21 @@ L049F:	rts
 	lda     #$70
 	sta     _Y1
 ;
-; Load_Palette();
+; LoadPalette();
 ;
-	jsr     _Load_Palette
+	jsr     _LoadPalette
 ;
-; Reset_Scroll();
+; ResetScroll();
 ;
-	jsr     _Reset_Scroll
+	jsr     _ResetScroll
 ;
 ; Wait_Vblank();
 ;
 	jsr     _Wait_Vblank
 ;
-; All_On(); // turn on screen
+; AllOn(); // turn on screen
 ;
-	jsr     _All_On
+	jsr     _AllOn
 ;
 ; while (NMI_flag == 0); // wait till NMI
 ;
@@ -2002,20 +2002,20 @@ L04EF:	lda     _NMI_flag
 ;
 	jsr     _Get_Input
 ;
-; move_logic();
+; MoveLogic();
 ;
-	jsr     _move_logic
+	jsr     _MoveLogic
 ;
-; update_Sprites();
+; UpdateSprites();
 ;
-	jsr     _update_Sprites
+	jsr     _UpdateSprites
 ;
 ; NMI_flag = 0;
 ;
 	lda     #$00
 	sta     _NMI_flag
 ;
-; while (1){ // infinite loop
+; while (1)
 ;
 	jmp     L04EF
 

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="asm4c.s" />
+    <None Include="lesson10.s" />
+    <None Include="reset.s" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Define.c" />
+    <ClCompile Include="lesson10.c" />
+  </ItemGroup>
+</Project>
