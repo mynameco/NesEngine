@@ -142,7 +142,7 @@ _SPRITES:
 	lda     #$00
 	sta     $2000
 ;
-; PPU_MASK = 0; 
+; PPU_MASK = 0;
 ;
 	sta     $2001
 ;
@@ -168,7 +168,7 @@ _SPRITES:
 	lda     #$90
 	sta     $2000
 ;
-; PPU_MASK = 0x1e; 
+; PPU_MASK = 0x1e;
 ;
 	lda     #$1E
 	sta     $2001
@@ -234,7 +234,7 @@ _SPRITES:
 	lda     #$00
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	sta     _index
 L00C2:	lda     _index
@@ -247,7 +247,7 @@ L00C2:	lda     _index
 	lda     _PALETTE,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	inc     _index
 	jmp     L00C2
@@ -281,7 +281,7 @@ L008D:	rts
 	lda     #$00
 	sta     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	sta     _index
 L00C6:	lda     _index
@@ -383,7 +383,7 @@ L00BD:	sta     ptr1
 ;
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	inc     _index
 	jmp     L00C6
@@ -423,11 +423,11 @@ L00BD:	sta     ptr1
 ;
 	jsr     _Reset_Scroll
 ;
-; All_On(); // turn on screen
+; All_On();
 ;
 	jsr     _All_On
 ;
-; while (NMI_flag == 0); // wait till NMI
+; while (NMI_flag == 0);
 ;
 L00C8:	lda     _NMI_flag
 	beq     L00C8
@@ -475,7 +475,7 @@ L00CB:	lda     _move
 ;
 L00CC:	inc     _move_count
 ;
-; if (move_count == 20){ // do a move for 20 frames, then switch
+; if (move_count == 20)
 ;
 	lda     _move_count
 	cmp     #$14
@@ -490,7 +490,7 @@ L00CC:	inc     _move_count
 ;
 	inc     _move
 ;
-; if (move == 4) // keep it 0-3
+; if (move == 4)
 ;
 L00CD:	lda     _move
 	cmp     #$04
@@ -510,7 +510,7 @@ L0063:	jsr     _update_Sprites
 	lda     #$00
 	sta     _NMI_flag
 ;
-; while (1){ // infinite loop
+; while (1)
 ;
 	jmp     L00C8
 

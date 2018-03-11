@@ -10,13 +10,13 @@
 	.importzp	sp, sreg, regsave, regbank
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
-	.dbg		file, "lesson11.c", 12807, 1519589862
-	.dbg		file, "DEFINE.c", 5484, 1519589845
+	.dbg		file, "lesson11.c", 12865, 1519708846
+	.dbg		file, "DEFINE.c", 5470, 1519708561
 	.dbg		file, "BG/A1.csv", 545, 1518911843
 	.dbg		file, "BG/A2.csv", 545, 1518911843
 	.dbg		file, "BG/A3.csv", 541, 1518911843
 	.dbg		file, "BG/A4.csv", 550, 1518911843
-	.dbg		file, "BufferMT.c", 3422, 1519589564
+	.dbg		file, "BufferMT.c", 3422, 1519708448
 	.forceimport	__STARTUP__
 	.dbg		sym, "memcpy", "00", extern, "_memcpy"
 	.dbg		sym, "Wait_Vblank", "00", extern, "_Wait_Vblank"
@@ -2365,21 +2365,21 @@ L0883:	lda     _Horiz_scroll
 ;
 ; if (X_speed >= 0)
 ;
-	.dbg	line, "lesson11.c", 347
+	.dbg	line, "lesson11.c", 348
 	ldx     _X_speed
 	bmi     L0729
 ;
 ; if (X1 < 0x80)
 ;
-	.dbg	line, "lesson11.c", 349
+	.dbg	line, "lesson11.c", 350
 	ldx     #$00
 	lda     _X1
 	cmp     #$80
 	bcs     L0884
 ;
-; X1 += (X_speed >> 4); // use the high nibble
+; X1 += (X_speed >> 4);
 ;
-	.dbg	line, "lesson11.c", 351
+	.dbg	line, "lesson11.c", 353
 	lda     _X_speed
 	bpl     L0731
 	dex
@@ -2390,23 +2390,23 @@ L0731:	jsr     asrax4
 ;
 ; if (X1 > 0x80)
 ;
-	.dbg	line, "lesson11.c", 352
+	.dbg	line, "lesson11.c", 354
 	cmp     #$81
 	bcc     L0885
 ;
 ; X1 = 0x80;
 ;
-	.dbg	line, "lesson11.c", 353
+	.dbg	line, "lesson11.c", 355
 	lda     #$80
 ;
 ; else
 ;
-	.dbg	line, "lesson11.c", 355
+	.dbg	line, "lesson11.c", 357
 	jmp     L086C
 ;
-; Horiz_scroll += (X_speed >> 4); // use the high nibble
+; Horiz_scroll += (X_speed >> 4);
 ;
-	.dbg	line, "lesson11.c", 357
+	.dbg	line, "lesson11.c", 360
 L0884:	lda     _X_speed
 	bpl     L073A
 	dex
@@ -2417,7 +2417,7 @@ L073A:	jsr     asrax4
 ;
 ; if (Horiz_scroll_Old > Horiz_scroll)
 ;
-	.dbg	line, "lesson11.c", 358
+	.dbg	line, "lesson11.c", 362
 	lda     _Horiz_scroll_Old
 	sec
 	sbc     _Horiz_scroll
@@ -2426,22 +2426,22 @@ L073A:	jsr     asrax4
 ;
 ; ++Nametable;
 ;
-	.dbg	line, "lesson11.c", 360
+	.dbg	line, "lesson11.c", 364
 	inc     _Nametable
 ;
 ; ++Room;
 ;
-	.dbg	line, "lesson11.c", 361
+	.dbg	line, "lesson11.c", 365
 	inc     _Room
 ;
 ; else
 ;
-	.dbg	line, "lesson11.c", 365
+	.dbg	line, "lesson11.c", 370
 	jmp     L0885
 ;
-; X1 += (X_speed >> 4); // use the high nibble
+; X1 += (X_speed >> 4);
 ;
-	.dbg	line, "lesson11.c", 367
+	.dbg	line, "lesson11.c", 373
 L0729:	ldx     #$00
 	lda     _X_speed
 	bpl     L0743
@@ -2453,33 +2453,33 @@ L0743:	jsr     asrax4
 ;
 ; if (X1 > 0xc0)
 ;
-	.dbg	line, "lesson11.c", 368
+	.dbg	line, "lesson11.c", 374
 	cmp     #$C1
 	bcc     L0885
 ;
 ; X1 = 0;
 ;
-	.dbg	line, "lesson11.c", 369
+	.dbg	line, "lesson11.c", 375
 	lda     #$00
 L086C:	sta     _X1
 ;
-; Nametable &= 1; // keep it 1 or 0
+; Nametable &= 1;
 ;
-	.dbg	line, "lesson11.c", 372
+	.dbg	line, "lesson11.c", 379
 L0885:	lda     _Nametable
 	and     #$01
 	sta     _Nametable
 ;
-; Room &= 3; // keep it 0-3
+; Room &= 3;
 ;
-	.dbg	line, "lesson11.c", 373
+	.dbg	line, "lesson11.c", 381
 	lda     _Room
 	and     #$03
 	sta     _Room
 ;
-; Y1 += (Y_speed >> 4); // use the high nibble
+; Y1 += (Y_speed >> 4);
 ;
-	.dbg	line, "lesson11.c", 381
+	.dbg	line, "lesson11.c", 393
 	ldx     #$00
 	lda     _Y_speed
 	bpl     L0757
@@ -2489,9 +2489,9 @@ L0757:	jsr     asrax4
 	adc     _Y1
 	sta     _Y1
 ;
-; if (walk_count > 0x1f) // walk_count forced 0-1f
+; if (walk_count > 0x1f)
 ;
-	.dbg	line, "lesson11.c", 384
+	.dbg	line, "lesson11.c", 397
 	lda     _walk_count
 	cmp     #$20
 	ldx     #$00
@@ -2499,12 +2499,12 @@ L0757:	jsr     asrax4
 ;
 ; walk_count = 0;
 ;
-	.dbg	line, "lesson11.c", 385
+	.dbg	line, "lesson11.c", 398
 	stx     _walk_count
 ;
-; state = Walk_Moves[(walk_count >> 3)]; // if not jumping
+; state = Walk_Moves[(walk_count >> 3)];
 ;
-	.dbg	line, "lesson11.c", 387
+	.dbg	line, "lesson11.c", 401
 L0886:	lda     _walk_count
 	lsr     a
 	lsr     a
@@ -2518,22 +2518,22 @@ L0886:	lda     _walk_count
 	lda     (ptr1),y
 	sta     _state
 ;
-; if (Y_speed < 0) // negative = jumping
+; if (Y_speed < 0)
 ;
-	.dbg	line, "lesson11.c", 389
+	.dbg	line, "lesson11.c", 404
 	lda     _Y_speed
 	asl     a
 	bcc     L0760
 ;
 ; state = 3;
 ;
-	.dbg	line, "lesson11.c", 390
+	.dbg	line, "lesson11.c", 405
 	lda     #$03
 	sta     _state
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 391
+	.dbg	line, "lesson11.c", 406
 L0760:	rts
 	.dbg	line
 
@@ -2554,12 +2554,12 @@ L0760:	rts
 ;
 ; BufferTiles();
 ;
-	.dbg	line, "lesson11.c", 398
+	.dbg	line, "lesson11.c", 413
 	jsr     _BufferTiles
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 400
+	.dbg	line, "lesson11.c", 415
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
@@ -2567,12 +2567,12 @@ L0760:	rts
 ;
 ; BufferTiles2();
 ;
-	.dbg	line, "lesson11.c", 402
+	.dbg	line, "lesson11.c", 417
 	jsr     _BufferTiles2
 ;
 ; Horiz_scroll_Plus -= 0x10;
 ;
-	.dbg	line, "lesson11.c", 404
+	.dbg	line, "lesson11.c", 419
 	lda     _Horiz_scroll_Plus
 	sec
 	sbc     #$10
@@ -2580,7 +2580,7 @@ L0760:	rts
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 405
+	.dbg	line, "lesson11.c", 420
 	rts
 	.dbg	line
 
@@ -2601,29 +2601,29 @@ L0760:	rts
 ;
 ; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 410
+	.dbg	line, "lesson11.c", 427
 	lda     _Nametable_Plus
 	bne     L088F
 ;
 ; PPU_ADDRESS_High = 0x24;
 ;
-	.dbg	line, "lesson11.c", 412
+	.dbg	line, "lesson11.c", 429
 	lda     #$24
 ;
 ; else
 ;
-	.dbg	line, "lesson11.c", 414
+	.dbg	line, "lesson11.c", 432
 	jmp     L088E
 ;
 ; PPU_ADDRESS_High = 0x20;
 ;
-	.dbg	line, "lesson11.c", 416
+	.dbg	line, "lesson11.c", 434
 L088F:	lda     #$20
 L088E:	sta     _PPU_ADDRESS_High
 ;
-; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80;
 ;
-	.dbg	line, "lesson11.c", 418
+	.dbg	line, "lesson11.c", 437
 	lda     _Horiz_scroll_Plus
 	and     #$F0
 	lsr     a
@@ -2635,19 +2635,19 @@ L088E:	sta     _PPU_ADDRESS_High
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_High;
 ;
-	.dbg	line, "lesson11.c", 419
+	.dbg	line, "lesson11.c", 438
 	lda     _PPU_ADDRESS_High
 	sta     $2006
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_Low;
 ;
-	.dbg	line, "lesson11.c", 420
+	.dbg	line, "lesson11.c", 439
 	lda     _PPU_ADDRESS_Low
 	sta     $2006
 ;
 ; Super_Fast_Write_PPU();
 ;
-	.dbg	line, "lesson11.c", 421
+	.dbg	line, "lesson11.c", 440
 	jmp     _Super_Fast_Write_PPU
 	.dbg	line
 
@@ -2668,29 +2668,29 @@ L088E:	sta     _PPU_ADDRESS_High
 ;
 ; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 427
+	.dbg	line, "lesson11.c", 448
 	lda     _Nametable_Plus
 	bne     L0891
 ;
 ; PPU_ADDRESS_High = 0x24;
 ;
-	.dbg	line, "lesson11.c", 429
+	.dbg	line, "lesson11.c", 450
 	lda     #$24
 ;
 ; else
 ;
-	.dbg	line, "lesson11.c", 431
+	.dbg	line, "lesson11.c", 453
 	jmp     L0890
 ;
 ; PPU_ADDRESS_High = 0x20;
 ;
-	.dbg	line, "lesson11.c", 433
+	.dbg	line, "lesson11.c", 455
 L0891:	lda     #$20
 L0890:	sta     _PPU_ADDRESS_High
 ;
-; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+; PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80;
 ;
-	.dbg	line, "lesson11.c", 435
+	.dbg	line, "lesson11.c", 458
 	lda     _Horiz_scroll_Plus
 	and     #$F0
 	lsr     a
@@ -2702,19 +2702,19 @@ L0890:	sta     _PPU_ADDRESS_High
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_High;
 ;
-	.dbg	line, "lesson11.c", 436
+	.dbg	line, "lesson11.c", 459
 	lda     _PPU_ADDRESS_High
 	sta     $2006
 ;
 ; PPU_ADDRESS = PPU_ADDRESS_Low;
 ;
-	.dbg	line, "lesson11.c", 437
+	.dbg	line, "lesson11.c", 460
 	lda     _PPU_ADDRESS_Low
 	sta     $2006
 ;
 ; Super_Fast_Write_PPU2();
 ;
-	.dbg	line, "lesson11.c", 438
+	.dbg	line, "lesson11.c", 461
 	jmp     _Super_Fast_Write_PPU2
 	.dbg	line
 
@@ -2735,7 +2735,7 @@ L0890:	sta     _PPU_ADDRESS_High
 ;
 ; memcpy(C_MAP, A1, 240);
 ;
-	.dbg	line, "lesson11.c", 446
+	.dbg	line, "lesson11.c", 469
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
 	jsr     pushax
@@ -2748,7 +2748,7 @@ L0890:	sta     _PPU_ADDRESS_High
 ;
 ; memcpy(C_MAP2, A2, 240);
 ;
-	.dbg	line, "lesson11.c", 447
+	.dbg	line, "lesson11.c", 470
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
 	jsr     pushax
@@ -2761,19 +2761,19 @@ L0890:	sta     _PPU_ADDRESS_High
 ;
 ; Nametable_Plus = 1;
 ;
-	.dbg	line, "lesson11.c", 450
+	.dbg	line, "lesson11.c", 473
 	lda     #$01
 	sta     _Nametable_Plus
 ;
 ; PPU_CTRL = 4; // sets to downward increments when writing to PPU
 ;
-	.dbg	line, "lesson11.c", 451
+	.dbg	line, "lesson11.c", 474
 	lda     #$04
 	sta     $2000
 ;
 ; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 452
+	.dbg	line, "lesson11.c", 475
 	lda     #$00
 	sta     _A
 L0892:	lda     _A
@@ -2782,17 +2782,17 @@ L0892:	lda     _A
 ;
 ; DoBuffer(); // fill buffer
 ;
-	.dbg	line, "lesson11.c", 454
+	.dbg	line, "lesson11.c", 477
 	jsr     _DoBuffer
 ;
 ; DoBuffer2(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 455
+	.dbg	line, "lesson11.c", 478
 	jsr     _DoBuffer2
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 456
+	.dbg	line, "lesson11.c", 479
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
@@ -2800,12 +2800,12 @@ L0892:	lda     _A
 ;
 ; DoBuffer3(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 457
+	.dbg	line, "lesson11.c", 480
 	jsr     _DoBuffer3
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 458
+	.dbg	line, "lesson11.c", 481
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
@@ -2813,18 +2813,18 @@ L0892:	lda     _A
 ;
 ; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 452
+	.dbg	line, "lesson11.c", 475
 	inc     _A
 	jmp     L0892
 ;
 ; --Nametable_Plus;
 ;
-	.dbg	line, "lesson11.c", 460
+	.dbg	line, "lesson11.c", 483
 L0893:	dec     _Nametable_Plus
 ;
 ; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 461
+	.dbg	line, "lesson11.c", 484
 	lda     #$00
 	sta     _A
 L0894:	lda     _A
@@ -2833,17 +2833,17 @@ L0894:	lda     _A
 ;
 ; DoBuffer(); // fill buffer
 ;
-	.dbg	line, "lesson11.c", 463
+	.dbg	line, "lesson11.c", 486
 	jsr     _DoBuffer
 ;
 ; DoBuffer2(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 464
+	.dbg	line, "lesson11.c", 487
 	jsr     _DoBuffer2
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 465
+	.dbg	line, "lesson11.c", 488
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
@@ -2851,12 +2851,12 @@ L0894:	lda     _A
 ;
 ; DoBuffer3(); // draw to ppu
 ;
-	.dbg	line, "lesson11.c", 466
+	.dbg	line, "lesson11.c", 489
 	jsr     _DoBuffer3
 ;
 ; Horiz_scroll_Plus += 0x10;
 ;
-	.dbg	line, "lesson11.c", 467
+	.dbg	line, "lesson11.c", 490
 	lda     #$10
 	clc
 	adc     _Horiz_scroll_Plus
@@ -2864,13 +2864,13 @@ L0894:	lda     _A
 ;
 ; for (A = 0; A < 8; ++A)
 ;
-	.dbg	line, "lesson11.c", 461
+	.dbg	line, "lesson11.c", 484
 	inc     _A
 	jmp     L0894
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 469
+	.dbg	line, "lesson11.c", 492
 L07B3:	rts
 	.dbg	line
 
@@ -2891,31 +2891,31 @@ L07B3:	rts
 ;
 ; SPRITE_ZERO[0] = 0x16; // y
 ;
-	.dbg	line, "lesson11.c", 474
+	.dbg	line, "lesson11.c", 496
 	lda     #$16
 	sta     _SPRITE_ZERO
 ;
 ; SPRITE_ZERO[1] = 0x30; // tile
 ;
-	.dbg	line, "lesson11.c", 475
+	.dbg	line, "lesson11.c", 497
 	lda     #$30
 	sta     _SPRITE_ZERO+1
 ;
-; SPRITE_ZERO[2] = 0;  // attributes
+; SPRITE_ZERO[2] = 0; // attributes
 ;
-	.dbg	line, "lesson11.c", 476
+	.dbg	line, "lesson11.c", 498
 	lda     #$00
 	sta     _SPRITE_ZERO+2
 ;
 ; SPRITE_ZERO[3] = 0xd0; // x
 ;
-	.dbg	line, "lesson11.c", 477
+	.dbg	line, "lesson11.c", 499
 	lda     #$D0
 	sta     _SPRITE_ZERO+3
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 478
+	.dbg	line, "lesson11.c", 500
 	rts
 	.dbg	line
 
@@ -2936,19 +2936,19 @@ L07B3:	rts
 ;
 ; PPU_ADDRESS = 0x20;
 ;
-	.dbg	line, "lesson11.c", 483
+	.dbg	line, "lesson11.c", 504
 	lda     #$20
 	sta     $2006
 ;
 ; PPU_ADDRESS = 0x42;
 ;
-	.dbg	line, "lesson11.c", 484
+	.dbg	line, "lesson11.c", 505
 	lda     #$42
 	sta     $2006
 ;
 ; for (index = 0; index < sizeof(HUD); ++index)
 ;
-	.dbg	line, "lesson11.c", 485
+	.dbg	line, "lesson11.c", 506
 	lda     #$00
 	sta     _index
 L0895:	lda     _index
@@ -2957,38 +2957,38 @@ L0895:	lda     _index
 ;
 ; PPU_DATA = HUD[index];
 ;
-	.dbg	line, "lesson11.c", 487
+	.dbg	line, "lesson11.c", 508
 	ldy     _index
 	lda     _HUD,y
 	sta     $2007
 ;
 ; for (index = 0; index < sizeof(HUD); ++index)
 ;
-	.dbg	line, "lesson11.c", 485
+	.dbg	line, "lesson11.c", 506
 	inc     _index
 	jmp     L0895
 ;
 ; PPU_DATA = 3;
 ;
-	.dbg	line, "lesson11.c", 489
+	.dbg	line, "lesson11.c", 510
 L0896:	lda     #$03
 	sta     $2007
 ;
 ; PPU_ADDRESS = 0x23;
 ;
-	.dbg	line, "lesson11.c", 490
+	.dbg	line, "lesson11.c", 511
 	lda     #$23
 	sta     $2006
 ;
 ; PPU_ADDRESS = 0xc0;
 ;
-	.dbg	line, "lesson11.c", 491
+	.dbg	line, "lesson11.c", 512
 	lda     #$C0
 	sta     $2006
 ;
 ; for (index = 0; index < 8; ++index)
 ;
-	.dbg	line, "lesson11.c", 492
+	.dbg	line, "lesson11.c", 513
 	lda     #$00
 	sta     _index
 L0897:	lda     _index
@@ -2997,19 +2997,19 @@ L0897:	lda     _index
 ;
 ; PPU_DATA = 0xaa;
 ;
-	.dbg	line, "lesson11.c", 494
+	.dbg	line, "lesson11.c", 515
 	lda     #$AA
 	sta     $2007
 ;
 ; for (index = 0; index < 8; ++index)
 ;
-	.dbg	line, "lesson11.c", 492
+	.dbg	line, "lesson11.c", 513
 	inc     _index
 	jmp     L0897
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 496
+	.dbg	line, "lesson11.c", 517
 L07ED:	rts
 	.dbg	line
 
@@ -3030,13 +3030,13 @@ L07ED:	rts
 ;
 ; if (direction == 0)
 ;
-	.dbg	line, "lesson11.c", 507
+	.dbg	line, "lesson11.c", 529
 	lda     _direction
 	bne     L0800
 ;
 ; if ((Horiz_scroll_Plus & 0x1e) == 0x02)
 ;
-	.dbg	line, "lesson11.c", 509
+	.dbg	line, "lesson11.c", 532
 	lda     _Horiz_scroll_Plus
 	and     #$1E
 	cmp     #$02
@@ -3044,17 +3044,17 @@ L07ED:	rts
 ;
 ; BufferTiles();
 ;
-	.dbg	line, "lesson11.c", 511
+	.dbg	line, "lesson11.c", 534
 	jsr     _BufferTiles
 ;
 ; ++PPU_flag;
 ;
-	.dbg	line, "lesson11.c", 512
+	.dbg	line, "lesson11.c", 535
 	inc     _PPU_flag
 ;
 ; if ((Horiz_scroll_Plus & 0x1e) == 0x10)
 ;
-	.dbg	line, "lesson11.c", 514
+	.dbg	line, "lesson11.c", 537
 L0898:	lda     _Horiz_scroll_Plus
 	and     #$1E
 	cmp     #$10
@@ -3062,17 +3062,17 @@ L0898:	lda     _Horiz_scroll_Plus
 ;
 ; BufferTiles2();
 ;
-	.dbg	line, "lesson11.c", 516
+	.dbg	line, "lesson11.c", 539
 	jsr     _BufferTiles2
 ;
 ; ++PPU_flag2;
 ;
-	.dbg	line, "lesson11.c", 517
+	.dbg	line, "lesson11.c", 540
 	inc     _PPU_flag2
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 520
+	.dbg	line, "lesson11.c", 543
 L0800:	rts
 	.dbg	line
 
@@ -3093,7 +3093,7 @@ L0800:	rts
 ;
 ; RoomB = RoomPlus + 1;
 ;
-	.dbg	line, "lesson11.c", 528
+	.dbg	line, "lesson11.c", 551
 	lda     _RoomPlus
 	clc
 	adc     #$01
@@ -3101,13 +3101,13 @@ L0800:	rts
 ;
 ; RoomB &= 3; // keep it 0-3, we only have 4 rooms
 ;
-	.dbg	line, "lesson11.c", 529
+	.dbg	line, "lesson11.c", 552
 	and     #$03
 	sta     _RoomB
 ;
 ; Room_Address = ROOMS[RoomB]; // get the address of the room data
 ;
-	.dbg	line, "lesson11.c", 530
+	.dbg	line, "lesson11.c", 553
 	ldx     #$00
 	lda     _RoomB
 	asl     a
@@ -3128,7 +3128,7 @@ L089E:	adc     #<(_ROOMS)
 ;
 ; A = Horiz_scroll_Plus >> 4;
 ;
-	.dbg	line, "lesson11.c", 531
+	.dbg	line, "lesson11.c", 554
 	lda     _Horiz_scroll_Plus
 	lsr     a
 	lsr     a
@@ -3138,13 +3138,13 @@ L089E:	adc     #<(_ROOMS)
 ;
 ; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 532
+	.dbg	line, "lesson11.c", 556
 	lda     _Nametable_Plus
 	bne     L08A0
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 534
+	.dbg	line, "lesson11.c", 558
 	sta     _index
 	tax
 L089F:	lda     _index
@@ -3153,7 +3153,7 @@ L089F:	lda     _index
 ;
 ; C_MAP2[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 536
+	.dbg	line, "lesson11.c", 560
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
 	clc
@@ -3172,7 +3172,7 @@ L081D:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 537
+	.dbg	line, "lesson11.c", 561
 	lda     #$10
 	clc
 	adc     _A
@@ -3180,14 +3180,14 @@ L081D:	jsr     pushax
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 534
+	.dbg	line, "lesson11.c", 558
 	ldx     #$00
 	inc     _index
 	jmp     L089F
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 542
+	.dbg	line, "lesson11.c", 567
 L08A0:	tya
 	sta     _index
 	tax
@@ -3197,7 +3197,7 @@ L08A1:	lda     _index
 ;
 ; C_MAP[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 544
+	.dbg	line, "lesson11.c", 569
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
 	clc
@@ -3216,7 +3216,7 @@ L082D:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 545
+	.dbg	line, "lesson11.c", 570
 	lda     #$10
 	clc
 	adc     _A
@@ -3224,14 +3224,14 @@ L082D:	jsr     pushax
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 542
+	.dbg	line, "lesson11.c", 567
 	ldx     #$00
 	inc     _index
 	jmp     L08A1
 ;
 ; A = (Horiz_scroll_Plus + 0x10) >> 4;
 ;
-	.dbg	line, "lesson11.c", 551
+	.dbg	line, "lesson11.c", 576
 L08A2:	lda     _Horiz_scroll_Plus
 	clc
 	adc     #$10
@@ -3242,13 +3242,13 @@ L0835:	jsr     shrax4
 ;
 ; if (Nametable_Plus == 0)
 ;
-	.dbg	line, "lesson11.c", 552
+	.dbg	line, "lesson11.c", 578
 	lda     _Nametable_Plus
 	bne     L08A4
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 554
+	.dbg	line, "lesson11.c", 580
 	sta     _index
 L08A3:	lda     _index
 	cmp     #$0F
@@ -3256,7 +3256,7 @@ L08A3:	lda     _index
 ;
 ; C_MAP2[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 556
+	.dbg	line, "lesson11.c", 582
 	lda     #<(_C_MAP2)
 	ldx     #>(_C_MAP2)
 	clc
@@ -3275,7 +3275,7 @@ L0842:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 557
+	.dbg	line, "lesson11.c", 583
 	lda     #$10
 	clc
 	adc     _A
@@ -3283,13 +3283,13 @@ L0842:	jsr     pushax
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 554
+	.dbg	line, "lesson11.c", 580
 	inc     _index
 	jmp     L08A3
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 562
+	.dbg	line, "lesson11.c", 589
 L08A4:	lda     #$00
 	sta     _index
 L08A5:	lda     _index
@@ -3298,7 +3298,7 @@ L08A5:	lda     _index
 ;
 ; C_MAP[A] = Room_Address[A];
 ;
-	.dbg	line, "lesson11.c", 564
+	.dbg	line, "lesson11.c", 591
 	lda     #<(_C_MAP)
 	ldx     #>(_C_MAP)
 	clc
@@ -3317,7 +3317,7 @@ L0852:	jsr     pushax
 ;
 ; A += 0x10;
 ;
-	.dbg	line, "lesson11.c", 565
+	.dbg	line, "lesson11.c", 592
 	lda     #$10
 	clc
 	adc     _A
@@ -3325,13 +3325,13 @@ L0852:	jsr     pushax
 ;
 ; for (index = 0; index < 15; ++index)
 ;
-	.dbg	line, "lesson11.c", 562
+	.dbg	line, "lesson11.c", 589
 	inc     _index
 	jmp     L08A5
 ;
 ; }
 ;
-	.dbg	line, "lesson11.c", 568
+	.dbg	line, "lesson11.c", 595
 L0849:	rts
 	.dbg	line
 
@@ -4352,7 +4352,7 @@ L08BA:	lda     #$94
 	lda     #$00
 	sta     $2005
 ;
-; SCROLL = 0;  // resetting scroll position, again
+; SCROLL = 0; // resetting scroll position, again
 ;
 	.dbg	line, "lesson11.c", 67
 	sta     $2005
@@ -4403,7 +4403,7 @@ L05A0:	jsr     _Sprite_Zero
 	lda     _Horiz_scroll
 	sta     $2005
 ;
-; SCROLL = 0;  // setting the new scroll position
+; SCROLL = 0; // setting the new scroll position
 ;
 	.dbg	line, "lesson11.c", 84
 	lda     #$00

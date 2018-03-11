@@ -58,30 +58,30 @@ void main(void)
 			DoBuffer2();
 		PPU_CTRL = 0x94;
 		SCROLL = 0;
-		SCROLL = 0;		// resetting scroll position, again
+		SCROLL = 0;	 // resetting scroll position, again
 
 		if (PPU_flag2 != 0)
 			DoBuffer3();
 		PPU_CTRL = 0x94;
 		SCROLL = 0;
-		SCROLL = 0;		// resetting scroll position, again
+		SCROLL = 0; // resetting scroll position, again
 
-		//every_frame();	// moved this to the nmi code in reset.s for greater stability
+		//every_frame(); // moved this to the nmi code in reset.s for greater stability
 		Get_Input();
 		PPU_flag = 0;
 		PPU_flag2 = 0;
 
 		if ((joypad1 & START) != 0)
 		{
-			SPRITE_ZERO[1] = 0xff;	// switch tiles to a very small one
-			SPRITE_ZERO[2] = 0x20;	// attributes = behind the bg
+			SPRITE_ZERO[1] = 0xff; // switch tiles to a very small one
+			SPRITE_ZERO[2] = 0x20; // attributes = behind the bg
 		} // makes it 'disappear'
 
 		// wait till sprite zero hit
 		Sprite_Zero();
 		// set new scroll position
 		SCROLL = Horiz_scroll;
-		SCROLL = 0;		// setting the new scroll position
+		SCROLL = 0; // setting the new scroll position
 		PPU_CTRL = (0x94 + Nametable);
 
 		MoveLogic();
@@ -344,57 +344,72 @@ void MoveLogic(void)
 
 	// move
 	Horiz_scroll_Old = Horiz_scroll;
+	// right
 	if (X_speed >= 0)
-	{ // right
+	{
 		if (X1 < 0x80)
 		{
-			X1 += (X_speed >> 4); // use the high nibble
+			// use the high nibble
+			X1 += (X_speed >> 4);
 			if (X1 > 0x80)
 				X1 = 0x80;
 		}
 		else
 		{
-			Horiz_scroll += (X_speed >> 4); // use the high nibble
+			// use the high nibble
+			Horiz_scroll += (X_speed >> 4);
+			// if pass 0, switch nametables
 			if (Horiz_scroll_Old > Horiz_scroll)
-			{ // if pass 0, switch nametables
+			{
 				++Nametable;
 				++Room;
 			}
 		}
 	}
+	// going left
 	else
-	{ // going left
-		X1 += (X_speed >> 4); // use the high nibble
+	{
+		// use the high nibble
+		X1 += (X_speed >> 4);
 		if (X1 > 0xc0)
 			X1 = 0;
 	}
 
-	Nametable &= 1; // keep it 1 or 0
-	Room &= 3; // keep it 0-3
+	// keep it 1 or 0
+	Nametable &= 1;
+	// keep it 0-3
+	Room &= 3;
 
+	// positive = falling
 	if (Y_speed >= 0)
-	{ // positive = falling
-		Y1 += (Y_speed >> 4); // use the high nibble
+	{
+		// use the high nibble
+		Y1 += (Y_speed >> 4);
 	}
+	// jumping
 	else
-	{ // jumping
-		Y1 += (Y_speed >> 4); // use the high nibble
+	{
+		// use the high nibble
+		Y1 += (Y_speed >> 4);
 	}
 
-	if (walk_count > 0x1f) // walk_count forced 0-1f
+	// walk_count forced 0-1f
+	if (walk_count > 0x1f)
 		walk_count = 0;
 
-	state = Walk_Moves[(walk_count >> 3)]; // if not jumping
+	// if not jumping
+	state = Walk_Moves[(walk_count >> 3)];
 
-	if (Y_speed < 0) // negative = jumping
+	// negative = jumping
+	if (Y_speed < 0)
 		state = 3;
 }
 
 
 // do 4 columns, 1 at every 0x20 pixel moves. do half, then half.
+// puts from cmap to buffer
 void DoBuffer(void)
-{ // puts from cmap to buffer
-
+{
 	BufferTiles();
 
 	Horiz_scroll_Plus += 0x10;
@@ -405,34 +420,42 @@ void DoBuffer(void)
 }
 
 
+// first pass
 void DoBuffer2(void)
-{ // first pass
+{
+	// write to right screen
 	if (Nametable_Plus == 0)
-	{ // write to right screen
+	{
 		PPU_ADDRESS_High = 0x24;
 	}
+	// write to the left screen
 	else
-	{ // write to the left screen
+	{
 		PPU_ADDRESS_High = 0x20;
 	}
-	PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+	// +80 because we're skipping the top
+	PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80;
 	PPU_ADDRESS = PPU_ADDRESS_High;
 	PPU_ADDRESS = PPU_ADDRESS_Low;
 	Super_Fast_Write_PPU();
 }
 
 
+// second pass
 void DoBuffer3(void)
-{ // second pass
+{
+	// write to right screen
 	if (Nametable_Plus == 0)
-	{ // write to right screen
+	{
 		PPU_ADDRESS_High = 0x24;
 	}
+	// write to the left screen
 	else
-	{ // write to the left screen
+	{
 		PPU_ADDRESS_High = 0x20;
 	}
-	PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80; // +80 because we're skipping the top
+	// +80 because we're skipping the top
+	PPU_ADDRESS_Low = ((Horiz_scroll_Plus & 0xf0) >> 3) + 0x80;
 	PPU_ADDRESS = PPU_ADDRESS_High;
 	PPU_ADDRESS = PPU_ADDRESS_Low;
 	Super_Fast_Write_PPU2();
@@ -451,32 +474,30 @@ void DrawBackground(void)
 	PPU_CTRL = 4; // sets to downward increments when writing to PPU
 	for (A = 0; A < 8; ++A)
 	{
-		DoBuffer();	// fill buffer
-		DoBuffer2();	// draw to ppu
+		DoBuffer(); // fill buffer
+		DoBuffer2(); // draw to ppu
 		Horiz_scroll_Plus += 0x10;
-		DoBuffer3();	// draw to ppu
+		DoBuffer3(); // draw to ppu
 		Horiz_scroll_Plus += 0x10;
 	}
 	--Nametable_Plus;
 	for (A = 0; A < 8; ++A)
 	{
-		DoBuffer();	// fill buffer
-		DoBuffer2();	// draw to ppu
+		DoBuffer(); // fill buffer
+		DoBuffer2(); // draw to ppu
 		Horiz_scroll_Plus += 0x10;
-		DoBuffer3();	// draw to ppu
+		DoBuffer3(); // draw to ppu
 		Horiz_scroll_Plus += 0x10;
 	}
 }
 
-
 void SetSpriteZero(void)
 {
-	SPRITE_ZERO[0] = 0x16;	// y
-	SPRITE_ZERO[1] = 0x30;	// tile
-	SPRITE_ZERO[2] = 0;		// attributes
-	SPRITE_ZERO[3] = 0xd0;	// x
+	SPRITE_ZERO[0] = 0x16; // y
+	SPRITE_ZERO[1] = 0x30; // tile
+	SPRITE_ZERO[2] = 0; // attributes
+	SPRITE_ZERO[3] = 0xd0; // x
 }
-
 
 void LoadHud(void)
 {
@@ -504,10 +525,12 @@ void LoadHud(void)
  */
 void ShouldWeBuffer(void)
 {
+	// right
 	if (direction == 0)
-	{ // right
+	{
+		// it was == 0
 		if ((Horiz_scroll_Plus & 0x1e) == 0x02)
-		{ // it was == 0
+		{
 			BufferTiles();
 			++PPU_flag;
 		}
@@ -519,26 +542,28 @@ void ShouldWeBuffer(void)
 	}
 }
 
-
 // this function gets new data to put in the collision map
 // as we go right it fetches 2 columns of data at a time
 // each byte of data is a 16x16 square on the screen
 void NewRoom(void)
-{ // left column
+{
+	// left column
 	RoomB = RoomPlus + 1;
 	RoomB &= 3; // keep it 0-3, we only have 4 rooms
 	Room_Address = ROOMS[RoomB]; // get the address of the room data
 	A = Horiz_scroll_Plus >> 4;
+	// load to right cmap
 	if (Nametable_Plus == 0)
-	{ // load to right cmap
+	{
 		for (index = 0; index < 15; ++index)
 		{
 			C_MAP2[A] = Room_Address[A];
 			A += 0x10;
 		}
 	}
+	// load to the left cmap
 	else
-	{ // load to the left cmap
+	{
 		for (index = 0; index < 15; ++index)
 		{
 			C_MAP[A] = Room_Address[A];
@@ -549,16 +574,18 @@ void NewRoom(void)
 	// second column
 	// Room_Address = ROOMS[RoomB]; //duplicate
 	A = (Horiz_scroll_Plus + 0x10) >> 4;
+	// load to right cmap
 	if (Nametable_Plus == 0)
-	{ // load to right cmap
+	{
 		for (index = 0; index < 15; ++index)
 		{
 			C_MAP2[A] = Room_Address[A];
 			A += 0x10;
 		}
 	}
+	// load to the left cmap
 	else
-	{ // load to the left cmap
+	{
 		for (index = 0; index < 15; ++index)
 		{
 			C_MAP[A] = Room_Address[A];

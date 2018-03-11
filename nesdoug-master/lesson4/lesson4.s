@@ -127,7 +127,7 @@ _SPRITES:
 	lda     #$00
 	sta     $2000
 ;
-; PPU_MASK = 0; 
+; PPU_MASK = 0;
 ;
 	sta     $2001
 ;
@@ -153,7 +153,7 @@ _SPRITES:
 	lda     #$90
 	sta     $2000
 ;
-; PPU_MASK = 0x1e; 
+; PPU_MASK = 0x1e;
 ;
 	lda     #$1E
 	sta     $2001
@@ -219,7 +219,7 @@ _SPRITES:
 	lda     #$00
 	sta     $2006
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	sta     _index
 L00B5:	lda     _index
@@ -232,7 +232,7 @@ L00B5:	lda     _index
 	lda     _PALETTE,y
 	sta     $2007
 ;
-; for( index = 0; index < sizeof(PALETTE); ++index ){
+; for (index = 0; index < sizeof(PALETTE); ++index)
 ;
 	inc     _index
 	jmp     L00B5
@@ -259,7 +259,7 @@ L0081:	rts
 	lda     #$00
 	sta     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	sta     _index
 L00B8:	lda     _index
@@ -350,7 +350,7 @@ L00B0:	sta     ptr1
 ;
 	inc     _index4
 ;
-; for (index = 0; index < 4; ++index ){
+; for (index = 0; index < 4; ++index)
 ;
 	inc     _index
 	jmp     L00B8
@@ -394,7 +394,7 @@ L00B0:	sta     ptr1
 ;
 	jsr     _All_On
 ;
-; while (NMI_flag == 0); // wait till NMI
+; while (NMI_flag == 0);
 ;
 L00BA:	lda     _NMI_flag
 	beq     L00BA
@@ -442,7 +442,7 @@ L00BD:	lda     _move
 ;
 L00BE:	inc     _move_count
 ;
-; if (move_count == 20){ // do a move for 20 frames, then switch
+; if (move_count == 20)
 ;
 	lda     _move_count
 	cmp     #$14
@@ -477,7 +477,7 @@ L0057:	jsr     _update_Sprites
 	lda     #$00
 	sta     _NMI_flag
 ;
-; while (1){ // infinite loop
+; while (1)
 ;
 	jmp     L00BA
 

@@ -1950,7 +1950,7 @@ L06A0:	bpl     L085F
 ;
 	jmp     L0861
 ;
-; X_speed -= 8;//just stop
+; X_speed -= 8; //just stop
 ;
 L085F:	lda     _X_speed
 	sec
@@ -1997,7 +1997,7 @@ L06B2:	sta     _Scroll_Adjusted_X
 	lda     _high_byte
 	beq     L0862
 ;
-; ++NametableB;    // the other nametable's collision map
+; ++NametableB; // the other nametable's collision map
 ;
 	inc     _NametableB
 ;
@@ -2062,7 +2062,7 @@ L06C9:	sta     _Scroll_Adjusted_X
 	lda     _high_byte
 	beq     L0863
 ;
-; ++NametableB;    // the other nametable's collision map
+; ++NametableB; // the other nametable's collision map
 ;
 	inc     _NametableB
 ;
@@ -2668,7 +2668,7 @@ L079B:	rts
 	lda     #$30
 	sta     _SPRITE_ZERO+1
 ;
-; SPRITE_ZERO[2] = 0;  // attributes
+; SPRITE_ZERO[2] = 0; // attributes
 ;
 	lda     #$00
 	sta     _SPRITE_ZERO+2
@@ -3964,7 +3964,7 @@ L059E:	jsr     _Sprite_Zero
 	lda     _Horiz_scroll
 	sta     $2005
 ;
-; SCROLL = 0;  // setting the new scroll position
+; SCROLL = 0; // setting the new scroll position
 ;
 	lda     #$00
 	sta     $2005
@@ -3984,7 +3984,7 @@ L059E:	jsr     _Sprite_Zero
 ;
 	jsr     _UpdateSprites
 ;
-; RoomPlus = Room;   // make a copy of variables, but 20 pixels right
+; RoomPlus = Room; // make a copy of variables, but 20 pixels right
 ;
 	lda     _Room
 	sta     _RoomPlus

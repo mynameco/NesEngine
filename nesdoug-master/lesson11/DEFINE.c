@@ -2,24 +2,24 @@
 
 
 
-#define PPU_CTRL		*((unsigned char*)0x2000)
-#define PPU_MASK		*((unsigned char*)0x2001)
-#define PPU_STATUS		*((unsigned char*)0x2002)
-#define OAM_ADDRESS		*((unsigned char*)0x2003)
-#define SCROLL			*((unsigned char*)0x2005)
-#define PPU_ADDRESS		*((unsigned char*)0x2006)
-#define PPU_DATA		*((unsigned char*)0x2007)
-#define OAM_DMA			*((unsigned char*)0x4014)
+#define PPU_CTRL *((unsigned char*)0x2000)
+#define PPU_MASK *((unsigned char*)0x2001)
+#define PPU_STATUS *((unsigned char*)0x2002)
+#define OAM_ADDRESS *((unsigned char*)0x2003)
+#define SCROLL *((unsigned char*)0x2005)
+#define PPU_ADDRESS *((unsigned char*)0x2006)
+#define PPU_DATA *((unsigned char*)0x2007)
+#define OAM_DMA *((unsigned char*)0x4014)
 
 
-#define RIGHT		0x01
-#define LEFT		0x02
-#define DOWN		0x04
-#define UP			0x08
-#define START		0x10
-#define SELECT		0x20
-#define B_BUTTON	0x40
-#define A_BUTTON	0x80
+#define RIGHT 0x01
+#define LEFT 0x02
+#define DOWN 0x04
+#define UP 0x08
+#define START 0x10
+#define SELECT 0x20
+#define B_BUTTON 0x40
+#define A_BUTTON 0x80
 
 
 // Globals
@@ -44,7 +44,8 @@ unsigned char joypad2test;
 unsigned char Room;
 unsigned char RoomB;
 unsigned char RoomPlus;
-const unsigned char *Room_Address; // is an int pointer, points to chars
+// is an int pointer, points to chars
+const unsigned char *Room_Address;
 unsigned char Horiz_scroll;
 unsigned char Horiz_scroll_Old;
 unsigned char Horiz_scroll_Plus;
@@ -72,7 +73,6 @@ unsigned char PPU_flag2;
 
 unsigned char dummy;
 
-
 #pragma bss-name(push, "OAM")
 unsigned char SPRITE_ZERO[4];
 unsigned char SPRITES[252];
@@ -84,14 +84,14 @@ unsigned char C_MAP2[256];
 // MAP equals ram addresses 300-4ff, collision map, metatiles
 
 #pragma bss-name(push, "BSS")
-unsigned char BUFFER1[32];	// left column 1
-unsigned char BUFFER2[32];	// right column 1
-unsigned char BUFFER3[32];	// left column 2
-unsigned char BUFFER4[32];	// right column 2
+unsigned char BUFFER1[32]; // left column 1
+unsigned char BUFFER2[32]; // right column 1
+unsigned char BUFFER3[32]; // left column 2
+unsigned char BUFFER4[32]; // right column 2
 
-unsigned char BUFFER5[8];	// 1/2 bits of attribute table
-unsigned char BUFFER6[8];	// 1/2 bits of attribute table
-unsigned char BUFFER7[8];	// final attribute table buffer
+unsigned char BUFFER5[8]; // 1/2 bits of attribute table
+unsigned char BUFFER6[8]; // 1/2 bits of attribute table
+unsigned char BUFFER7[8]; // final attribute table buffer
 
 #include "BG/A1.csv"
 #include "BG/A2.csv"
