@@ -24,6 +24,10 @@
 #define B_BUTTON 0x40
 #define A_BUTTON 0x80
 
+#define SPRITE_FLIP_V 0x80
+#define SPRITE_FLIP_H 0x40
+#define SPRITE_PRIORITY 0x20
+
 // Globals
 // our startup code initialized all values to zero
 #pragma bss-name(push, "ZEROPAGE")
@@ -56,15 +60,15 @@ unsigned char high_byte;
 unsigned char collision;
 unsigned char temp;
 
-const unsigned char max_walk_count = 31;
+#define MAX_WALK_COUNT 31
 
 #pragma bss-name(push, "OAM")
-unsigned char SPRITES[256];
+unsigned char Sprites[256];
 // OAM equals ram addresses 200-2ff
 
 #pragma bss-name(push, "MAP")
-unsigned char C_MAP[256];
-unsigned char C_MAP2[256];
+unsigned char map1[256];
+unsigned char map2[256];
 // MAP equals ram addresses 300-4ff, collision map, metatiles
 
 #include "BG/N1.h"
@@ -117,7 +121,7 @@ const unsigned char MetaSprite_Tile_L[] =
 // attributes = not flipped
 const unsigned char MetaSprite_Attrib_R[] = { 0, 0, 0, 0 };
 //attributes = H flipped
-const unsigned char MetaSprite_Attrib_L[] = { 0x40, 0x40, 0x40, 0x40 };
+const unsigned char MetaSprite_Attrib_L[] = { SPRITE_FLIP_H, SPRITE_FLIP_H, SPRITE_FLIP_H, SPRITE_FLIP_H };
 
 // Prototypes
 void AllOff(void);

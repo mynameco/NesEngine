@@ -16,11 +16,12 @@ void main(void)
 	ResetScroll();
 	Wait_Vblank();
 	AllOn(); // turn on screen
+
 	while (1) // infinite loop
 	{
 		while (NMI_flag == 0); // wait till NMI
 
-		//every_frame();	// moved this to the nmi code in reset.s for greater stability
+		//every_frame(); // moved this to the nmi code in reset.s for greater stability
 		Get_Input();
 		MoveLogic();
 		UpdateSprites();
@@ -64,12 +65,12 @@ void CollisionDown(void)
 {
 	if (NametableB == 0) // first collision map
 	{
-		temp = C_MAP[collision_Index];
+		temp = map1[collision_Index];
 		collision += Platform[temp];
 	}
 	else // second collision map
 	{
-		temp = C_MAP2[collision_Index];
+		temp = map2[collision_Index];
 		collision += Platform[temp];
 	}
 }
@@ -231,7 +232,7 @@ void ComputeAnimation(void)
 		{
 			++walk_count;
 
-			if (walk_count > max_walk_count) // walk_count forced 0-31
+			if (walk_count > MAX_WALK_COUNT) // walk_count forced 0-31
 				walk_count = 0;
 
 			state = Walk_Moves[(walk_count >> 3)]; // if not jumping
@@ -245,19 +246,26 @@ void ComputeAnimation(void)
 
 void UpdateSprites(void)
 {
+	// информация о спрайте, 4 байта
+	// Y координата
+	// индекс спрайта
+	// атрибуты - FlipV : 1, FlipH : 1, Priority : 1, Unimplemented : 3, Palette : 2
+	// X координата
+
 	state4 = state << 2; // shift left 2 = multiply 4
 	index4 = 0;
 	if (direction == 0) // right
 	{
 		for (index = 0; index < 4; ++index)
 		{
-			SPRITES[index4] = MetaSprite_Y[index] + Y1; // relative y + master y
+			// y координата
+			Sprites[index4] = MetaSprite_Y[index] + Y1; // relative y + master y
 			++index4;
-			SPRITES[index4] = MetaSprite_Tile_R[index + state4]; // tile numbers
+			Sprites[index4] = MetaSprite_Tile_R[index + state4]; // tile numbers
 			++index4;
-			SPRITES[index4] = MetaSprite_Attrib_R[index]; // attributes, all zero here
+			Sprites[index4] = MetaSprite_Attrib_R[index]; // attributes, all zero here
 			++index4;
-			SPRITES[index4] = MetaSprite_X[index] + X1; // relative x + master x
+			Sprites[index4] = MetaSprite_X[index] + X1; // relative x + master x
 			++index4;
 		}
 	}
@@ -265,13 +273,13 @@ void UpdateSprites(void)
 	{
 		for (index = 0; index < 4; ++index)
 		{
-			SPRITES[index4] = MetaSprite_Y[index] + Y1; // relative y + master y
+			Sprites[index4] = MetaSprite_Y[index] + Y1; // relative y + master y
 			++index4;
-			SPRITES[index4] = MetaSprite_Tile_L[index + state4]; // tile numbers
+			Sprites[index4] = MetaSprite_Tile_L[index + state4]; // tile numbers
 			++index4;
-			SPRITES[index4] = MetaSprite_Attrib_L[index]; // attributes, all zero here
+			Sprites[index4] = MetaSprite_Attrib_L[index]; // attributes, all zero here
 			++index4;
-			SPRITES[index4] = MetaSprite_X[index] + X1; // relative x + master x
+			Sprites[index4] = MetaSprite_X[index] + X1; // relative x + master x
 			++index4;
 		}
 	}
@@ -288,6 +296,6 @@ void DrawBackground(void)
 	UnRLE(N2); // uncompresses our data
 
 	// load collision maps to RAM
-	memcpy(C_MAP, C1, 240);
-	memcpy(C_MAP2, C2, 240);
+	memcpy(map1, C1, 240);
+	memcpy(map2, C2, 240);
 }
