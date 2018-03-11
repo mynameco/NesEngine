@@ -168,9 +168,3 @@ const unsigned char* const metasprite_list2[] =
 	0
 };
 
-const unsigned char* const *metasprite_list_list[] =
-{
-	metasprite_list1,
-	metasprite_list2,
-};
-
