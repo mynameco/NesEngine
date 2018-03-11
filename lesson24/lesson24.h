@@ -15,13 +15,13 @@ unsigned char X_position;
 unsigned char X_position2;
 unsigned char X_position3;
 unsigned char sprid;
-	
+unsigned char sprite_index;
 
 
 /*	this is so you have to type less
  *	cut and paste from this list
- 
-// any time button pressed or held 
+
+// any time button pressed or held
 
 (PAD_STATE & PAD_A)
 (PAD_STATE & PAD_B)
@@ -30,7 +30,7 @@ unsigned char sprid;
 (PAD_STATE & PAD_UP)
 (PAD_STATE & PAD_DOWN)
 (PAD_STATE & PAD_LEFT)
-(PAD_STATE & PAD_RIGHT)	
+(PAD_STATE & PAD_RIGHT)
 
 (PAD_STATE2 & PAD_A)
 (PAD_STATE2 & PAD_B)
@@ -39,7 +39,7 @@ unsigned char sprid;
 (PAD_STATE2 & PAD_UP)
 (PAD_STATE2 & PAD_DOWN)
 (PAD_STATE2 & PAD_LEFT)
-(PAD_STATE2 & PAD_RIGHT)	
+(PAD_STATE2 & PAD_RIGHT)
 
 
 // only on button down, not hold
@@ -51,7 +51,7 @@ unsigned char sprid;
 (PAD_STATET & PAD_UP)
 (PAD_STATET & PAD_DOWN)
 (PAD_STATET & PAD_LEFT)
-(PAD_STATET & PAD_RIGHT)	
+(PAD_STATET & PAD_RIGHT)
 
 (PAD_STATET2 & PAD_A)
 (PAD_STATET2 & PAD_B)
@@ -63,5 +63,5 @@ unsigned char sprid;
 (PAD_STATET2 & PAD_RIGHT)
 
  */
- 
- 
+
+
