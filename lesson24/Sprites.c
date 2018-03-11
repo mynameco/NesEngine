@@ -142,6 +142,11 @@ const unsigned char metasprite_15_data[] =
 	128
 };
 
+unsigned char metasprite_delay_list1[] =
+{
+	4, 4, 4, 4, 4, 4, 4, 4, 0
+};
+
 const unsigned char* const metasprite_list1[] =
 {
 	metasprite_8_data,
@@ -153,6 +158,11 @@ const unsigned char* const metasprite_list1[] =
 	metasprite_14_data,
 	metasprite_15_data,
 	0
+};
+
+unsigned char metasprite_delay_list2[] =
+{
+	4, 4, 4, 4, 4, 4, 4, 4, 0
 };
 
 const unsigned char* const metasprite_list2[] =

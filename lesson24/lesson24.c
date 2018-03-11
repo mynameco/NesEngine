@@ -15,11 +15,12 @@ const unsigned char Test[] =
 
 const unsigned char PaletteBackgroud[] =
 {
-	0x0f, 0x00, 0x10, 0x30, //	black, gray, lt gray, white
+	0x0f, 0x00, 0x10, 0x30,
 	0,0,0,0,
 	0,0,0,0,
 	0,0,0,0
 };
+
 const unsigned char PaletteSprites[] =
 {
 	0x0f, 0x00, 0x10, 0x30,
@@ -28,10 +29,12 @@ const unsigned char PaletteSprites[] =
 	0,0,0,0
 };
 
+unsigned char sprite_index = 0;
+unsigned char sprite_delay = 0;
+unsigned char sprite_delay_count = 0;
 const unsigned char* metasprite = 0;
 const unsigned char* const* metasprite_list = 0;
-//unsigned char metasprite_list_index = 0;
-#define ANIMATION_SHIFT 2
+const unsigned char* metasprite_delay_list = 0;
 
 void main(void)
 {
@@ -72,7 +75,11 @@ void main(void)
 	X_position3 = 0xc0;
 
 	sprite_index = 0;
+	sprite_delay = 0;
 	metasprite_list = metasprite_list1;
+	metasprite_delay_list = metasprite_delay_list1;
+	metasprite = metasprite_list[sprite_index];
+	sprite_delay_count = metasprite_delay_list[sprite_index];
 
 	//	infinite loop
 	while (1)
@@ -89,36 +96,44 @@ void main(void)
 		// reset index into the buffer
 		sprid = 0;
 
-		// push a single sprite
-		// oam_spr(unsigned char x,unsigned char y,unsigned char chrnum,unsigned char attr,unsigned char sprid);
-		// use tile #0, palette #0
-		sprid = oam_spr(X_position, Y_position, 0, 0, sprid);
-
-		sprite_index++;
-		metasprite = metasprite_list[sprite_index >> ANIMATION_SHIFT];
-		if (metasprite == 0)
+		sprite_delay++;
+		if (sprite_delay > sprite_delay_count)
 		{
-			sprite_index = 0;
-			metasprite = metasprite_list[0];
+			sprite_delay = 0;
+			sprite_index++;
+
+			metasprite = metasprite_list[sprite_index];
+			sprite_delay_count = metasprite_delay_list[sprite_index];
+
+			if (metasprite == 0)
+			{
+				sprite_index = 0;
+				metasprite = metasprite_list[sprite_index];
+				sprite_delay_count = metasprite_delay_list[sprite_index];
+			}
 		}
 
-		// push a metasprite
-		// oam_meta_spr(unsigned char x,unsigned char y,unsigned char sprid,const unsigned char *data);
 		sprid = oam_meta_spr(X_position2, Y_position, sprid, metasprite);
-
-		// and another
-		//sprid = oam_meta_spr(X_position3, Y_position, sprid, metasprite_1_data);
 
 		if ((PAD_STATET & PAD_UP) != 0)
 		{
-			metasprite_list = metasprite_list1;
 			sprite_index = 0;
+			sprite_delay = 0;
+			metasprite_list = metasprite_list1;
+			metasprite_delay_list = metasprite_delay_list1;
+			metasprite = metasprite_list[sprite_index];
+			sprite_delay_count = metasprite_delay_list[sprite_index];
 		}
 		else if ((PAD_STATET & PAD_DOWN) != 0)
 		{
-			metasprite_list = metasprite_list2;
 			sprite_index = 0;
+			sprite_delay = 0;
+			metasprite_list = metasprite_list2;
+			metasprite_delay_list = metasprite_delay_list2;
+			metasprite = metasprite_list[sprite_index];
+			sprite_delay_count = metasprite_delay_list[sprite_index];
 		}
+
 		//Y_position++;
 	}
 };

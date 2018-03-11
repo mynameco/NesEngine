@@ -15,7 +15,6 @@ unsigned char X_position;
 unsigned char X_position2;
 unsigned char X_position3;
 unsigned char sprid;
-unsigned char sprite_index;
 
 
 /*	this is so you have to type less

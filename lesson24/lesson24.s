@@ -10,17 +10,16 @@
 	.importzp	sp, sreg, regsave, regbank
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
-	.dbg		file, "lesson24.c", 2943, 1520805812
+	.dbg		file, "lesson24.c", 3319, 1520807374
 	.dbg		file, "neslib.h", 8578, 1492006296
-	.dbg		file, "lesson24.h", 1562, 1520800394
-	.dbg		file, "Sprites.c", 2254, 1520805763
+	.dbg		file, "lesson24.h", 1533, 1520806183
+	.dbg		file, "Sprites.c", 2402, 1520807031
 	.forceimport	__STARTUP__
 	.dbg		sym, "pal_bg", "00", extern, "_pal_bg"
 	.dbg		sym, "pal_spr", "00", extern, "_pal_spr"
 	.dbg		sym, "ppu_wait_nmi", "00", extern, "_ppu_wait_nmi"
 	.dbg		sym, "ppu_on_all", "00", extern, "_ppu_on_all"
 	.dbg		sym, "oam_clear", "00", extern, "_oam_clear"
-	.dbg		sym, "oam_spr", "00", extern, "_oam_spr"
 	.dbg		sym, "oam_meta_spr", "00", extern, "_oam_meta_spr"
 	.dbg		sym, "pad_poll", "00", extern, "_pad_poll"
 	.dbg		sym, "bank_spr", "00", extern, "_bank_spr"
@@ -31,7 +30,6 @@
 	.import		_ppu_wait_nmi
 	.import		_ppu_on_all
 	.import		_oam_clear
-	.import		_oam_spr
 	.import		_oam_meta_spr
 	.import		_pad_poll
 	.import		_bank_spr
@@ -46,7 +44,6 @@
 	.export		_X_position2
 	.export		_X_position3
 	.export		_sprid
-	.export		_sprite_index
 	.export		_metasprite_0_data
 	.export		_metasprite_1_data
 	.export		_metasprite_2_data
@@ -63,20 +60,54 @@
 	.export		_metasprite_13_data
 	.export		_metasprite_14_data
 	.export		_metasprite_15_data
+	.export		_metasprite_delay_list1
 	.export		_metasprite_list1
+	.export		_metasprite_delay_list2
 	.export		_metasprite_list2
 	.export		_Test
 	.export		_PaletteBackgroud
 	.export		_PaletteSprites
+	.export		_sprite_index
+	.export		_sprite_delay
+	.export		_sprite_delay_count
 	.export		_metasprite
 	.export		_metasprite_list
+	.export		_metasprite_delay_list
 	.export		_main
 
 .segment	"DATA"
 
+_metasprite_delay_list1:
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$00
+_metasprite_delay_list2:
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$04
+	.byte	$00
+_sprite_index:
+	.byte	$00
+_sprite_delay:
+	.byte	$00
+_sprite_delay_count:
+	.byte	$00
 _metasprite:
 	.word	$0000
 _metasprite_list:
+	.word	$0000
+_metasprite_delay_list:
 	.word	$0000
 
 .segment	"RODATA"
@@ -448,8 +479,6 @@ _X_position3:
 	.res	1,$00
 _sprid:
 	.res	1,$00
-_sprite_index:
-	.res	1,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ main (void)
@@ -466,34 +495,34 @@ _sprite_index:
 ;
 ; pal_bg(PaletteBackgroud);
 ;
-	.dbg	line, "lesson24.c", 44
+	.dbg	line, "lesson24.c", 47
 	lda     #<(_PaletteBackgroud)
 	ldx     #>(_PaletteBackgroud)
 	jsr     _pal_bg
 ;
 ; pal_spr(PaletteSprites);
 ;
-	.dbg	line, "lesson24.c", 45
+	.dbg	line, "lesson24.c", 48
 	lda     #<(_PaletteSprites)
 	ldx     #>(_PaletteSprites)
 	jsr     _pal_spr
 ;
 ; bank_spr(1);
 ;
-	.dbg	line, "lesson24.c", 49
+	.dbg	line, "lesson24.c", 52
 	lda     #$01
 	jsr     _bank_spr
 ;
 ; vram_adr(NTADR_A(7, 14)); // screen is 32 x 30 tiles
 ;
-	.dbg	line, "lesson24.c", 54
+	.dbg	line, "lesson24.c", 57
 	ldx     #$21
 	lda     #$C7
 	jsr     _vram_adr
 ;
 ; vram_write((unsigned char*)Test, sizeof(Test));
 ;
-	.dbg	line, "lesson24.c", 57
+	.dbg	line, "lesson24.c", 60
 	lda     #<(_Test)
 	ldx     #>(_Test)
 	jsr     pushax
@@ -503,153 +532,224 @@ _sprite_index:
 ;
 ; ppu_on_all();
 ;
-	.dbg	line, "lesson24.c", 66
+	.dbg	line, "lesson24.c", 69
 	jsr     _ppu_on_all
 ;
 ; Y_position = 0x80;
 ;
-	.dbg	line, "lesson24.c", 69
+	.dbg	line, "lesson24.c", 72
 	lda     #$80
 	sta     _Y_position
 ;
 ; X_position = 0x88;
 ;
-	.dbg	line, "lesson24.c", 70
+	.dbg	line, "lesson24.c", 73
 	lda     #$88
 	sta     _X_position
 ;
 ; X_position2 = 0xa0;
 ;
-	.dbg	line, "lesson24.c", 71
+	.dbg	line, "lesson24.c", 74
 	lda     #$A0
 	sta     _X_position2
 ;
 ; X_position3 = 0xc0;
 ;
-	.dbg	line, "lesson24.c", 72
+	.dbg	line, "lesson24.c", 75
 	lda     #$C0
 	sta     _X_position3
 ;
 ; sprite_index = 0;
 ;
-	.dbg	line, "lesson24.c", 74
-	lda     #$00
+	.dbg	line, "lesson24.c", 77
+L0206:	lda     #$00
 	sta     _sprite_index
+;
+; sprite_delay = 0;
+;
+	.dbg	line, "lesson24.c", 78
+	sta     _sprite_delay
 ;
 ; metasprite_list = metasprite_list1;
 ;
-	.dbg	line, "lesson24.c", 75
+	.dbg	line, "lesson24.c", 79
 	lda     #<(_metasprite_list1)
 	sta     _metasprite_list
 	lda     #>(_metasprite_list1)
 	sta     _metasprite_list+1
 ;
-; ppu_wait_nmi();
+; metasprite_delay_list = metasprite_delay_list1;
+;
+	.dbg	line, "lesson24.c", 80
+	lda     #<(_metasprite_delay_list1)
+	sta     _metasprite_delay_list
+	lda     #>(_metasprite_delay_list1)
+L01FC:	sta     _metasprite_delay_list+1
+;
+; metasprite = metasprite_list[sprite_index];
 ;
 	.dbg	line, "lesson24.c", 81
-L0167:	jsr     _ppu_wait_nmi
+	ldx     #$00
+	lda     _sprite_index
+	asl     a
+	bcc     L01E0
+	inx
+	clc
+L01E0:	adc     _metasprite_list
+	sta     ptr1
+	txa
+	adc     _metasprite_list+1
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	sta     _metasprite+1
+	dey
+	lda     (ptr1),y
+	sta     _metasprite
+;
+; sprite_delay_count = metasprite_delay_list[sprite_index];
+;
+	.dbg	line, "lesson24.c", 82
+	lda     _metasprite_delay_list
+	ldx     _metasprite_delay_list+1
+	ldy     _sprite_index
+	sta     ptr1
+	stx     ptr1+1
+	lda     (ptr1),y
+	sta     _sprite_delay_count
+;
+; ppu_wait_nmi();
+;
+	.dbg	line, "lesson24.c", 88
+L0187:	jsr     _ppu_wait_nmi
 ;
 ; pad_poll(0); // read controller 1
 ;
-	.dbg	line, "lesson24.c", 83
+	.dbg	line, "lesson24.c", 90
 	lda     #$00
 	jsr     _pad_poll
 ;
 ; pad_poll(1); // read controller 2
 ;
-	.dbg	line, "lesson24.c", 84
+	.dbg	line, "lesson24.c", 91
 	lda     #$01
 	jsr     _pad_poll
 ;
 ; oam_clear();
 ;
-	.dbg	line, "lesson24.c", 87
+	.dbg	line, "lesson24.c", 94
 	jsr     _oam_clear
 ;
 ; sprid = 0;
 ;
-	.dbg	line, "lesson24.c", 90
+	.dbg	line, "lesson24.c", 97
 	lda     #$00
 	sta     _sprid
 ;
-; sprid = oam_spr(X_position, Y_position, 0, 0, sprid);
+; sprite_delay++;
 ;
-	.dbg	line, "lesson24.c", 95
-	jsr     decsp4
-	lda     _X_position
-	ldy     #$03
-	sta     (sp),y
-	lda     _Y_position
-	dey
-	sta     (sp),y
-	lda     #$00
-	dey
-	sta     (sp),y
-	dey
-	sta     (sp),y
-	lda     _sprid
-	jsr     _oam_spr
-	sta     _sprid
+	.dbg	line, "lesson24.c", 99
+	inc     _sprite_delay
+;
+; if (sprite_delay > sprite_delay_count)
+;
+	.dbg	line, "lesson24.c", 100
+	tax
+	lda     _sprite_delay
+	sec
+	sbc     _sprite_delay_count
+	bcc     L019F
+	beq     L019F
+;
+; sprite_delay = 0;
+;
+	.dbg	line, "lesson24.c", 102
+	stx     _sprite_delay
 ;
 ; sprite_index++;
 ;
-	.dbg	line, "lesson24.c", 97
+	.dbg	line, "lesson24.c", 103
 	inc     _sprite_index
 ;
-; metasprite = metasprite_list[sprite_index >> ANIMATION_SHIFT];
+; metasprite = metasprite_list[sprite_index];
 ;
-	.dbg	line, "lesson24.c", 98
-	ldx     #$00
+	.dbg	line, "lesson24.c", 105
 	lda     _sprite_index
-	lsr     a
-	lsr     a
-	stx     tmp1
 	asl     a
-	rol     tmp1
+	bcc     L01E1
+	inx
 	clc
-	adc     _metasprite_list
+L01E1:	adc     _metasprite_list
 	sta     ptr1
-	lda     tmp1
+	txa
 	adc     _metasprite_list+1
 	sta     ptr1+1
 	ldy     #$01
 	lda     (ptr1),y
-	tax
+	sta     _metasprite+1
 	dey
 	lda     (ptr1),y
 	sta     _metasprite
-	stx     _metasprite+1
+;
+; sprite_delay_count = metasprite_delay_list[sprite_index];
+;
+	.dbg	line, "lesson24.c", 106
+	lda     _metasprite_delay_list
+	ldx     _metasprite_delay_list+1
+	ldy     _sprite_index
+	sta     ptr1
+	stx     ptr1+1
+	lda     (ptr1),y
+	sta     _sprite_delay_count
 ;
 ; if (metasprite == 0)
 ;
-	.dbg	line, "lesson24.c", 99
-	cpx     #$00
-	bne     L017E
-	cmp     #$00
-	bne     L017E
+	.dbg	line, "lesson24.c", 108
+	lda     _metasprite
+	ora     _metasprite+1
+	bne     L019F
 ;
 ; sprite_index = 0;
 ;
-	.dbg	line, "lesson24.c", 101
+	.dbg	line, "lesson24.c", 110
 	sta     _sprite_index
 ;
-; metasprite = metasprite_list[0];
+; metasprite = metasprite_list[sprite_index];
 ;
-	.dbg	line, "lesson24.c", 102
-	lda     _metasprite_list
+	.dbg	line, "lesson24.c", 111
+	tax
+	lda     _sprite_index
+	asl     a
+	bcc     L01E2
+	inx
+	clc
+L01E2:	adc     _metasprite_list
 	sta     ptr1
-	lda     _metasprite_list+1
+	txa
+	adc     _metasprite_list+1
 	sta     ptr1+1
-	iny
+	ldy     #$01
 	lda     (ptr1),y
 	sta     _metasprite+1
-	lda     (ptr1,x)
+	dey
+	lda     (ptr1),y
 	sta     _metasprite
+;
+; sprite_delay_count = metasprite_delay_list[sprite_index];
+;
+	.dbg	line, "lesson24.c", 112
+	lda     _metasprite_delay_list
+	ldx     _metasprite_delay_list+1
+	ldy     _sprite_index
+	sta     ptr1
+	stx     ptr1+1
+	lda     (ptr1),y
+	sta     _sprite_delay_count
 ;
 ; sprid = oam_meta_spr(X_position2, Y_position, sprid, metasprite);
 ;
-	.dbg	line, "lesson24.c", 107
-L017E:	jsr     decsp3
+	.dbg	line, "lesson24.c", 116
+L019F:	jsr     decsp3
 	lda     _X_position2
 	ldy     #$02
 	sta     (sp),y
@@ -666,51 +766,48 @@ L017E:	jsr     decsp3
 ;
 ; if ((PAD_STATET & PAD_UP) != 0)
 ;
-	.dbg	line, "lesson24.c", 112
+	.dbg	line, "lesson24.c", 118
 	lda     _PAD_STATET
 	and     #$10
-	beq     L019D
-;
-; metasprite_list = metasprite_list1;
-;
-	.dbg	line, "lesson24.c", 114
-	lda     #<(_metasprite_list1)
-	sta     _metasprite_list
-	lda     #>(_metasprite_list1)
-	sta     _metasprite_list+1
-;
-; sprite_index = 0;
-;
-	.dbg	line, "lesson24.c", 115
-	lda     #$00
-	sta     _sprite_index
 ;
 ; else if ((PAD_STATET & PAD_DOWN) != 0)
 ;
-	.dbg	line, "lesson24.c", 117
-	jmp     L0167
-L019D:	lda     _PAD_STATET
+	.dbg	line, "lesson24.c", 127
+	jne     L0206
+	lda     _PAD_STATET
 	and     #$20
-	jeq     L0167
+	jeq     L0187
+;
+; sprite_index = 0;
+;
+	.dbg	line, "lesson24.c", 129
+	lda     #$00
+	sta     _sprite_index
+;
+; sprite_delay = 0;
+;
+	.dbg	line, "lesson24.c", 130
+	sta     _sprite_delay
 ;
 ; metasprite_list = metasprite_list2;
 ;
-	.dbg	line, "lesson24.c", 119
+	.dbg	line, "lesson24.c", 131
 	lda     #<(_metasprite_list2)
 	sta     _metasprite_list
 	lda     #>(_metasprite_list2)
 	sta     _metasprite_list+1
 ;
-; sprite_index = 0;
+; metasprite_delay_list = metasprite_delay_list2;
 ;
-	.dbg	line, "lesson24.c", 120
-	lda     #$00
-	sta     _sprite_index
+	.dbg	line, "lesson24.c", 132
+	lda     #<(_metasprite_delay_list2)
+	sta     _metasprite_delay_list
+	lda     #>(_metasprite_delay_list2)
 ;
 ; while (1)
 ;
-	.dbg	line, "lesson24.c", 78
-	jmp     L0167
+	.dbg	line, "lesson24.c", 85
+	jmp     L01FC
 	.dbg	line
 
 .endproc
