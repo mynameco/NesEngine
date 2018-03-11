@@ -50,6 +50,7 @@ unsigned char high_byte;
 unsigned char collision;
 unsigned char temp;
 
+const unsigned char max_walk_count = 31;
 
 #pragma bss-name(push, "OAM")
 unsigned char SPRITES[256];
@@ -69,13 +70,13 @@ unsigned char C_MAP2[256];
 // now their value is 0-11, which will index to this array...
 
 // which metatiles act like platforms
-const unsigned char PLATFORM[] =
+const unsigned char Platform[] =
 {
 	0, 1, 1, 1, 1, 1,
 	0, 0, 0, 0, 0, 0, 0
 };
 
-const unsigned char PALETTE[] =
+const unsigned char Palette[] =
 {
 	0x22, 0x16, 0x36, 0x0f,  0, 8, 0x18, 0x39,  0, 0, 0x10, 0x20,  0, 0x0a, 0x1a, 0x2a,
 	0x22, 0x37, 0x16, 0x0f,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 5, 0x15
@@ -123,6 +124,7 @@ void LoadPalette(void);
 void UpdateSprites(void);
 void CollisionDown(void);
 void MoveLogic(void);
+void ComputeAnimation(void);
 void DrawBackground(void);
 
 void __fastcall__ memcpy(void* dest, const void* src, int count);
