@@ -162,7 +162,7 @@ const unsigned char* const metasprite_list1[] =
 
 unsigned char metasprite_delay_list2[] =
 {
-	4, 4, 4, 4, 4, 4, 4, 4, 0
+	8, 8, 8, 8, 8, 8, 8, 8, 0
 };
 
 const unsigned char* const metasprite_list2[] =

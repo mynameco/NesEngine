@@ -13,7 +13,7 @@
 	.dbg		file, "lesson24.c", 3319, 1520807374
 	.dbg		file, "neslib.h", 8578, 1492006296
 	.dbg		file, "lesson24.h", 1533, 1520806183
-	.dbg		file, "Sprites.c", 2402, 1520807031
+	.dbg		file, "Sprites.c", 2402, 1520807456
 	.forceimport	__STARTUP__
 	.dbg		sym, "pal_bg", "00", extern, "_pal_bg"
 	.dbg		sym, "pal_spr", "00", extern, "_pal_spr"
@@ -88,14 +88,14 @@ _metasprite_delay_list1:
 	.byte	$04
 	.byte	$00
 _metasprite_delay_list2:
-	.byte	$04
-	.byte	$04
-	.byte	$04
-	.byte	$04
-	.byte	$04
-	.byte	$04
-	.byte	$04
-	.byte	$04
+	.byte	$08
+	.byte	$08
+	.byte	$08
+	.byte	$08
+	.byte	$08
+	.byte	$08
+	.byte	$08
+	.byte	$08
 	.byte	$00
 _sprite_index:
 	.byte	$00
